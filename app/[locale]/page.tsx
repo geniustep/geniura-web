@@ -3,6 +3,7 @@ import {
   GraduationCapIcon,
   HandshakeIcon,
   LockKeyholeIcon,
+  SearchIcon,
   ScaleIcon,
   ShieldCheckIcon,
   UsersIcon,
@@ -13,8 +14,10 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Link } from "@/lib/i18n/navigation";
 import { routing } from "@/lib/i18n/routing";
 
 type HomePageProps = {
@@ -52,6 +55,7 @@ export default async function HomePage({ params }: HomePageProps) {
   setRequestLocale(locale);
   const t = await getTranslations("Home");
   const tCommon = await getTranslations("Common");
+  const tJobs = await getTranslations("Jobs");
 
   return (
     <>
@@ -64,17 +68,42 @@ export default async function HomePage({ params }: HomePageProps) {
           <Badge variant="info">{t("eyebrow")}</Badge>
           <h1 className="max-w-3xl text-3xl font-bold sm:text-5xl">{t("title")}</h1>
           <p className="max-w-2xl text-lg text-muted-foreground">{t("subtitle")}</p>
-          <div className="flex flex-wrap gap-3">
-            {/* Search and employer spaces arrive in PHASE 3 and PHASE 5. */}
-            <Button size="lg" disabled aria-describedby="cta-soon">
+          {/* Plain GET form: works before JavaScript loads and lands on the shareable results URL. */}
+          <form
+            role="search"
+            action={`/${locale}/jobs`}
+            method="get"
+            className="flex w-full max-w-2xl flex-col gap-2 sm:flex-row"
+          >
+            <label htmlFor="home-q" className="sr-only">
+              {tJobs("search.label")}
+            </label>
+            <Input
+              id="home-q"
+              name="q"
+              type="search"
+              dir="auto"
+              maxLength={200}
+              enterKeyHint="search"
+              placeholder={tJobs("search.placeholder")}
+              className="h-12 bg-background"
+            />
+            <Button type="submit" size="lg">
+              <SearchIcon aria-hidden="true" />
+              {tJobs("search.submit")}
+            </Button>
+          </form>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/jobs" className={buttonVariants({ variant: "outline", size: "lg" })}>
               <BriefcaseIcon aria-hidden="true" />
               {t("seekerCta")}
-            </Button>
-            <Button size="lg" variant="outline" disabled aria-describedby="cta-soon">
+            </Link>
+            {/* The employer space arrives in PHASE 5. */}
+            <Button size="lg" variant="ghost" disabled aria-describedby="cta-soon">
               <HandshakeIcon aria-hidden="true" />
               {t("employerCta")}
             </Button>
-            <span id="cta-soon" className="self-center text-sm text-muted-foreground">
+            <span id="cta-soon" className="text-sm text-muted-foreground">
               {tCommon("comingSoon")}
             </span>
           </div>

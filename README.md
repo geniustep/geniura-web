@@ -1,7 +1,7 @@
 # Geniura Web
 المستودع العام لواجهة Geniura متعددة اللغات: منصة الوظائف، فضاء الباحث عن عمل، بوابة المؤسسات، والواجهات المصرح بها لفريق Geniura.
 
-**الحالة الحالية: PHASE 0 + 1 + 2 على فرع dev — أساس تقني، نظام تصميم وتعدد لغات، وربط بالـAPI مع المصادقة. لا نشر بعد.** التفاصيل في [حالة التنفيذ](docs/06-WEB-FOUNDATION-STATUS.md) و[ADR 0001](docs/adr/0001-web-stack.md).
+**الحالة الحالية: PHASE 0 → 3 على فرع dev — أساس تقني، نظام تصميم وتعدد لغات، المصادقة، وعروض العمل العامة مع البحث وSEO. لا نشر بعد.** التفاصيل في [حالة التنفيذ](docs/06-WEB-FOUNDATION-STATUS.md) و[ADR 0001](docs/adr/0001-web-stack.md).
 
 ## حدود المستودع
 - تقنية الواجهة: Next.js 16 + React 19 + TypeScript (انظر ADR 0001).
@@ -18,6 +18,7 @@
 - [حالة تنفيذ الواجهة](docs/06-WEB-FOUNDATION-STATUS.md)
 - [ADR 0001 — حزمة تقنيات الواجهة](docs/adr/0001-web-stack.md)
 - [ADR 0002 — ربط الـAPI والمصادقة](docs/adr/0002-web-api-and-auth.md)
+- [ADR 0003 — الوظائف العامة والبحث وSEO](docs/adr/0003-public-jobs-search-seo.md)
 - [عقد الـAPI للواجهة](contracts/README.md)
 - [مطالب منسّقة مع Backend](docs/07-BACKEND-COORDINATION.md)
 

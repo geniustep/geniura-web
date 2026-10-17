@@ -241,5 +241,156 @@
     "too_small": "القيمة قصيرة جدًا.",
     "too_big": "القيمة طويلة جدًا.",
     "invalid": "القيمة غير صالحة."
+  },
+  "Jobs": {
+    "metaTitle": "عروض العمل",
+    "metaDescription": "ابحث في عروض العمل المنشورة على Geniura حسب المهنة والمدينة ونوع العقد.",
+    "title": "عروض العمل",
+    "subtitle": "عروض منشورة من مؤسسات متحقَّق منها. الترشح مجاني.",
+    "search": {
+      "label": "كلمات البحث",
+      "placeholder": "مهنة، مهارة أو مسمى… بأي لغة",
+      "submit": "بحث",
+      "location": "المدينة",
+      "anyLocation": "كل المدن"
+    },
+    "filters": {
+      "title": "الفلاتر",
+      "open": "الفلاتر",
+      "apply": "عرض النتائج",
+      "clear": "مسح الفلاتر",
+      "occupation": "المهنة",
+      "sector": "القطاع",
+      "contractType": "نوع العقد",
+      "workMode": "نمط العمل",
+      "schedule": "التوقيت",
+      "posted": "تاريخ النشر",
+      "sort": "الترتيب",
+      "any": "الكل",
+      "postedWithin": "{days, plural, =1 {آخر 24 ساعة} other {آخر # يومًا}}"
+    },
+    "sort": {
+      "relevance": "الأكثر صلة",
+      "newest": "الأحدث",
+      "expiring_soon": "تنتهي قريبًا"
+    },
+    "results": {
+      "count": "{count, plural, =0 {لا توجد عروض} one {عرض واحد} two {عرضان} few {# عروض} many {# عرضًا} other {# عرض}}",
+      "emptyTitle": "لا توجد عروض مطابقة",
+      "emptyBody": "جرّب كلمات أخرى أو أزل بعض الفلاتر.",
+      "errorTitle": "تعذّر تحميل العروض",
+      "errorBody": "الخدمة غير متاحة حاليًا. أعد المحاولة بعد قليل.",
+      "depthLimit": "تعرض الصفحات الأولى فقط. حدّد البحث أكثر للوصول إلى نتائج أخرى."
+    },
+    "pagination": {
+      "label": "الصفحات",
+      "previous": "السابق",
+      "next": "التالي",
+      "page": "صفحة {page} من {total}"
+    },
+    "card": {
+      "posted": "نُشر {date}",
+      "expires": "ينتهي {date}",
+      "salary": "الراتب",
+      "verified": "مؤسسة متحقَّق منها",
+      "reviewed": "راجعه فريق Geniura",
+      "language": "الإعلان بـ{language}"
+    },
+    "contractType": {
+      "permanent": "عقد دائم",
+      "fixed_term": "عقد محدد المدة",
+      "temporary": "مؤقت",
+      "internship": "تدريب",
+      "apprenticeship": "تمهين",
+      "freelance": "عمل حر",
+      "seasonal": "موسمي"
+    },
+    "workMode": {
+      "onsite": "حضوري",
+      "hybrid": "هجين",
+      "remote": "عن بُعد"
+    },
+    "schedule": {
+      "full_time": "دوام كامل",
+      "part_time": "دوام جزئي",
+      "shifts": "بنظام المناوبة"
+    },
+    "salaryPeriod": {
+      "hour": "في الساعة",
+      "day": "في اليوم",
+      "month": "في الشهر",
+      "year": "في السنة"
+    },
+    "educationLevel": {
+      "none": "بدون شهادة",
+      "primary": "ابتدائي",
+      "secondary": "ثانوي",
+      "baccalaureate": "باكالوريا",
+      "vocational": "تكوين مهني",
+      "bac_plus_2": "باك +2",
+      "bac_plus_3": "باك +3",
+      "bac_plus_5": "باك +5",
+      "doctorate": "دكتوراه"
+    },
+    "requirementKind": {
+      "skill": "مهارة",
+      "occupation_experience": "خبرة مهنية",
+      "language": "لغة",
+      "education": "مستوى دراسي",
+      "certification": "شهادة",
+      "license": "رخصة"
+    },
+    "skillLevel": {
+      "unspecified": "",
+      "basic": "أساسي",
+      "intermediate": "متوسط",
+      "advanced": "متقدم",
+      "expert": "خبير"
+    },
+    "detail": {
+      "back": "العودة إلى العروض",
+      "description": "الوصف",
+      "responsibilities": "المهام",
+      "requirements": "المتطلبات",
+      "mandatory": "إلزامي",
+      "optional": "مرغوب",
+      "details": "تفاصيل العرض",
+      "location": "المكان",
+      "positions": "عدد المناصب",
+      "experience": "الخبرة المطلوبة",
+      "experienceYears": "{years, plural, =0 {بدون خبرة} one {سنة واحدة} two {سنتان} few {# سنوات} many {# سنة} other {# سنة}}",
+      "education": "المستوى الدراسي",
+      "published": "تاريخ النشر",
+      "expires": "آخر أجل",
+      "organization": "المؤسسة",
+      "website": "الموقع الإلكتروني",
+      "verifiedNote": "تحققت Geniura من هوية المؤسسة. هذا لا يعني ضمان كل تفاصيل الإعلان؛ أبلغنا عن أي شيء مريب.",
+      "applyTitle": "الترشح",
+      "applySoon": "الترشح عبر Geniura سيتاح قريبًا. لا تدفع أي مبلغ مقابل الترشح لأي جهة.",
+      "apply": "الترشح لهذا العرض",
+      "unknownLabel": "غير محدد",
+      "notFoundTitle": "العرض غير متاح",
+      "notFoundBody": "ربما أُغلق هذا العرض أو انتهت صلاحيته."
+    },
+    "report": {
+      "open": "الإبلاغ عن هذا الإعلان",
+      "title": "الإبلاغ عن إعلان",
+      "body": "سيراجع فريق الثقة بلاغك. لا تذكر بيانات شخصية لا داعي لها.",
+      "category": "سبب البلاغ",
+      "description": "تفاصيل (اختياري)",
+      "submit": "إرسال البلاغ",
+      "done": "شكرًا. استلمنا بلاغك وسيُراجع.",
+      "categories": {
+        "fraud": "احتيال",
+        "fee_request": "طلب مبلغ مالي",
+        "misleading": "معلومات مضللة",
+        "discrimination": "تمييز",
+        "harassment": "تحرّش",
+        "inappropriate": "محتوى غير لائق",
+        "spam": "رسائل مزعجة",
+        "privacy": "انتهاك الخصوصية",
+        "other": "سبب آخر"
+      }
+    }
   }
 }

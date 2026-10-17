@@ -1,4 +1,4 @@
-# حالة تنفيذ الواجهة — PHASE 0 + 1 + 2 (2026-10-17، الفرع dev)
+# حالة تنفيذ الواجهة — PHASE 0 → 3 (2026-10-17، الفرع dev)
 
 المفاتيح: **IMPLEMENTED** (كود موجود) · **TESTED** (اختبار آلي ناجح) · **DEFERRED** (مؤجل) · **NOT APPROVED** (قرار غير متخذ).
 
@@ -26,6 +26,12 @@
 | اختبارات التكامل مع Backend في CI | DEFERRED | المستودع الخلفي خاص؛ تُشغّل محليًا (`pnpm test:integration`) |
 | تصحيحات العقد في المصدر، `capabilities`، رمز CSRF مميز | بانتظار Backend | `docs/07-BACKEND-COORDINATION.md` |
 | النطاقان geniura.com / api.geniura.com | Approved (صاحب المشروع) | إعدادات النشر في ADR 0002 للواجهة |
+| **PHASE 3** — بحث الوظائف بفلاتر في URL، ترقيم صفحات، درج فلاتر للهاتف، حالات فارغة وتعطل | IMPLEMENTED · TESTED | E2E عام (دون Backend) + integration |
+| تفاصيل الوظيفة: لغة/اتجاه الإعلان، المتطلبات، المؤسسة، الإبلاغ المجهول | IMPLEMENTED · TESTED | integration (بلاغ حقيقي 201) |
+| JobPosting JSON-LD، canonical بلغة الإعلان، sitemap، 404 حقيقية للوظائف غير المتاحة | IMPLEMENTED · TESTED | unit + integration (Googlebot ← 404) |
+| تخزين عام فقط (`'use cache'`، دقائق/ساعات) دون أي بيانات جلسة | IMPLEMENTED | ADR 0003 |
+| التسميات من أول 50 قيمة في القاموس | مؤقت | بانتظار تسميات مضمّنة (البند 7) |
+| slug، webhook الإبطال، البحث المحفوظ، facets | بانتظار Backend | `docs/07-BACKEND-COORDINATION.md` |
 | النشر والإنتاج | خارج النطاق | لا نشر دون موافقة صريحة |
 
 ## التحقق المحلي

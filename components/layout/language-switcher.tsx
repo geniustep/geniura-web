@@ -4,15 +4,26 @@ import { Menu } from "@base-ui/react/menu";
 import { CheckIcon, LanguagesIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { Link, usePathname } from "@/lib/i18n/navigation";
 import { getDirection, locales } from "@/lib/i18n/config";
+import { useRouter } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
 
+/**
+ * Reads the current URL only when a language is chosen (not during render). Reading it during
+ * render would make every page's header depend on request data, which forces streaming to start
+ * before a page can answer with a real 404 (see app/[locale]/jobs/[jobId]/page.tsx).
+ */
 export function LanguageSwitcher() {
   const t = useTranslations("LanguageSwitcher");
   const tLanguages = useTranslations("Languages");
   const locale = useLocale();
-  const pathname = usePathname();
+  const router = useRouter();
+
+  function switchTo(next: string) {
+    const { pathname, search } = window.location;
+    const withoutLocale = pathname.replace(new RegExp(`^/${locale}(?=/|$)`), "") || "/";
+    router.replace(`${withoutLocale}${search}`, { locale: next });
+  }
 
   return (
     <Menu.Root>
@@ -27,12 +38,12 @@ export function LanguageSwitcher() {
         <Menu.Positioner sideOffset={6} align="end" className="z-50 outline-none">
           <Menu.Popup className="min-w-40 rounded-lg border bg-popover p-1 text-popover-foreground shadow-md transition-[scale,opacity] duration-100 outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0">
             {locales.map((option) => (
-              <Menu.LinkItem
+              <Menu.Item
                 key={option}
-                render={<Link href={pathname} locale={option} />}
                 lang={option}
                 dir={getDirection(option)}
                 aria-current={option === locale ? "true" : undefined}
+                onClick={() => option !== locale && switchTo(option)}
                 className={cn(
                   "flex h-10 items-center justify-between gap-4 rounded-md px-3 text-sm outline-none data-highlighted:bg-muted",
                   option === locale && "font-semibold",
@@ -40,7 +51,7 @@ export function LanguageSwitcher() {
               >
                 {tLanguages(option)}
                 {option === locale ? <CheckIcon className="size-4" aria-hidden="true" /> : null}
-              </Menu.LinkItem>
+              </Menu.Item>
             ))}
           </Menu.Popup>
         </Menu.Positioner>

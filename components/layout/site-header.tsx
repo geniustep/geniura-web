@@ -7,7 +7,7 @@ import { BrandMark } from "./brand-mark";
 import { Container } from "./container";
 import { LanguageSwitcher } from "./language-switcher";
 import { MobileNav } from "./mobile-nav";
-import { plannedNavItems } from "./nav-items";
+import { liveNavItems, plannedNavItems } from "./nav-items";
 
 export function SiteHeader() {
   const t = useTranslations("Header");
@@ -22,6 +22,16 @@ export function SiteHeader() {
           </Link>
           <nav aria-label={tCommon("menu")} className="hidden md:block">
             <ul className="flex items-center gap-1">
+              {liveNavItems.map((item) => (
+                <li key={item.key}>
+                  <Link
+                    href={item.href}
+                    className="rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+                  >
+                    {t(`nav.${item.key}`)}
+                  </Link>
+                </li>
+              ))}
               {plannedNavItems.map((item) => (
                 <li key={item} className="px-3 py-2 text-sm text-muted-foreground">
                   {t(`nav.${item}`)}

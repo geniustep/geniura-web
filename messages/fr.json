@@ -241,5 +241,156 @@
     "too_small": "Valeur trop courte.",
     "too_big": "Valeur trop longue.",
     "invalid": "Valeur invalide."
+  },
+  "Jobs": {
+    "metaTitle": "Offres d’emploi",
+    "metaDescription": "Recherchez parmi les offres publiées sur Geniura par métier, ville et type de contrat.",
+    "title": "Offres d’emploi",
+    "subtitle": "Offres publiées par des entreprises vérifiées. La candidature est gratuite.",
+    "search": {
+      "label": "Mots-clés",
+      "placeholder": "Métier, compétence ou intitulé… dans n’importe quelle langue",
+      "submit": "Rechercher",
+      "location": "Ville",
+      "anyLocation": "Toutes les villes"
+    },
+    "filters": {
+      "title": "Filtres",
+      "open": "Filtres",
+      "apply": "Voir les résultats",
+      "clear": "Effacer les filtres",
+      "occupation": "Métier",
+      "sector": "Secteur",
+      "contractType": "Type de contrat",
+      "workMode": "Mode de travail",
+      "schedule": "Horaire",
+      "posted": "Date de publication",
+      "sort": "Tri",
+      "any": "Tous",
+      "postedWithin": "{days, plural, =1 {Dernières 24 heures} other {# derniers jours}}"
+    },
+    "sort": {
+      "relevance": "Pertinence",
+      "newest": "Plus récentes",
+      "expiring_soon": "Expirent bientôt"
+    },
+    "results": {
+      "count": "{count, plural, =0 {Aucune offre} one {# offre} other {# offres}}",
+      "emptyTitle": "Aucune offre ne correspond",
+      "emptyBody": "Essayez d’autres mots-clés ou retirez des filtres.",
+      "errorTitle": "Impossible de charger les offres",
+      "errorBody": "Le service est momentanément indisponible. Réessayez dans un instant.",
+      "depthLimit": "Seules les premières pages sont affichées. Affinez la recherche pour accéder à d’autres résultats."
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page {page} sur {total}"
+    },
+    "card": {
+      "posted": "Publiée {date}",
+      "expires": "Expire {date}",
+      "salary": "Salaire",
+      "verified": "Entreprise vérifiée",
+      "reviewed": "Relue par l’équipe Geniura",
+      "language": "Offre en {language}"
+    },
+    "contractType": {
+      "permanent": "CDI",
+      "fixed_term": "CDD",
+      "temporary": "Intérim",
+      "internship": "Stage",
+      "apprenticeship": "Apprentissage",
+      "freelance": "Freelance",
+      "seasonal": "Saisonnier"
+    },
+    "workMode": {
+      "onsite": "Sur site",
+      "hybrid": "Hybride",
+      "remote": "Télétravail"
+    },
+    "schedule": {
+      "full_time": "Temps plein",
+      "part_time": "Temps partiel",
+      "shifts": "En équipes"
+    },
+    "salaryPeriod": {
+      "hour": "par heure",
+      "day": "par jour",
+      "month": "par mois",
+      "year": "par an"
+    },
+    "educationLevel": {
+      "none": "Sans diplôme",
+      "primary": "Primaire",
+      "secondary": "Secondaire",
+      "baccalaureate": "Baccalauréat",
+      "vocational": "Formation professionnelle",
+      "bac_plus_2": "Bac +2",
+      "bac_plus_3": "Bac +3",
+      "bac_plus_5": "Bac +5",
+      "doctorate": "Doctorat"
+    },
+    "requirementKind": {
+      "skill": "Compétence",
+      "occupation_experience": "Expérience métier",
+      "language": "Langue",
+      "education": "Niveau d’études",
+      "certification": "Certification",
+      "license": "Permis"
+    },
+    "skillLevel": {
+      "unspecified": "",
+      "basic": "notions",
+      "intermediate": "intermédiaire",
+      "advanced": "avancé",
+      "expert": "expert"
+    },
+    "detail": {
+      "back": "Retour aux offres",
+      "description": "Description",
+      "responsibilities": "Missions",
+      "requirements": "Exigences",
+      "mandatory": "Obligatoire",
+      "optional": "Souhaité",
+      "details": "Détails de l’offre",
+      "location": "Lieu",
+      "positions": "Postes",
+      "experience": "Expérience requise",
+      "experienceYears": "{years, plural, =0 {Débutant accepté} one {# an} other {# ans}}",
+      "education": "Niveau d’études",
+      "published": "Publication",
+      "expires": "Date limite",
+      "organization": "Entreprise",
+      "website": "Site web",
+      "verifiedNote": "Geniura a vérifié l’identité de l’entreprise. Cela ne garantit pas chaque détail de l’offre : signalez tout élément suspect.",
+      "applyTitle": "Candidature",
+      "applySoon": "La candidature via Geniura sera bientôt disponible. Ne payez jamais pour postuler.",
+      "apply": "Postuler à cette offre",
+      "unknownLabel": "Non précisé",
+      "notFoundTitle": "Offre indisponible",
+      "notFoundBody": "Cette offre a peut-être été clôturée ou a expiré."
+    },
+    "report": {
+      "open": "Signaler cette offre",
+      "title": "Signaler une offre",
+      "body": "L’équipe confiance examinera votre signalement. N’indiquez pas de données personnelles inutiles.",
+      "category": "Motif",
+      "description": "Détails (facultatif)",
+      "submit": "Envoyer le signalement",
+      "done": "Merci. Votre signalement a été reçu et sera examiné.",
+      "categories": {
+        "fraud": "Fraude",
+        "fee_request": "Demande d’argent",
+        "misleading": "Informations trompeuses",
+        "discrimination": "Discrimination",
+        "harassment": "Harcèlement",
+        "inappropriate": "Contenu inapproprié",
+        "spam": "Spam",
+        "privacy": "Atteinte à la vie privée",
+        "other": "Autre motif"
+      }
+    }
   }
 }
