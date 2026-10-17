@@ -1,0 +1,91 @@
+import AxeBuilder from "@axe-core/playwright";
+import { expect, test } from "@playwright/test";
+
+const pages = [
+  { locale: "ar", dir: "rtl", heading: /فرص عمل حقيقية/ },
+  { locale: "fr", dir: "ltr", heading: /De vraies offres/ },
+] as const;
+
+for (const { locale, dir, heading } of pages) {
+  test.describe(`home (${locale})`, () => {
+    test("sets the document language and direction", async ({ page }) => {
+      await page.goto(`/${locale}`);
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      await expect(page.locator("html")).toHaveAttribute("dir", dir);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
+    });
+
+    test("has no serious or critical accessibility violations", async ({ page }) => {
+      await page.goto(`/${locale}`);
+      const results = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+        .analyze();
+      const blocking = results.violations.filter(
+        (v) => v.impact === "serious" || v.impact === "critical",
+      );
+      expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
+    });
+
+    test("is not indexable before launch", async ({ page }) => {
+      await page.goto(`/${locale}`);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    });
+  });
+}
+
+test("redirects the bare origin to a locale", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/ar$/);
+});
+
+test.describe("French browser", () => {
+  test.use({ locale: "fr-FR" });
+
+  test("negotiates French from Accept-Language", async ({ page }) => {
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/fr$/);
+  });
+});
+
+test("switches language and keeps the current page", async ({ page }) => {
+  await page.goto("/ar/design-system");
+  await page.getByRole("button", { name: /اللغة الحالية/ }).click();
+  await page.getByRole("menuitem", { name: "Français" }).click();
+  await expect(page).toHaveURL(/\/fr\/design-system$/);
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+});
+
+test("renders a localized 404 for unknown paths", async ({ page }) => {
+  const response = await page.goto("/ar/does-not-exist");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { name: "الصفحة غير موجودة" })).toBeVisible();
+});
+
+test("sends security headers", async ({ request }) => {
+  const response = await request.get("/ar");
+  const headers = response.headers();
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+  expect(headers["x-frame-options"]).toBe("DENY");
+  expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(headers["x-powered-by"]).toBeUndefined();
+});
+
+test("robots.txt disallows everything before launch", async ({ request }) => {
+  const body = await (await request.get("/robots.txt")).text();
+  expect(body).toMatch(/Disallow: \/\s*$/m);
+});
+
+test("design-system page is never indexed", async ({ page }) => {
+  await page.goto("/fr/design-system");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+});
+
+test("mobile menu opens as a dialog and closes with Escape", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "The menu button only exists on small screens.");
+  await page.goto("/ar");
+  await page.getByRole("button", { name: "القائمة" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+});

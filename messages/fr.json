@@ -1,0 +1,135 @@
+{
+  "Metadata": {
+    "title": "Geniura — Recrutement et développement des compétences",
+    "titleTemplate": "%s · Geniura",
+    "description": "Plateforme marocaine de recrutement et de développement des compétences : offres d’emploi, candidature gratuite, services de présélection et matching expliqué."
+  },
+  "Common": {
+    "skipToContent": "Aller au contenu",
+    "comingSoon": "Bientôt",
+    "underConstruction": "La plateforme est en construction. Aucune offre ni aucun compte réel n’est encore disponible.",
+    "close": "Fermer",
+    "menu": "Menu"
+  },
+  "Header": {
+    "homeLabel": "Geniura — accueil",
+    "nav": {
+      "jobs": "Offres d’emploi",
+      "employers": "Employeurs",
+      "skills": "Compétences"
+    },
+    "signIn": "Se connecter"
+  },
+  "LanguageSwitcher": {
+    "label": "Langue",
+    "current": "Langue actuelle : {language}"
+  },
+  "Languages": {
+    "ar": "العربية",
+    "fr": "Français"
+  },
+  "Footer": {
+    "tagline": "Plateforme marocaine à ambition internationale pour le recrutement et les compétences.",
+    "legal": "Confidentialité et conditions",
+    "rights": "© Geniura"
+  },
+  "Home": {
+    "eyebrow": "Recruter en confiance",
+    "title": "De vraies offres, une candidature gratuite et des décisions prises par des humains",
+    "subtitle": "Geniura réunit un marché d’offres ouvert, des services de présélection et d’évaluation pour les entreprises, et des parcours de mise à niveau liés aux besoins du marché.",
+    "seekerCta": "Je cherche un emploi",
+    "employerCta": "Je recrute",
+    "pathsTitle": "Trois parcours liés",
+    "paths": {
+      "jobs": {
+        "title": "Offres d’emploi",
+        "body": "Les entreprises publient leurs offres et gèrent candidatures et entretiens ; les candidats consultent et postulent gratuitement."
+      },
+      "recruitment": {
+        "title": "Recrutement accompagné",
+        "body": "L’entreprise décrit son besoin et le nombre de postes ; l’équipe Geniura présélectionne et évalue, avec accord et droits explicites."
+      },
+      "skills": {
+        "title": "Développement des compétences",
+        "body": "Des pistes de mise à niveau facultatives, liées à un écart de compétence pour un poste précis, sans achat obligatoire ni promesse d’embauche."
+      }
+    },
+    "principlesTitle": "Nos principes",
+    "principles": {
+      "free": {
+        "title": "Candidature gratuite",
+        "body": "Postuler et consulter les offres ne coûte rien au candidat."
+      },
+      "privacy": {
+        "title": "Privé par défaut",
+        "body": "Votre profil n’apparaît dans aucune recherche sans votre accord, révocable à tout moment."
+      },
+      "human": {
+        "title": "Décision humaine",
+        "body": "Le matching automatique explique ses raisons et ne rejette jamais un candidat de lui-même."
+      },
+      "trust": {
+        "title": "Confiance vérifiable",
+        "body": "Nous vérifions les entreprises, relisons les offres et affichons leur statut et leur date d’expiration."
+      }
+    }
+  },
+  "Status": {
+    "application": {
+      "submitted": "Envoyée",
+      "in_review": "En cours d’examen",
+      "shortlisted": "Présélectionnée",
+      "interview": "Entretien",
+      "offer": "Offre",
+      "hired": "Recruté·e",
+      "rejected": "Non retenue",
+      "withdrawn": "Retirée",
+      "closed": "Clôturée"
+    }
+  },
+  "Provenance": {
+    "asserted": "Déclaré par vous",
+    "extracted": "Extrait et confirmé",
+    "verified": "Vérifié"
+  },
+  "NotFound": {
+    "title": "Page introuvable",
+    "body": "La page a peut-être été déplacée ou n’est plus disponible.",
+    "back": "Retour à l’accueil"
+  },
+  "Error": {
+    "title": "Une erreur inattendue s’est produite",
+    "body": "Le chargement de cette page n’a pas abouti. Vous pouvez réessayer.",
+    "retry": "Réessayer"
+  },
+  "DesignSystem": {
+    "title": "Système de design",
+    "intro": "Page interne pour revoir les tokens et composants dans les deux sens. Non indexée.",
+    "colors": "Couleurs",
+    "typography": "Typographie",
+    "buttons": "Boutons",
+    "forms": "Champs de formulaire",
+    "badges": "Badges et statuts",
+    "feedback": "Chargement et états vides",
+    "dialogs": "Fenêtres",
+    "sampleHeading": "Chargé·e RH — Casablanca",
+    "sampleBody": "Texte d’essai mêlant le français, العربية, recruiter@example.com et le nombre 2026 pour vérifier la direction.",
+    "fieldLabel": "Intitulé du poste",
+    "fieldPlaceholder": "Ex. : comptable",
+    "fieldHint": "Écrivez dans n’importe quelle langue ; les intitulés équivalents seront proposés plus tard.",
+    "textareaLabel": "Brève description",
+    "primary": "Principal",
+    "secondary": "Secondaire",
+    "outline": "Contour",
+    "ghost": "Discret",
+    "destructive": "Supprimer",
+    "disabled": "Désactivé",
+    "toast": "Afficher une notification",
+    "toastMessage": "Enregistré (notification d’essai)",
+    "emptyTitle": "Aucun résultat",
+    "emptyBody": "Essayez de retirer des filtres ou d’élargir la ville.",
+    "openSheet": "Ouvrir un panneau latéral",
+    "sheetTitle": "Filtres",
+    "sheetBody": "Exemple de tiroir de filtres sur mobile."
+  }
+}

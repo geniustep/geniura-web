@@ -1,0 +1,9 @@
+.next
+node_modules
+pnpm-lock.yaml
+playwright-report
+test-results
+next-env.d.ts
+
+# Approved documentation is edited by hand, not reformatted.
+*.md
