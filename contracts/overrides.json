@@ -1,0 +1,40 @@
+{
+  "$comment": "Corrections applied to the web copy of the geniura-api contract. Each entry documents real server behaviour verified against geniura-api dev@239ebd9 (view source + live responses from a local, unmodified instance). They must be fixed upstream in geniura-api; once fixed, the entry is removed here.",
+  "paginatedLists": {
+    "$comment": "Views that call StandardPagination.get_paginated_response() but whose schema says `type: array`. Real body: {count, next, previous, results}.",
+    "paths": [
+      "/api/v1/candidates/me/applications",
+      "/api/v1/candidates/me/interviews",
+      "/api/v1/jobs",
+      "/api/v1/me/notifications",
+      "/api/v1/organizations/",
+      "/api/v1/organizations/{org_id}/jobs",
+      "/api/v1/organizations/{org_id}/jobs/{job_id}/applications",
+      "/api/v1/organizations/{org_id}/jobs/{job_id}/revisions",
+      "/api/v1/organizations/{org_id}/members",
+      "/api/v1/organizations/{org_id}/members/invitations",
+      "/api/v1/organizations/{org_id}/recruitment-orders",
+      "/api/v1/organizations/{org_id}/service-orders",
+      "/api/v1/training/paths"
+    ],
+    "extraProperties": {
+      "/api/v1/me/notifications": { "unread_count": { "type": "integer" } }
+    }
+  },
+  "vocabularyLists": {
+    "$comment": "Taxonomy views return {count, results, locale} (no next/previous), while the schema says `type: array`.",
+    "paths": [
+      "/api/v1/taxonomy/locations",
+      "/api/v1/taxonomy/occupations",
+      "/api/v1/taxonomy/sectors",
+      "/api/v1/taxonomy/skills"
+    ]
+  },
+  "errorEnvelope": {
+    "$comment": "apps/common/exceptions.py returns {code, message, details, request_id} for every error, but no component schema or 4xx response is declared. Added as ErrorResponse + a `default` response on every operation."
+  },
+  "excludedPathPrefixes": {
+    "$comment": "Internal Geniura staff and audit surface: not used by the public web app and not published in this public repository.",
+    "prefixes": ["/api/v1/staff/"]
+  }
+}

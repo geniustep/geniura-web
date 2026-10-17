@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 
 import { Container } from "@/components/layout/container";
 import { EmptyState } from "@/components/patterns/empty-state";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 
 export default function NotFoundPage() {
@@ -16,9 +16,9 @@ export default function NotFoundPage() {
         title={t("title")}
         description={t("body")}
         action={
-          <Button render={<Link href="/" />} nativeButton={false}>
+          <Link href="/" className={buttonVariants()}>
             {t("back")}
-          </Button>
+          </Link>
         }
       />
     </Container>

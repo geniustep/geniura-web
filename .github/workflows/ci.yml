@@ -28,6 +28,10 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Generated API client matches the pinned contract
+        run: |
+          pnpm api:generate
+          git diff --exit-code -- lib/api/generated
       - name: Lint
         run: pnpm lint
       - name: Formatting

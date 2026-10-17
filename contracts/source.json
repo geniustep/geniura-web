@@ -1,0 +1,31 @@
+{
+  "sourceRepository": "geniustep/geniura-api (private)",
+  "sourceFile": "docs/openapi/openapi.yaml",
+  "sourceCommit": "239ebd9",
+  "sourceSha256": "3c1f7f0afd026c6a75ac9838e2ae47a640305ad213c028152044f37afaab8811",
+  "outputSha256": "ebcace8791ae3aa0e83182091d4b780b6dde4a12dda57eb7d16383ed7ad2959c",
+  "operations": 146,
+  "paths": 111,
+  "schemasKept": 219,
+  "schemasPruned": 78,
+  "corrections": [
+    "paginated: /api/v1/candidates/me/applications",
+    "paginated: /api/v1/candidates/me/interviews",
+    "paginated: /api/v1/jobs",
+    "paginated: /api/v1/me/notifications",
+    "paginated: /api/v1/organizations/",
+    "paginated: /api/v1/organizations/{org_id}/jobs",
+    "paginated: /api/v1/organizations/{org_id}/jobs/{job_id}/applications",
+    "paginated: /api/v1/organizations/{org_id}/jobs/{job_id}/revisions",
+    "paginated: /api/v1/organizations/{org_id}/members",
+    "paginated: /api/v1/organizations/{org_id}/members/invitations",
+    "paginated: /api/v1/organizations/{org_id}/recruitment-orders",
+    "paginated: /api/v1/organizations/{org_id}/service-orders",
+    "paginated: /api/v1/training/paths",
+    "vocabulary: /api/v1/taxonomy/locations",
+    "vocabulary: /api/v1/taxonomy/occupations",
+    "vocabulary: /api/v1/taxonomy/sectors",
+    "vocabulary: /api/v1/taxonomy/skills",
+    "error envelope: ErrorResponse + default response on every operation"
+  ]
+}

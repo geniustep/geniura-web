@@ -1,4 +1,4 @@
-# حالة تنفيذ الواجهة — PHASE 0 + PHASE 1 (2026-10-17، الفرع dev)
+# حالة تنفيذ الواجهة — PHASE 0 + 1 + 2 (2026-10-17، الفرع dev)
 
 المفاتيح: **IMPLEMENTED** (كود موجود) · **TESTED** (اختبار آلي ناجح) · **DEFERRED** (مؤجل) · **NOT APPROVED** (قرار غير متخذ).
 
@@ -17,8 +17,15 @@
 | CI (lint، تنسيق، فحوص، اختبارات، build، audit، E2E) بلا أسرار وبلا نشر | IMPLEMENTED · TESTED | `.github/workflows/ci.yml`؛ نجاح المهمتين quality وe2e على `8773893` في [التشغيل 39072732925](https://github.com/geniustep/geniura-web/actions/runs/39072732925) |
 | اللغات الأربع وترتيبها | NOT APPROVED | `ar,fr` مؤقتًا في `lib/i18n/config.ts` |
 | الهوية البصرية (ألوان، خط، شعار) | NOT APPROVED | قيم مؤقتة موسومة في الكود |
-| Sentry / CSP / Storybook / الوضع الداكن المرئي | DEFERRED | ADR 0001 |
-| أي اتصال بالـAPI أو مصادقة أو بيانات حقيقية | DEFERRED | PHASE 2، بعد إصلاح عقد OpenAPI في Backend |
+| Sentry / Storybook / الوضع الداكن المرئي | DEFERRED | ADR 0001 (CSP نُفّذت في PHASE 2) |
+| **PHASE 2** — عقد API مصفّى ومثبّت (geniura-api@239ebd9) مع تصحيحات موثقة | IMPLEMENTED | `contracts/`؛ 111 مسارًا، 146 عملية |
+| عميل مولّد (Orval: fetch + TanStack Query + Zod) وفحص التطابق في CI | IMPLEMENTED | `lib/api/generated`، خطوة CI |
+| النقل: CSRF، credentials، تجديد الرمز، أخطاء موحدة مع مرجع دعم | IMPLEMENTED · TESTED | `tests/unit/api.test.ts` |
+| الدخول، التسجيل، نسيت كلمة المرور، إعادة التعيين، تأكيد البريد، حسابي، الجلسات وإنهاؤها، الخروج | IMPLEMENTED · TESTED | E2E عام + `tests/integration` ضد geniura-api محلي (8/8) |
+| حماية الصفحات الخاصة من Django، `no-store`، منع open redirect، CSP | IMPLEMENTED · TESTED | E2E + integration |
+| اختبارات التكامل مع Backend في CI | DEFERRED | المستودع الخلفي خاص؛ تُشغّل محليًا (`pnpm test:integration`) |
+| تصحيحات العقد في المصدر، `capabilities`، رمز CSRF مميز | بانتظار Backend | `docs/07-BACKEND-COORDINATION.md` |
+| النطاقان geniura.com / api.geniura.com | Approved (صاحب المشروع) | إعدادات النشر في ADR 0002 للواجهة |
 | النشر والإنتاج | خارج النطاق | لا نشر دون موافقة صريحة |
 
 ## التحقق المحلي
@@ -27,4 +34,6 @@ pnpm install
 pnpm check          # lint + format + typecheck + check:css + check:messages + test
 pnpm build
 pnpm test:e2e       # يتطلب متصفح Chromium من Playwright
+# تكامل كامل ضد geniura-api محلي (بيانات اصطناعية):
+GENIURA_API_URL=http://localhost:8000 GENIURA_API_LOG=<سجل Django> pnpm test:integration
 ```

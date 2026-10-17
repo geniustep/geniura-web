@@ -131,5 +131,115 @@
     "openSheet": "Ouvrir un panneau latéral",
     "sheetTitle": "Filtres",
     "sheetBody": "Exemple de tiroir de filtres sur mobile."
+  },
+  "Auth": {
+    "login": {
+      "title": "Se connecter",
+      "subtitle": "Accédez à votre compte Geniura.",
+      "submit": "Connexion",
+      "forgot": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "toRegister": "Créer un compte"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "L’inscription est gratuite. Nous enverrons un lien de confirmation à votre adresse.",
+      "submit": "Créer le compte",
+      "intentLabel": "Je suis",
+      "intent": {
+        "candidate": "à la recherche d’un emploi",
+        "employer": "représentant d’une entreprise"
+      },
+      "hasAccount": "Déjà un compte ?",
+      "toLogin": "Se connecter",
+      "doneTitle": "Consultez votre messagerie",
+      "doneBody": "Si l’adresse est valide, vous recevrez un message de confirmation dans quelques minutes. Pensez à vérifier les indésirables."
+    },
+    "forgot": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Indiquez votre adresse pour recevoir un lien de réinitialisation.",
+      "submit": "Envoyer le lien",
+      "doneTitle": "Consultez votre messagerie",
+      "doneBody": "Si un compte existe avec cette adresse, vous recevrez un lien de réinitialisation."
+    },
+    "reset": {
+      "title": "Nouveau mot de passe",
+      "subtitle": "Choisissez un nouveau mot de passe.",
+      "submit": "Enregistrer",
+      "missingLink": "Le lien est incomplet. Demandez-en un nouveau.",
+      "doneTitle": "Mot de passe modifié",
+      "doneBody": "Vos autres sessions ont été fermées. Vous pouvez vous connecter."
+    },
+    "verify": {
+      "title": "Confirmer l’adresse e-mail",
+      "subtitle": "Cliquez sur le bouton pour confirmer votre adresse.",
+      "submit": "Confirmer mon adresse",
+      "missingLink": "Le lien est incomplet. Demandez un nouveau lien depuis votre compte.",
+      "doneTitle": "Adresse confirmée",
+      "doneBody": "Vous pouvez maintenant postuler et créer une entreprise."
+    },
+    "fields": {
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "fullName": "Nom complet",
+      "optional": "facultatif"
+    },
+    "backToLogin": "Retour à la connexion",
+    "submitting": "Envoi…"
+  },
+  "Account": {
+    "title": "Mon compte",
+    "subtitle": "Vos informations et vos sessions.",
+    "email": "Adresse e-mail",
+    "name": "Nom",
+    "joined": "Inscription",
+    "verified": "Confirmée",
+    "notVerified": "Non confirmée",
+    "verifyBanner": "Votre adresse n’est pas encore confirmée. C’est nécessaire pour postuler et créer une entreprise.",
+    "resend": "Renvoyer le lien de confirmation",
+    "resent": "Si possible, un nouveau lien a été envoyé.",
+    "sessionsLink": "Appareils et sessions",
+    "logout": "Se déconnecter",
+    "loggedOut": "Vous êtes déconnecté·e.",
+    "sessions": {
+      "title": "Appareils et sessions",
+      "subtitle": "Sessions ouvertes sur votre compte. Fermez celles que vous ne reconnaissez pas.",
+      "current": "Cet appareil",
+      "lastSeen": "Dernière activité",
+      "started": "Ouverte le",
+      "unknownDevice": "Appareil inconnu",
+      "revoke": "Fermer la session",
+      "revoked": "Session fermée.",
+      "empty": "Aucune autre session."
+    }
+  },
+  "UserMenu": {
+    "account": "Mon compte",
+    "sessions": "Appareils et sessions",
+    "logout": "Se déconnecter",
+    "label": "Menu du compte"
+  },
+  "Errors": {
+    "api": {
+      "invalid_credentials": "Adresse ou mot de passe incorrect.",
+      "invalid_token": "Lien invalide ou expiré. Demandez-en un nouveau.",
+      "invalid_current_password": "Mot de passe actuel incorrect.",
+      "not_authenticated": "Votre session a expiré. Reconnectez-vous.",
+      "permission_denied": "Vous n’avez pas l’autorisation d’effectuer cette action.",
+      "not_found": "Élément introuvable.",
+      "rate_limited": "Trop de tentatives. Patientez avant de réessayer.",
+      "validation_error": "Vérifiez les champs signalés.",
+      "network_error": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "unknown_error": "Une erreur inattendue s’est produite. Réessayez."
+    },
+    "reference": "Référence support : {id}"
+  },
+  "Validation": {
+    "required": "Ce champ est obligatoire.",
+    "invalid_format": "Format invalide.",
+    "too_small": "Valeur trop courte.",
+    "too_big": "Valeur trop longue.",
+    "invalid": "Valeur invalide."
   }
 }

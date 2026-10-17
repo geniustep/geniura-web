@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 
+import { UserMenu } from "@/features/auth/user-menu";
 import { Link } from "@/lib/i18n/navigation";
 
 import { BrandMark } from "./brand-mark";
@@ -32,6 +33,7 @@ export function SiteHeader() {
         </div>
         <div className="flex items-center gap-1">
           <LanguageSwitcher />
+          <UserMenu />
           <MobileNav />
         </div>
       </Container>
