@@ -14,7 +14,7 @@
 | رؤوس الأمان، إخفاء `x-powered-by` | IMPLEMENTED · TESTED | E2E |
 | منع الفهرسة قبل الإطلاق (robots + `noindex`) | IMPLEMENTED · TESTED | E2E |
 | فحص الخصائص المنطقية (RTL) وتطابق ملفات الرسائل | IMPLEMENTED | `pnpm check:css`، `pnpm check:messages` |
-| CI (lint، تنسيق، فحوص، اختبارات، build، audit، E2E) بلا أسرار وبلا نشر | IMPLEMENTED | `.github/workflows/ci.yml` |
+| CI (lint، تنسيق، فحوص، اختبارات، build، audit، E2E) بلا أسرار وبلا نشر | IMPLEMENTED · TESTED | `.github/workflows/ci.yml`؛ نجاح المهمتين quality وe2e على `8773893` في [التشغيل 39072732925](https://github.com/geniustep/geniura-web/actions/runs/39072732925) |
 | اللغات الأربع وترتيبها | NOT APPROVED | `ar,fr` مؤقتًا في `lib/i18n/config.ts` |
 | الهوية البصرية (ألوان، خط، شعار) | NOT APPROVED | قيم مؤقتة موسومة في الكود |
 | Sentry / CSP / Storybook / الوضع الداكن المرئي | DEFERRED | ADR 0001 |
