@@ -48,7 +48,8 @@
     "trustTitle": "Nos principes",
     "trustFree": "Candidature gratuite",
     "trustPrivate": "Profil privé par défaut",
-    "trustHuman": "Décision humaine"
+    "trustHuman": "Décision humaine",
+    "employersSpace": "Espace entreprises"
   },
   "Home": {
     "eyebrow": "Plateforme de recrutement au Maroc",
@@ -105,13 +106,13 @@
       "eyebrow": "Geniura pour les entreprises",
       "title": "Publiez une offre et gérez vos candidatures.",
       "body": "Recevez les candidatures, échangez avec les candidats et organisez les entretiens au même endroit.",
-      "cta": "Publier une offre"
+      "learnMore": "Découvrir l’espace entreprises"
     },
     "service": {
       "eyebrow": "Service de recrutement",
       "title": "Confiez-nous la présélection.",
       "body": "Décrivez votre besoin et le nombre de postes : l’équipe Geniura vous aide à sélectionner et évaluer les profils.",
-      "cta": "Décrire mon besoin"
+      "learnMore": "En savoir plus sur le service"
     }
   },
   "Status": {
@@ -438,5 +439,145 @@
       }
     },
     "eyebrow": "Offres d’emploi"
+  },
+  "Employers": {
+    "metaTitle": "Entreprises",
+    "metaDescription": "Publiez vos offres et gérez vos candidatures, ou confiez la présélection et l’évaluation à l’équipe Geniura.",
+    "eyebrow": "Geniura pour les entreprises",
+    "titleLead": "Recrutez les bons profils,",
+    "titleAccent": "avec clarté.",
+    "subtitle": "Publiez votre offre et gérez vous-même les candidatures, ou laissez l’équipe Geniura vous aider à présélectionner et évaluer. Deux parcours distincts, chacun avec des règles claires.",
+    "status": "L’espace entreprises est en préparation. Créez votre compte dès maintenant en choisissant « représentant d’une entreprise » pour être prêt à l’ouverture.",
+    "ctaRegister": "Créer un compte entreprise",
+    "ctaHow": "Comment ça marche",
+    "preview": {
+      "label": "Exemple de gestion des candidatures",
+      "example": "Exemple",
+      "job": "Comptable · Casablanca",
+      "count": "3 candidatures",
+      "candidateA": "Candidat A",
+      "candidateB": "Candidat B",
+      "candidateC": "Candidat C",
+      "skill": "Logiciel comptable",
+      "language": "Français",
+      "note": "Chaque information indique sa source : déclarée, extraite ou vérifiée."
+    },
+    "pathsTitle": "Deux parcours, chacun son rôle",
+    "pathsSubtitle": "Publier une offre et commander un service de recrutement sont deux choses différentes.",
+    "publish": {
+      "eyebrow": "Publier une offre",
+      "title": "Gérez vous-même le recrutement.",
+      "body": "Pour l’entreprise qui veut recevoir et traiter directement les candidatures.",
+      "items": {
+        "one": "Une publication courte : intitulé et ville, missions et exigences, puis aperçu et envoi",
+        "two": "Un tableau de candidatures filtrable, sans exposer ceux qui n’ont pas postulé",
+        "three": "Statuts, entretiens et échanges au même endroit",
+        "four": "Relecture de l’offre si nécessaire, date d’expiration visible des candidats"
+      }
+    },
+    "service": {
+      "eyebrow": "Demander un service de recrutement",
+      "title": "Confiez-nous la présélection.",
+      "body": "Pour l’entreprise qui veut un accompagnement professionnel pour sélectionner et évaluer.",
+      "items": {
+        "one": "Vous précisez le nombre de postes, les compétences, les conditions, le lieu et le périmètre",
+        "two": "Une proposition de service claire, et votre accord avant tout travail",
+        "three": "Présélection et évaluation par l’équipe Geniura, avec des droits limités",
+        "four": "Une liste restreinte consultable avec un accès encadré"
+      }
+    },
+    "trustTitle": "Une confiance vérifiable",
+    "trust": {
+      "verified": {
+        "title": "Entreprise vérifiée",
+        "body": "Nous vérifions l’identité de l’entreprise sur pièces. La vérification ne garantit pas chaque détail d’une offre."
+      },
+      "privacy": {
+        "title": "Vie privée des candidats",
+        "body": "Aucun téléchargement en masse de CV, et aucune entreprise ne voit les dossiers ou décisions d’une autre."
+      },
+      "human": {
+        "title": "Décision humaine",
+        "body": "Le matching explique ses raisons et ne rejette jamais un candidat automatiquement."
+      },
+      "roles": {
+        "title": "Rôles et droits",
+        "body": "Créateur, administrateur, chargé de recrutement, évaluateur : chacun n’accède qu’à ce que sa mission exige."
+      }
+    },
+    "stepsTitle": "Pour commencer",
+    "steps": {
+      "account": {
+        "title": "Créez votre compte",
+        "body": "L’inscription est gratuite. Choisissez « représentant d’une entreprise »."
+      },
+      "verify": {
+        "title": "Faites vérifier l’entreprise",
+        "body": "À l’ouverture de l’espace, vous transmettez les documents de l’entreprise pour une revue interne."
+      },
+      "publish": {
+        "title": "Publiez ou demandez",
+        "body": "Publiez votre première offre, ou décrivez votre besoin au service de recrutement."
+      }
+    }
+  },
+  "Skills": {
+    "metaTitle": "Développement des compétences",
+    "metaDescription": "Des pistes de mise à niveau facultatives, liées aux exigences d’un poste précis, sans achat obligatoire ni promesse d’embauche.",
+    "eyebrow": "Développement des compétences",
+    "titleLead": "Développez la compétence",
+    "titleAccent": "qui vous manque vraiment.",
+    "subtitle": "Nous comparons les exigences d’un poste précis à votre profil, expliquons ce qui correspond et ce qui manque, puis proposons des parcours facultatifs. Sans achat obligatoire ni promesse d’embauche.",
+    "status": "Ce service est en préparation et n’est pas encore ouvert.",
+    "ctaJobs": "Parcourir les offres",
+    "preview": {
+      "label": "Exemple de comparaison entre un profil et un poste",
+      "example": "Exemple",
+      "job": "Comptable · exigences de l’offre",
+      "match1": "Logiciel comptable",
+      "match1Note": "Présent dans votre profil",
+      "match2": "Français professionnel",
+      "match2Note": "Présent dans votre profil",
+      "gap": "Excel avancé",
+      "gapNote": "Absent de votre profil",
+      "suggestion": "Parcours suggéré : Excel pour la comptabilité",
+      "optional": "Facultatif : vous pouvez postuler dès maintenant"
+    },
+    "stepsTitle": "Du poste à la compétence",
+    "steps": {
+      "choose": {
+        "title": "Vous choisissez un poste",
+        "body": "Les suggestions partent des exigences d’une vraie offre, jamais d’un jugement général sur vous."
+      },
+      "compare": {
+        "title": "Nous comparons et expliquons",
+        "body": "Nous distinguons ce que vous avez déclaré, ce qui a été extrait de votre CV et ce qui est vérifié, et montrons ce qui manque."
+      },
+      "decide": {
+        "title": "Vous décidez",
+        "body": "Postuler maintenant, ou vous former d’abord : le choix vous appartient."
+      }
+    },
+    "principlesTitle": "Des règles non négociables",
+    "principles": {
+      "optional": {
+        "title": "Toujours facultatif",
+        "body": "Aucun achat de formation n’est exigé pour envoyer une candidature."
+      },
+      "job": {
+        "title": "Lié à un poste",
+        "body": "L’écart est mesuré face aux exigences d’une offre, pas à la valeur d’une personne."
+      },
+      "noPromise": {
+        "title": "Pas de fausses promesses",
+        "body": "Se former ne garantit pas l’embauche, et nous ne dirons jamais le contraire."
+      },
+      "source": {
+        "title": "Source explicite",
+        "body": "Chaque compétence indique sa source ; une donnée extraite ne devient jamais « vérifiée » d’elle-même."
+      }
+    },
+    "partnersTitle": "Partenaires d’évaluation et de formation",
+    "partnersBody": "Nous sélectionnons des partenaires d’évaluation et de formation liés aux besoins du marché. Aucun partenaire n’accède à la base des candidats."
   }
 }

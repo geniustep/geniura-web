@@ -83,7 +83,17 @@ export function SiteFooter() {
         <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
           <h2 className="text-sm font-semibold text-gold-ink">{t("employers")}</h2>
           <ul className="flex flex-col gap-3 text-muted-foreground">
-            {[t("publishJob"), t("recruitmentService"), t("skills")].map((item) => (
+            <li>
+              <Link href="/employers" className={linkClass}>
+                {t("employersSpace")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/skills" className={linkClass}>
+                {t("skills")}
+              </Link>
+            </li>
+            {[t("publishJob"), t("recruitmentService")].map((item) => (
               <li key={item} className="flex flex-wrap items-center gap-2">
                 {item}
                 <span className="rounded-full bg-muted px-2 text-xs text-subtle-foreground">

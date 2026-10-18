@@ -21,6 +21,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = routing.locales.flatMap((locale) => [
     { url: `${base}/${locale}`, alternates: { languages: languages("") } },
     { url: `${base}/${locale}/jobs`, alternates: { languages: languages("/jobs") } },
+    { url: `${base}/${locale}/employers`, alternates: { languages: languages("/employers") } },
+    { url: `${base}/${locale}/skills`, alternates: { languages: languages("/skills") } },
   ]);
 
   try {

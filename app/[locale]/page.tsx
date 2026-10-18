@@ -292,7 +292,7 @@ export default async function HomePage({ params }: HomePageProps) {
         </Container>
       </section>
 
-      {/* The employer space and the recruitment service are not open yet: no live links. */}
+      {/* The employer tools are not open yet: the cards lead to the explanatory page only. */}
       <section aria-label={t("employers.eyebrow")}>
         <Container className="grid gap-5 pt-12 pb-24 md:grid-cols-2">
           <ServiceCard
@@ -301,7 +301,8 @@ export default async function HomePage({ params }: HomePageProps) {
             eyebrow={t("employers.eyebrow")}
             title={t("employers.title")}
             body={t("employers.body")}
-            cta={t("employers.cta")}
+            href="/employers#publish"
+            linkLabel={t("employers.learnMore")}
             soon={tCommon("comingSoon")}
           />
           <ServiceCard
@@ -310,7 +311,8 @@ export default async function HomePage({ params }: HomePageProps) {
             eyebrow={t("service.eyebrow")}
             title={t("service.title")}
             body={t("service.body")}
-            cta={t("service.cta")}
+            href="/employers#service"
+            linkLabel={t("service.learnMore")}
             soon={tCommon("comingSoon")}
           />
         </Container>
@@ -415,7 +417,8 @@ function ServiceCard({
   eyebrow,
   title,
   body,
-  cta,
+  href,
+  linkLabel,
   soon,
 }: {
   tone: "navy" | "sand";
@@ -423,11 +426,11 @@ function ServiceCard({
   eyebrow: string;
   title: string;
   body: string;
-  cta: string;
+  href: string;
+  linkLabel: string;
   soon: string;
 }) {
   const navy = tone === "navy";
-  const soonId = `soon-${tone}`;
   return (
     <article
       className={cn(
@@ -446,11 +449,13 @@ function ServiceCard({
         {body}
       </p>
       <div className="mt-auto flex flex-wrap items-center gap-3 pt-4">
-        <Button size="lg" variant={navy ? "inverse" : "primary"} disabled aria-describedby={soonId}>
-          {cta}
-        </Button>
+        <Link
+          href={href}
+          className={buttonVariants({ size: "lg", variant: navy ? "inverse" : "primary" })}
+        >
+          {linkLabel}
+        </Link>
         <Badge
-          id={soonId}
           variant="neutral"
           className={navy ? "bg-white/10 text-white" : "bg-white/70 text-foreground"}
         >
