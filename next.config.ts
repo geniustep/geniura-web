@@ -4,7 +4,9 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./lib/i18n/request.ts");
 
 const isDev = process.env.NODE_ENV !== "production";
-const apiOrigin = new URL(process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api-geniura.geniura.com").origin;
+const apiOrigin = new URL(
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api-geniura.geniura.com",
+).origin;
 
 // Static CSP without nonces, so public pages keep their prerendered shell (a nonce forces dynamic
 // rendering). `'unsafe-inline'` for scripts remains required by Next.js inline bootstrapping until
