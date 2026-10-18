@@ -7,7 +7,6 @@
   "Common": {
     "skipToContent": "Aller au contenu",
     "comingSoon": "Bientôt",
-    "underConstruction": "La plateforme est en construction. Aucune offre ni aucun compte réel n’est encore disponible.",
     "close": "Fermer",
     "menu": "Menu"
   },
@@ -32,8 +31,24 @@
   "Footer": {
     "tagline": "Plateforme marocaine à ambition internationale pour le recrutement et les compétences.",
     "legal": "Confidentialité et conditions",
-    "rights": "© Geniura",
-    "promise": "Candidature gratuite, toujours. Votre profil n’est visible que par les entreprises où vous postulez."
+    "rights": "© Geniura · Maroc",
+    "promise": "Candidature gratuite, toujours. Votre profil n’est visible que par les entreprises où vous postulez.",
+    "ctaTitle": "Commencez par une offre qui vous correspond.",
+    "ctaBody": "La consultation est ouverte à tous sans compte, et la candidature reste toujours gratuite.",
+    "ctaButton": "Parcourir les offres",
+    "seekers": "Candidats",
+    "employers": "Entreprises",
+    "language": "Langue",
+    "browseJobs": "Offres d’emploi",
+    "createAccount": "Créer un compte",
+    "signIn": "Se connecter",
+    "publishJob": "Publier une offre",
+    "recruitmentService": "Service de recrutement",
+    "skills": "Développement des compétences",
+    "trustTitle": "Nos principes",
+    "trustFree": "Candidature gratuite",
+    "trustPrivate": "Profil privé par défaut",
+    "trustHuman": "Décision humaine"
   },
   "Home": {
     "eyebrow": "Plateforme de recrutement au Maroc",

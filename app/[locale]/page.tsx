@@ -120,12 +120,6 @@ export default async function HomePage({ params }: HomePageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdScript(buildSiteIdentityGraph()) }}
       />
-      <div className="bg-accent text-accent-foreground">
-        <Container className="py-2 text-center text-sm font-medium">
-          {tCommon("underConstruction")}
-        </Container>
-      </div>
-
       {/* Hero: navy band, search first, and a labelled example of what follow-up looks like. */}
       <section className="bg-navy-grid text-white">
         <Container className="grid items-center gap-14 py-16 sm:py-20 lg:grid-cols-[1.35fr_1fr] lg:py-24">
