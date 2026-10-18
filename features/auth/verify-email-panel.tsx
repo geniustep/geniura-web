@@ -35,7 +35,7 @@ export function VerifyEmailPanel({ token }: { token: string }) {
         title={t("verify.doneTitle")}
         description={t("verify.doneBody")}
         action={
-          <Link href="/account" className="text-sm font-medium text-primary hover:underline">
+          <Link href="/account" className="text-sm font-medium text-action hover:underline">
             {tMenu("account")}
           </Link>
         }

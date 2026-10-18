@@ -18,7 +18,8 @@
       "employers": "Employeurs",
       "skills": "Compétences"
     },
-    "signIn": "Se connecter"
+    "signIn": "Se connecter",
+    "register": "Créer un compte"
   },
   "LanguageSwitcher": {
     "label": "Langue",
@@ -31,49 +32,16 @@
   "Footer": {
     "tagline": "Plateforme marocaine à ambition internationale pour le recrutement et les compétences.",
     "legal": "Confidentialité et conditions",
-    "rights": "© Geniura"
+    "rights": "© Geniura",
+    "promise": "Candidature gratuite, toujours. Votre profil n’est visible que par les entreprises où vous postulez."
   },
   "Home": {
-    "eyebrow": "Recruter en confiance",
-    "title": "De vraies offres, une candidature gratuite et des décisions prises par des humains",
-    "subtitle": "Geniura réunit un marché d’offres ouvert, des services de présélection et d’évaluation pour les entreprises, et des parcours de mise à niveau liés aux besoins du marché.",
-    "seekerCta": "Je cherche un emploi",
-    "employerCta": "Je recrute",
-    "pathsTitle": "Trois parcours liés",
-    "paths": {
-      "jobs": {
-        "title": "Offres d’emploi",
-        "body": "Les entreprises publient leurs offres et gèrent candidatures et entretiens ; les candidats consultent et postulent gratuitement."
-      },
-      "recruitment": {
-        "title": "Recrutement accompagné",
-        "body": "L’entreprise décrit son besoin et le nombre de postes ; l’équipe Geniura présélectionne et évalue, avec accord et droits explicites."
-      },
-      "skills": {
-        "title": "Développement des compétences",
-        "body": "Des pistes de mise à niveau facultatives, liées à un écart de compétence pour un poste précis, sans achat obligatoire ni promesse d’embauche."
-      }
-    },
-    "principlesTitle": "Nos principes",
-    "principles": {
-      "free": {
-        "title": "Candidature gratuite",
-        "body": "Postuler et consulter les offres ne coûte rien au candidat."
-      },
-      "privacy": {
-        "title": "Privé par défaut",
-        "body": "Votre profil n’apparaît dans aucune recherche sans votre accord, révocable à tout moment."
-      },
-      "human": {
-        "title": "Décision humaine",
-        "body": "Le matching automatique explique ses raisons et ne rejette jamais un candidat de lui-même."
-      },
-      "trust": {
-        "title": "Confiance vérifiable",
-        "body": "Nous vérifions les entreprises, relisons les offres et affichons leur statut et leur date d’expiration."
-      }
-    },
-    "browseAll": "Voir toutes les offres",
+    "eyebrow": "Plateforme de recrutement au Maroc",
+    "titleLead": "Des offres d’emploi",
+    "titleAccent": "enfin claires.",
+    "subtitle": "Salaire, exigences et date limite visibles avant de postuler. Puis l’état réel de votre candidature, à chaque étape.",
+    "searchPlaceholder": "Comptable, محاسب, technicien…",
+    "searchHint": "Écrivez en français ou en arabe.",
     "examplesLabel": "Exemples de recherche :",
     "examples": {
       "one": "Comptable",
@@ -81,67 +49,54 @@
       "three": "Infirmier",
       "four": "Technicien de maintenance"
     },
-    "guarantees": {
-      "title": "Ce que Geniura garantit pour chaque offre",
-      "verified": {
-        "title": "Entreprise vérifiée",
-        "body": "Nous vérifions l’identité de l’entreprise avant d’afficher le badge de vérification."
-      },
-      "reviewed": {
-        "title": "Offre relue et datée",
-        "body": "Chaque offre affiche son statut, sa date de publication et sa date limite."
-      },
-      "private": {
-        "title": "Votre profil reste privé",
-        "body": "Seules les entreprises auprès desquelles vous postulez, ou que vous autorisez, y ont accès."
-      }
+    "preview": {
+      "label": "Exemple de suivi d’une candidature",
+      "example": "Exemple",
+      "jobTitle": "Comptable",
+      "company": "Société de distribution (exemple)",
+      "monogram": "SD",
+      "submittedOn": "14 oct.",
+      "reviewOn": "16 oct.",
+      "interviewOn": "Jeudi 23 oct. · 10 h 00",
+      "decision": "Décision de l’entreprise"
     },
-    "audience": {
-      "title": "Une plateforme pour les deux côtés du recrutement",
-      "seekers": {
-        "title": "Pour les candidats",
-        "items": {
-          "one": "Consulter les offres et postuler gratuitement",
-          "two": "Suivre l’état de chaque candidature, étape par étape",
-          "three": "Contrôler la visibilité de votre profil et retirer votre accord à tout moment"
-        },
-        "cta": "Commencer la recherche"
-      },
-      "employers": {
-        "title": "Pour les entreprises",
-        "items": {
-          "one": "Publier des offres et gérer candidatures et entretiens",
-          "two": "Un service de présélection et d’évaluation assuré par l’équipe Geniura",
-          "three": "Un badge de vérification qui rassure les candidats"
-        },
-        "cta": "Espace entreprises"
-      }
+    "free": {
+      "title": "Candidature gratuite, toujours",
+      "body": "Aucun paiement n’est jamais demandé pour consulter ou postuler."
     },
     "latest": {
       "title": "Offres récentes",
-      "subtitle": "Les dernières offres publiées par les entreprises présentes sur la plateforme.",
-      "all": "Toutes les offres",
+      "subtitle": "Chaque carte affiche le salaire, même lorsqu’il n’est pas communiqué.",
+      "all": "Voir toutes les offres",
       "emptyTitle": "Aucune offre publiée pour l’instant",
       "emptyBody": "Les offres les plus récentes apparaîtront ici dès leur publication."
     },
     "steps": {
-      "title": "Comment fonctionne Geniura",
+      "title": "Vous savez toujours où en est votre candidature.",
       "search": {
-        "title": "Cherchez",
-        "body": "Par métier, ville ou type de contrat, en arabe comme en français."
+        "title": "Cherchez sans créer de compte",
+        "body": "Salaire, exigences et conditions visibles dès la recherche, en français comme en arabe."
       },
       "apply": {
-        "title": "Postulez gratuitement",
-        "body": "Choisissez ce que vous partagez de votre profil avant d’envoyer votre candidature."
+        "title": "Vérifiez ce que vous partagez",
+        "body": "Avant l’envoi, vous voyez exactement ce que l’entreprise recevra de votre profil."
       },
       "follow": {
-        "title": "Suivez la décision",
-        "body": "Vous voyez où en est votre candidature, et la décision finale revient à une personne, pas à une machine."
+        "title": "Suivez l’état réel",
+        "body": "Chaque étape vient d’une action de l’entreprise, et la décision finale revient à une personne, pas à une machine."
       }
     },
-    "cta": {
-      "title": "Commencez par une offre qui vous correspond",
-      "body": "La consultation est ouverte à tous sans compte, et la candidature reste toujours gratuite."
+    "employers": {
+      "eyebrow": "Geniura pour les entreprises",
+      "title": "Publiez une offre et gérez vos candidatures.",
+      "body": "Recevez les candidatures, échangez avec les candidats et organisez les entretiens au même endroit.",
+      "cta": "Publier une offre"
+    },
+    "service": {
+      "eyebrow": "Service de recrutement",
+      "title": "Confiez-nous la présélection.",
+      "body": "Décrivez votre besoin et le nombre de postes : l’équipe Geniura vous aide à sélectionner et évaluer les profils.",
+      "cta": "Décrire mon besoin"
     }
   },
   "Status": {
@@ -365,7 +320,9 @@
       "salary": "Salaire",
       "verified": "Entreprise vérifiée",
       "reviewed": "Relue par l’équipe Geniura",
-      "language": "Offre en {language}"
+      "language": "Offre en {language}",
+      "notDisclosed": "Salaire non communiqué",
+      "view": "Voir l’offre"
     },
     "contractType": {
       "permanent": "CDI",
@@ -441,7 +398,9 @@
       "apply": "Postuler à cette offre",
       "unknownLabel": "Non précisé",
       "notFoundTitle": "Offre indisponible",
-      "notFoundBody": "Cette offre a peut-être été clôturée ou a expiré."
+      "notFoundBody": "Cette offre a peut-être été clôturée ou a expiré.",
+      "open": "Offre publiée et en cours",
+      "badgesTitle": "Ce que nous avons vérifié"
     },
     "report": {
       "open": "Signaler cette offre",
@@ -462,6 +421,7 @@
         "privacy": "Atteinte à la vie privée",
         "other": "Autre motif"
       }
-    }
+    },
+    "eyebrow": "Offres d’emploi"
   }
 }

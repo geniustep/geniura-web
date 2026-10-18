@@ -31,7 +31,7 @@ function SheetContent({
       <Dialog.Popup
         data-slot="sheet-content"
         className={cn(
-          "fixed inset-y-0 z-50 flex w-[min(22rem,100vw-3rem)] flex-col gap-4 bg-background p-6 shadow-lg transition-transform duration-200 ease-out outline-none",
+          "fixed inset-y-0 z-50 flex w-[min(22rem,100vw-3rem)] flex-col gap-4 bg-card p-6 shadow-float transition-transform duration-200 ease-out outline-none",
           side === "end"
             ? "end-0 border-s data-ending-style:translate-x-full data-starting-style:translate-x-full rtl:data-ending-style:-translate-x-full rtl:data-starting-style:-translate-x-full"
             : "start-0 border-e data-ending-style:-translate-x-full data-starting-style:-translate-x-full rtl:data-ending-style:translate-x-full rtl:data-starting-style:translate-x-full",
@@ -52,7 +52,9 @@ function SheetContent({
 }
 
 function SheetTitle({ className, ...props }: ComponentProps<typeof Dialog.Title>) {
-  return <Dialog.Title className={cn("text-lg font-semibold", className)} {...props} />;
+  return (
+    <Dialog.Title className={cn("font-display text-xl font-semibold", className)} {...props} />
+  );
 }
 
 function SheetDescription({ className, ...props }: ComponentProps<typeof Dialog.Description>) {

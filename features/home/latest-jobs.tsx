@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/patterns/empty-state";
 import { JobCard } from "@/features/jobs/job-card";
 import { getJobsPage, getVocabulary } from "@/lib/api/public";
 
-const LATEST_COUNT = 3;
+const LATEST_COUNT = 4;
 
 export async function LatestJobs() {
   // Rendered per request so that an API outage during the build is never baked into the page.
@@ -36,7 +36,7 @@ export async function LatestJobs() {
   }
 
   return (
-    <ul className="grid gap-4 md:grid-cols-3">
+    <ul className="grid gap-5 lg:grid-cols-2">
       {page.results.slice(0, LATEST_COUNT).map((job) => (
         <li key={job.id} className="grid">
           <JobCard job={job} vocabulary={vocabulary} headingLevel="h3" />

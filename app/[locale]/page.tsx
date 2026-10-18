@@ -1,35 +1,28 @@
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  BadgeCheckIcon,
-  BellRingIcon,
-  BriefcaseIcon,
-  Building2Icon,
-  CalendarCheckIcon,
   CheckIcon,
-  GraduationCapIcon,
-  LockKeyholeIcon,
-  ScaleIcon,
+  FileCheck2Icon,
+  MapPinIcon,
   SearchIcon,
-  SendIcon,
-  ShieldCheckIcon,
-  UserRoundSearchIcon,
-  UsersIcon,
+  UsersRoundIcon,
   WalletIcon,
 } from "lucide-react";
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { type ReactNode, Suspense } from "react";
+import { connection } from "next/server";
+import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LatestJobs } from "@/features/home/latest-jobs";
+import { getVocabulary } from "@/lib/api/public";
 import { getDirection } from "@/lib/i18n/config";
 import { Link } from "@/lib/i18n/navigation";
 import { routing } from "@/lib/i18n/routing";
+import { vocabularyOptions } from "@/lib/jobs/labels";
 import { jsonLdScript } from "@/lib/seo/json-ld";
 import { buildSiteIdentityGraph } from "@/lib/seo/site-identity";
 import { buildSocialMetadata } from "@/lib/seo/social";
@@ -60,41 +53,54 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
 }
 
 const examples = ["one", "two", "three", "four"] as const;
+const steps = ["search", "apply", "follow"] as const;
 
-const guarantees = [
-  { key: "verified", icon: BadgeCheckIcon },
-  { key: "reviewed", icon: CalendarCheckIcon },
-  { key: "private", icon: LockKeyholeIcon },
-] as const;
-
-const audienceItems = ["one", "two", "three"] as const;
-
-const steps = [
-  { key: "search", icon: SearchIcon },
-  { key: "apply", icon: SendIcon },
-  { key: "follow", icon: BellRingIcon },
-] as const;
-
-const paths = [
-  { key: "jobs", icon: BriefcaseIcon },
-  { key: "recruitment", icon: UsersIcon },
-  { key: "skills", icon: GraduationCapIcon },
-] as const;
-
-const principles = [
-  { key: "free", icon: WalletIcon },
-  { key: "privacy", icon: LockKeyholeIcon },
-  { key: "human", icon: ScaleIcon },
-  { key: "trust", icon: ShieldCheckIcon },
-] as const;
+const chipClass =
+  "inline-flex min-h-9 items-center rounded-full border border-white/20 bg-white/8 px-4 text-sm font-medium text-white hover:bg-white/15";
 
 function LatestJobsSkeleton() {
   return (
-    <div className="grid gap-4 md:grid-cols-3" aria-busy="true">
-      {[0, 1, 2].map((index) => (
-        <Skeleton key={index} className="h-44 rounded-xl" />
+    <div className="grid gap-5 lg:grid-cols-2" aria-busy="true">
+      {[0, 1, 2, 3].map((index) => (
+        <Skeleton key={index} className="h-60 rounded-2xl" />
       ))}
     </div>
+  );
+}
+
+/** City list of the hero search; the keyword field works on its own if the vocabulary is down. */
+async function LocationSelect({
+  id,
+  name,
+  anyLabel,
+}: {
+  id: string;
+  name: string;
+  anyLabel: string;
+}) {
+  await connection();
+  const locale = await getLocale();
+  let options: { id: string; label: string }[] = [];
+  try {
+    options = vocabularyOptions((await getVocabulary()).locations, locale);
+  } catch {
+    options = [];
+  }
+  return (
+    <select
+      id={id}
+      name={options.length > 0 ? name : undefined}
+      disabled={options.length === 0}
+      className="h-8 w-full appearance-none bg-transparent text-lg text-foreground outline-none disabled:text-muted-foreground"
+      defaultValue=""
+    >
+      <option value="">{anyLabel}</option>
+      {options.map((option) => (
+        <option key={option.id} value={option.id}>
+          {option.label}
+        </option>
+      ))}
+    </select>
   );
 }
 
@@ -104,6 +110,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const t = await getTranslations("Home");
   const tCommon = await getTranslations("Common");
   const tJobs = await getTranslations("Jobs");
+  const tStatus = await getTranslations("Status.application");
   // Arrows point toward the reading direction.
   const ForwardIcon = getDirection(locale) === "rtl" ? ArrowLeftIcon : ArrowRightIcon;
 
@@ -113,50 +120,86 @@ export default async function HomePage({ params }: HomePageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdScript(buildSiteIdentityGraph()) }}
       />
-      <div className="border-b bg-accent/60 text-accent-foreground">
-        <Container className="py-2 text-center text-sm">{tCommon("underConstruction")}</Container>
+      <div className="bg-accent text-accent-foreground">
+        <Container className="py-2 text-center text-sm font-medium">
+          {tCommon("underConstruction")}
+        </Container>
       </div>
 
-      {/* Hero: search first, with the guarantees that make an offer trustworthy beside it. */}
-      <section className="relative overflow-hidden border-b bg-gradient-to-b from-secondary/70 via-secondary/30 to-background">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -end-32 -top-32 size-96 rounded-full bg-primary/10 blur-3xl"
-        />
-        <Container className="relative grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.4fr_1fr] lg:py-24">
-          <div className="flex flex-col items-start gap-6">
-            <Badge variant="info">{t("eyebrow")}</Badge>
-            <h1 className="text-3xl leading-tight font-bold text-balance sm:text-5xl">
-              {t("title")}
+      {/* Hero: navy band, search first, and a labelled example of what follow-up looks like. */}
+      <section className="bg-navy-grid text-white">
+        <Container className="grid items-center gap-14 py-16 sm:py-20 lg:grid-cols-[1.35fr_1fr] lg:py-24">
+          <div className="flex min-w-0 flex-col items-start gap-6">
+            <span className="inline-flex items-center gap-2 rounded-full border border-gold/50 px-4 py-1 text-sm font-medium text-gold-soft">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-gold" />
+              {t("eyebrow")}
+            </span>
+            <h1 className="max-w-3xl text-5xl leading-[1.08] font-bold tracking-tight sm:text-6xl lg:text-7xl lg:leading-[1.05] rtl:leading-[1.25]">
+              {t("titleLead")} <span className="text-gold">{t("titleAccent")}</span>
             </h1>
-            <p className="max-w-2xl text-lg text-muted-foreground">{t("subtitle")}</p>
+            <p className="max-w-xl text-lg text-on-navy-muted sm:text-xl">{t("subtitle")}</p>
+
             {/* Plain GET form: works before JavaScript loads and lands on the shareable results URL. */}
             <form
               role="search"
               action={`/${locale}/jobs`}
               method="get"
-              className="flex w-full max-w-2xl flex-col gap-2 rounded-xl border bg-background p-2 shadow-sm sm:flex-row"
+              className="mt-2 flex w-full max-w-3xl flex-col gap-2 rounded-[1.25rem] bg-card p-2 text-foreground shadow-hero sm:flex-row"
             >
-              <label htmlFor="home-q" className="sr-only">
-                {tJobs("search.label")}
-              </label>
-              <Input
-                id="home-q"
-                name="q"
-                type="search"
-                dir="auto"
-                maxLength={200}
-                enterKeyHint="search"
-                placeholder={tJobs("search.placeholder")}
-                className="h-12 border-0 shadow-none focus-visible:ring-2"
-              />
-              <Button type="submit" size="lg" className="h-12">
-                <SearchIcon aria-hidden="true" />
+              <div className="flex flex-[2] items-center gap-3 px-4 py-2">
+                <SearchIcon className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <label htmlFor="home-q" className="text-xs font-semibold text-subtle-foreground">
+                    {tJobs("search.label")}
+                  </label>
+                  <input
+                    id="home-q"
+                    name="q"
+                    type="search"
+                    dir="auto"
+                    maxLength={200}
+                    enterKeyHint="search"
+                    placeholder={t("searchPlaceholder")}
+                    className="h-8 w-full min-w-0 bg-transparent text-lg outline-none placeholder:text-muted-foreground"
+                  />
+                </div>
+              </div>
+              <div aria-hidden="true" className="my-2 hidden w-px bg-border sm:block" />
+              <div className="flex flex-1 items-center gap-3 border-t px-4 py-2 sm:border-t-0">
+                <MapPinIcon className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <label
+                    htmlFor="home-location"
+                    className="text-xs font-semibold text-subtle-foreground"
+                  >
+                    {tJobs("search.location")}
+                  </label>
+                  <Suspense
+                    fallback={
+                      <select
+                        id="home-location"
+                        disabled
+                        className="h-8 w-full appearance-none bg-transparent text-lg text-muted-foreground outline-none"
+                      >
+                        <option>{tJobs("search.anyLocation")}</option>
+                      </select>
+                    }
+                  >
+                    <LocationSelect
+                      id="home-location"
+                      name="location"
+                      anyLabel={tJobs("search.anyLocation")}
+                    />
+                  </Suspense>
+                </div>
+              </div>
+              <Button type="submit" variant="action" size="lg" className="h-16 rounded-2xl px-9">
                 {tJobs("search.submit")}
               </Button>
             </form>
-            <div className="flex flex-wrap items-center gap-2 text-sm">
-              <span id="home-examples" className="text-muted-foreground">
+            <p className="text-sm text-on-navy-subtle">{t("searchHint")}</p>
+            <div className="flex flex-wrap items-center gap-2">
+              <span id="home-examples" className="text-sm text-on-navy-subtle">
                 {t("examplesLabel")}
               </span>
               <ul aria-labelledby="home-examples" className="flex flex-wrap gap-2">
@@ -164,90 +207,63 @@ export default async function HomePage({ params }: HomePageProps) {
                   <li key={key}>
                     <Link
                       href={{ pathname: "/jobs", query: { q: t(`examples.${key}`) } }}
-                      className="inline-flex min-h-8 items-center rounded-full border bg-background px-3 hover:border-primary/50 hover:text-primary"
+                      className={chipClass}
                     >
                       {t(`examples.${key}`)}
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <Link
+                    href={{ pathname: "/jobs", query: { work_mode: "remote" } }}
+                    className={chipClass}
+                  >
+                    {tJobs("workMode.remote")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={{ pathname: "/jobs", query: { contract_type: "permanent" } }}
+                    className={chipClass}
+                  >
+                    {tJobs("contractType.permanent")}
+                  </Link>
+                </li>
               </ul>
             </div>
-            <Link href="/jobs" className={buttonVariants({ variant: "link" })}>
-              {t("browseAll")}
-              <ForwardIcon aria-hidden="true" />
-            </Link>
           </div>
 
-          <aside
-            aria-labelledby="guarantees-title"
-            className="flex flex-col gap-5 rounded-2xl border bg-card p-6 shadow-sm sm:p-8"
-          >
-            <h2 id="guarantees-title" className="text-lg font-semibold">
-              {t("guarantees.title")}
-            </h2>
-            <ul className="flex flex-col gap-5">
-              {guarantees.map(({ key, icon: Icon }) => (
-                <li key={key} className="flex gap-4">
-                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-                    <Icon className="size-5" aria-hidden="true" />
-                  </span>
-                  <div className="flex flex-col gap-1">
-                    <h3 className="font-semibold">{t(`guarantees.${key}.title`)}</h3>
-                    <p className="text-sm text-muted-foreground">{t(`guarantees.${key}.body`)}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          <ApplicationPreview
+            labels={{
+              label: t("preview.label"),
+              example: t("preview.example"),
+              jobTitle: t("preview.jobTitle"),
+              company: t("preview.company"),
+              monogram: t("preview.monogram"),
+              submitted: tStatus("submitted"),
+              submittedOn: t("preview.submittedOn"),
+              inReview: tStatus("in_review"),
+              reviewOn: t("preview.reviewOn"),
+              interview: tStatus("interview"),
+              interviewOn: t("preview.interviewOn"),
+              decision: t("preview.decision"),
+              freeTitle: t("free.title"),
+              freeBody: t("free.body"),
+            }}
+          />
         </Container>
       </section>
 
-      <section aria-labelledby="audience-title">
-        <Container className="flex flex-col gap-8 py-16">
-          <h2 id="audience-title" className="text-2xl font-bold">
-            {t("audience.title")}
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            <AudienceCard
-              title={t("audience.seekers.title")}
-              icon={UserRoundSearchIcon}
-              items={audienceItems.map((key) => t(`audience.seekers.items.${key}`))}
-              highlighted
-            >
-              <Link href="/jobs" className={buttonVariants({ size: "lg" })}>
-                {t("audience.seekers.cta")}
-                <ForwardIcon aria-hidden="true" />
-              </Link>
-            </AudienceCard>
-            <AudienceCard
-              title={t("audience.employers.title")}
-              icon={Building2Icon}
-              items={audienceItems.map((key) => t(`audience.employers.items.${key}`))}
-            >
-              {/* The employer space arrives in PHASE 5. */}
-              <div className="flex flex-wrap items-center gap-3">
-                <Button size="lg" variant="outline" disabled aria-describedby="cta-soon">
-                  {t("audience.employers.cta")}
-                </Button>
-                <Badge id="cta-soon" variant="neutral">
-                  {tCommon("comingSoon")}
-                </Badge>
-              </div>
-            </AudienceCard>
-          </div>
-        </Container>
-      </section>
-
-      <section aria-labelledby="latest-title" className="border-y bg-muted/40">
-        <Container className="flex flex-col gap-8 py-16">
+      <section aria-labelledby="latest-title">
+        <Container className="flex flex-col gap-8 py-20">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <div className="flex flex-col gap-1">
-              <h2 id="latest-title" className="text-2xl font-bold">
+            <div className="flex flex-col gap-2">
+              <h2 id="latest-title" className="text-4xl font-bold sm:text-5xl">
                 {t("latest.title")}
               </h2>
               <p className="text-muted-foreground">{t("latest.subtitle")}</p>
             </div>
-            <Link href="/jobs" className={buttonVariants({ variant: "outline" })}>
+            <Link href="/jobs" className={buttonVariants({ variant: "link", size: "md" })}>
               {t("latest.all")}
               <ForwardIcon aria-hidden="true" />
             </Link>
@@ -259,125 +275,194 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       <section aria-labelledby="steps-title">
-        <Container className="flex flex-col gap-8 py-16">
-          <h2 id="steps-title" className="text-2xl font-bold">
+        <Container className="grid gap-12 py-12 lg:grid-cols-[1fr_1.6fr]">
+          <h2 id="steps-title" className="text-4xl leading-tight font-bold sm:text-5xl">
             {t("steps.title")}
           </h2>
-          <ol className="grid gap-6 md:grid-cols-3">
-            {steps.map(({ key, icon: Icon }, index) => (
-              <li key={key} className="flex flex-col gap-3 rounded-xl border bg-card p-6">
-                <div className="flex items-center gap-3">
-                  <span
-                    aria-hidden="true"
-                    className="inline-flex size-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground"
-                  >
-                    {index + 1}
-                  </span>
-                  <Icon className="size-5 text-primary" aria-hidden="true" />
+          <ol className="flex flex-col border-b">
+            {steps.map((key, index) => (
+              <li key={key} className="flex gap-7 border-t py-6">
+                <span
+                  aria-hidden="true"
+                  className="min-w-14 font-display text-4xl leading-none font-bold text-action"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-xl font-semibold">{t(`steps.${key}.title`)}</h3>
+                  <p className="text-muted-foreground">{t(`steps.${key}.body`)}</p>
                 </div>
-                <h3 className="text-lg font-semibold">{t(`steps.${key}.title`)}</h3>
-                <p className="text-muted-foreground">{t(`steps.${key}.body`)}</p>
               </li>
             ))}
           </ol>
         </Container>
       </section>
 
-      <section aria-labelledby="paths-title" className="bg-secondary/40">
-        <Container className="flex flex-col gap-8 py-16">
-          <h2 id="paths-title" className="text-2xl font-bold">
-            {t("pathsTitle")}
-          </h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {paths.map(({ key, icon: Icon }) => (
-              <article
-                key={key}
-                className="flex flex-col gap-3 rounded-xl border-t-4 border-t-primary bg-card p-6 shadow-xs"
-              >
-                <Icon className="size-7 text-primary" aria-hidden="true" />
-                <h3 className="text-lg font-semibold">{t(`paths.${key}.title`)}</h3>
-                <p className="text-muted-foreground">{t(`paths.${key}.body`)}</p>
-              </article>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section aria-labelledby="principles-title">
-        <Container className="flex flex-col gap-8 py-16">
-          <h2 id="principles-title" className="text-2xl font-bold">
-            {t("principlesTitle")}
-          </h2>
-          <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-            {principles.map(({ key, icon: Icon }) => (
-              <li key={key} className="flex flex-col gap-2 border-s-2 border-primary/30 ps-4">
-                <Icon className="size-6 text-primary" aria-hidden="true" />
-                <h3 className="font-semibold">{t(`principles.${key}.title`)}</h3>
-                <p className="text-sm text-muted-foreground">{t(`principles.${key}.body`)}</p>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </section>
-
-      <section aria-labelledby="cta-title" className="pb-16">
-        <Container>
-          <div className="flex flex-col items-start gap-6 rounded-2xl bg-primary px-6 py-10 text-primary-foreground sm:px-10 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-col gap-2">
-              <h2 id="cta-title" className="text-2xl font-bold">
-                {t("cta.title")}
-              </h2>
-              <p className="max-w-xl opacity-90">{t("cta.body")}</p>
-            </div>
-            <Link
-              href="/jobs"
-              className={cn(buttonVariants({ size: "lg", variant: "secondary" }), "shrink-0")}
-            >
-              <BriefcaseIcon aria-hidden="true" />
-              {t("seekerCta")}
-            </Link>
-          </div>
+      {/* The employer space and the recruitment service are not open yet: no live links. */}
+      <section aria-label={t("employers.eyebrow")}>
+        <Container className="grid gap-5 pt-12 pb-24 md:grid-cols-2">
+          <ServiceCard
+            tone="navy"
+            icon={FileCheck2Icon}
+            eyebrow={t("employers.eyebrow")}
+            title={t("employers.title")}
+            body={t("employers.body")}
+            cta={t("employers.cta")}
+            soon={tCommon("comingSoon")}
+          />
+          <ServiceCard
+            tone="sand"
+            icon={UsersRoundIcon}
+            eyebrow={t("service.eyebrow")}
+            title={t("service.title")}
+            body={t("service.body")}
+            cta={t("service.cta")}
+            soon={tCommon("comingSoon")}
+          />
         </Container>
       </section>
     </>
   );
 }
 
-function AudienceCard({
-  title,
+type PreviewLabels = Record<
+  | "label"
+  | "example"
+  | "jobTitle"
+  | "company"
+  | "monogram"
+  | "submitted"
+  | "submittedOn"
+  | "inReview"
+  | "reviewOn"
+  | "interview"
+  | "interviewOn"
+  | "decision"
+  | "freeTitle"
+  | "freeBody",
+  string
+>;
+
+/** Static, clearly labelled illustration: it shows the follow-up, it is not a real application. */
+function ApplicationPreview({ labels }: { labels: PreviewLabels }) {
+  const done = [
+    { label: labels.submitted, date: labels.submittedOn },
+    { label: labels.inReview, date: labels.reviewOn },
+  ];
+  return (
+    <figure aria-label={labels.label} className="flex min-w-0 flex-col gap-4">
+      <div className="flex flex-col gap-5 rounded-[1.4rem] bg-card p-6 text-foreground shadow-hero">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span
+              aria-hidden="true"
+              className="inline-flex size-11 items-center justify-center rounded-xl bg-secondary font-display font-bold text-secondary-foreground"
+            >
+              {labels.monogram}
+            </span>
+            <div className="flex flex-col">
+              <span className="font-semibold">{labels.jobTitle}</span>
+              <span className="text-sm text-muted-foreground">{labels.company}</span>
+            </div>
+          </div>
+          <span className="text-xs text-muted-foreground">{labels.example}</span>
+        </div>
+        <ol className="flex flex-col">
+          {done.map((step) => (
+            <li key={step.label} className="flex gap-3.5">
+              <div className="flex flex-col items-center">
+                <span className="inline-flex size-5.5 items-center justify-center rounded-full bg-success text-success-foreground">
+                  <CheckIcon className="size-3" strokeWidth={3} aria-hidden="true" />
+                </span>
+                <span aria-hidden="true" className="h-6 w-0.5 bg-success" />
+              </div>
+              <div className="flex flex-1 justify-between gap-2">
+                <span className="font-medium">{step.label}</span>
+                <span className="text-sm text-muted-foreground">{step.date}</span>
+              </div>
+            </li>
+          ))}
+          <li className="flex gap-3.5">
+            <div className="flex flex-col items-center">
+              <span
+                aria-hidden="true"
+                className="size-5.5 rounded-full border-3 border-action bg-card"
+              />
+              <span aria-hidden="true" className="h-6 w-0.5 bg-border" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-semibold text-action">{labels.interview}</span>
+              <span className="text-sm text-subtle-foreground">{labels.interviewOn}</span>
+            </div>
+          </li>
+          <li className="flex gap-3.5">
+            <span
+              aria-hidden="true"
+              className="size-5.5 rounded-full border-2 border-dashed border-input"
+            />
+            <span className="text-muted-foreground">{labels.decision}</span>
+          </li>
+        </ol>
+      </div>
+      <div className="flex w-[82%] items-center gap-3.5 self-end rounded-2xl border border-white/15 bg-navy-raised p-4 shadow-hero">
+        <WalletIcon className="size-6 shrink-0 text-gold" aria-hidden="true" />
+        <div className="flex flex-col">
+          <span className="font-semibold">{labels.freeTitle}</span>
+          <span className="text-sm text-on-navy-muted">{labels.freeBody}</span>
+        </div>
+      </div>
+    </figure>
+  );
+}
+
+function ServiceCard({
+  tone,
   icon: Icon,
-  items,
-  highlighted = false,
-  children,
+  eyebrow,
+  title,
+  body,
+  cta,
+  soon,
 }: {
+  tone: "navy" | "sand";
+  icon: typeof WalletIcon;
+  eyebrow: string;
   title: string;
-  icon: typeof BriefcaseIcon;
-  items: string[];
-  highlighted?: boolean;
-  children: ReactNode;
+  body: string;
+  cta: string;
+  soon: string;
 }) {
+  const navy = tone === "navy";
+  const soonId = `soon-${tone}`;
   return (
     <article
       className={cn(
-        "flex flex-col gap-6 rounded-2xl border bg-card p-6 sm:p-8",
-        highlighted && "border-primary/40 shadow-sm",
+        "flex min-h-80 flex-col gap-4 rounded-3xl p-8 sm:p-10",
+        navy ? "bg-navy text-white" : "bg-accent text-foreground",
       )}
     >
-      <div className="flex items-center gap-3">
-        <span className="inline-flex size-11 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-          <Icon className="size-5" aria-hidden="true" />
-        </span>
-        <h3 className="text-xl font-semibold">{title}</h3>
+      <Icon className={cn("size-7", navy ? "text-gold" : "text-gold-ink")} aria-hidden="true" />
+      <p
+        className={cn("text-sm font-semibold", navy ? "text-gold-soft" : "text-accent-foreground")}
+      >
+        {eyebrow}
+      </p>
+      <h2 className="text-3xl leading-tight font-bold sm:text-4xl">{title}</h2>
+      <p className={cn("max-w-md", navy ? "text-on-navy-muted" : "text-accent-foreground")}>
+        {body}
+      </p>
+      <div className="mt-auto flex flex-wrap items-center gap-3 pt-4">
+        <Button size="lg" variant={navy ? "inverse" : "primary"} disabled aria-describedby={soonId}>
+          {cta}
+        </Button>
+        <Badge
+          id={soonId}
+          variant="neutral"
+          className={navy ? "bg-white/10 text-white" : "bg-white/70 text-foreground"}
+        >
+          {soon}
+        </Badge>
       </div>
-      <ul className="flex flex-1 flex-col gap-3">
-        {items.map((item) => (
-          <li key={item} className="flex gap-2">
-            <CheckIcon className="mt-1 size-4 shrink-0 text-success" aria-hidden="true" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-      {children}
     </article>
   );
 }

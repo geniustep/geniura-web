@@ -8,7 +8,7 @@ export function BrandMark() {
       alt="Geniura"
       width={171}
       height={50}
-      className="h-10 w-auto object-contain"
+      className="h-9 w-auto object-contain sm:h-10"
     />
   );
 }

@@ -99,7 +99,7 @@ export function LoginForm({ next }: { next?: string }) {
         )}
       </FormField>
       <div className="flex justify-end">
-        <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+        <Link href="/forgot-password" className="text-sm text-action hover:underline">
           {t("login.forgot")}
         </Link>
       </div>
@@ -108,7 +108,7 @@ export function LoginForm({ next }: { next?: string }) {
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         {t("login.noAccount")}{" "}
-        <Link href="/register" className="font-medium text-primary hover:underline">
+        <Link href="/register" className="font-medium text-action hover:underline">
           {t("login.toRegister")}
         </Link>
       </p>

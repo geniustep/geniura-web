@@ -54,7 +54,7 @@ export function RegisterForm() {
         title={t("register.doneTitle")}
         description={t("register.doneBody")}
         action={
-          <Link href="/login" className="text-sm font-medium text-primary hover:underline">
+          <Link href="/login" className="text-sm font-medium text-action hover:underline">
             {t("backToLogin")}
           </Link>
         }
@@ -78,12 +78,12 @@ export function RegisterForm() {
           {intents.map((intent) => (
             <label
               key={intent}
-              className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md border px-3 text-sm has-checked:border-primary has-checked:bg-secondary"
+              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-input px-3.5 text-sm has-checked:border-action has-checked:bg-secondary"
             >
               <input
                 type="radio"
                 value={intent}
-                className="accent-primary"
+                className="accent-action"
                 {...form.register("signup_intent")}
               />
               {t(`register.intent.${intent}`)}
@@ -159,7 +159,7 @@ export function RegisterForm() {
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         {t("register.hasAccount")}{" "}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+        <Link href="/login" className="font-medium text-action hover:underline">
           {t("register.toLogin")}
         </Link>
       </p>

@@ -35,11 +35,11 @@ export async function JobResults({ searchParams }: { searchParams: Promise<Searc
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-sm text-muted-foreground" role="status">
+    <div className="flex flex-col gap-5">
+      <p className="font-medium text-subtle-foreground" role="status">
         {t("count", { count: page.count })}
       </p>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-5">
         {page.results.map((job) => (
           <li key={job.id}>
             <JobCard job={job} vocabulary={vocabulary} />

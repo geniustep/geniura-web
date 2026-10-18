@@ -16,8 +16,8 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
         width: "100%",
         height: "100%",
         position: "relative",
-        backgroundColor: "#F9F8F5",
-        color: "#143340",
+        backgroundColor: "#F6F5F1",
+        color: "#031E3C",
         fontFamily: "sans-serif",
         alignItems: "center",
         justifyContent: "center",
@@ -31,7 +31,7 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
           left: 0,
           width: 18,
           height: "100%",
-          backgroundColor: "#0B6170",
+          backgroundColor: "#031E3C",
         }}
       />
       <div
@@ -51,7 +51,7 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
             display: "flex",
             fontSize: 31,
             marginTop: 18,
-            color: "#486572",
+            color: "#5D6875",
           }}
         >
           {subtitle}
@@ -65,7 +65,7 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
           left: 96,
           fontSize: 24,
           letterSpacing: 2,
-          color: "#0B6170",
+          color: "#8A6420",
         }}
       >
         geniura.com
@@ -78,7 +78,7 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
           bottom: 48,
           width: 180,
           height: 6,
-          backgroundColor: "#0B6170",
+          backgroundColor: "#031E3C",
         }}
       />
     </div>,

@@ -22,13 +22,13 @@ export type ApplicationStatus = (typeof applicationStatuses)[number];
 
 // Presentation only: colour carries no decision, and the text label is always shown.
 const tone: Record<ApplicationStatus, NonNullable<BadgeProps["variant"]>> = {
-  submitted: "info",
+  submitted: "neutral",
   in_review: "info",
   shortlisted: "accent",
-  interview: "accent",
+  interview: "success",
   offer: "success",
-  hired: "success",
-  rejected: "neutral",
+  hired: "primary",
+  rejected: "danger",
   withdrawn: "neutral",
   closed: "neutral",
 };

@@ -10,7 +10,13 @@ import { env } from "@/lib/env";
 import { getDirection } from "@/lib/i18n/config";
 import { routing } from "@/lib/i18n/routing";
 import { Providers } from "@/providers/providers";
-import { fontArabic, fontLatin } from "@/styles/fonts";
+import {
+  fontArabic,
+  fontDisplayArabic,
+  fontDisplayArabicLatin,
+  fontDisplayLatin,
+  fontLatin,
+} from "@/styles/fonts";
 
 type LocaleLayoutProps = {
   children: ReactNode;
@@ -22,7 +28,7 @@ export function generateStaticParams() {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0b6170",
+  themeColor: "#031e3c",
   width: "device-width",
   initialScale: 1,
 };
@@ -55,13 +61,21 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     <html
       lang={locale}
       dir={direction}
-      className={`${fontArabic.variable} ${fontLatin.variable}`}
+      className={[
+        fontArabic,
+        fontLatin,
+        fontDisplayArabic,
+        fontDisplayArabicLatin,
+        fontDisplayLatin,
+      ]
+        .map((font) => font.variable)
+        .join(" ")}
       suppressHydrationWarning
     >
       <body className="flex min-h-dvh flex-col">
         <a
           href="#main"
-          className="sr-only z-50 rounded-md bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only focus:fixed focus:start-4 focus:top-4"
+          className="sr-only z-50 rounded-full bg-action px-4 py-2 text-action-foreground focus:not-sr-only focus:fixed focus:start-4 focus:top-4"
         >
           {t("skipToContent")}
         </a>

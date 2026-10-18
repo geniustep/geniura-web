@@ -35,7 +35,7 @@ export function ForgotPasswordForm() {
         title={t("forgot.doneTitle")}
         description={t("forgot.doneBody")}
         action={
-          <Link href="/login" className="text-sm font-medium text-primary hover:underline">
+          <Link href="/login" className="text-sm font-medium text-action hover:underline">
             {t("backToLogin")}
           </Link>
         }
@@ -71,7 +71,7 @@ export function ForgotPasswordForm() {
       <Button type="submit" size="lg" disabled={request.isPending}>
         {request.isPending ? t("submitting") : t("forgot.submit")}
       </Button>
-      <Link href="/login" className="text-center text-sm text-primary hover:underline">
+      <Link href="/login" className="text-center text-sm text-action hover:underline">
         {t("backToLogin")}
       </Link>
     </form>

@@ -3,8 +3,7 @@ import type { Metadata } from "next";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
 
-import { Container } from "@/components/layout/container";
-import { PageHeader } from "@/components/patterns/page-header";
+import { PageBand } from "@/components/patterns/page-band";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,7 +27,7 @@ async function AccountDetails({ locale }: { locale: string }) {
   return (
     <div className="grid gap-6">
       {me.is_email_verified ? null : (
-        <div className="flex flex-col gap-3 rounded-xl border border-warning/50 bg-warning/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 rounded-2xl bg-warning-soft p-4 text-warning sm:flex-row sm:items-center sm:justify-between">
           <p className="flex gap-2 text-sm">
             <TriangleAlertIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
             {t("verifyBanner")}
@@ -36,10 +35,10 @@ async function AccountDetails({ locale }: { locale: string }) {
           <ResendVerificationButton />
         </div>
       )}
-      <dl className="grid gap-4 rounded-xl border p-6 sm:grid-cols-2">
+      <dl className="grid gap-6 sm:grid-cols-3">
         <div className="grid gap-1">
           <dt className="text-sm text-muted-foreground">{t("email")}</dt>
-          <dd className="flex flex-wrap items-center gap-2 font-medium">
+          <dd className="flex flex-wrap items-center gap-2 font-display text-lg font-semibold">
             <bdi dir="ltr">{me.email}</bdi>
             <Badge variant={me.is_email_verified ? "success" : "warning"}>
               {me.is_email_verified ? <CircleCheckIcon aria-hidden="true" /> : null}
@@ -77,11 +76,12 @@ export default async function AccountPage({ params }: Props) {
   const t = await getTranslations("Account");
 
   return (
-    <Container className="grid gap-8 py-10">
-      <PageHeader title={t("title")} description={t("subtitle")} />
-      <Suspense fallback={<Skeleton className="h-48" />}>
-        <AccountDetails locale={locale} />
-      </Suspense>
-    </Container>
+    <PageBand title={t("title")} description={t("subtitle")}>
+      <div className="rounded-2xl bg-card p-6 shadow-float sm:p-8">
+        <Suspense fallback={<Skeleton className="h-48" />}>
+          <AccountDetails locale={locale} />
+        </Suspense>
+      </div>
+    </PageBand>
   );
 }

@@ -67,11 +67,13 @@ async function JobContent({ params }: Props) {
     vocabulary = await getVocabulary().catch(() => vocabulary);
   } catch {
     return (
-      <EmptyState
-        icon={FileQuestionIcon}
-        title={t("notFoundTitle")}
-        description={t("notFoundBody")}
-      />
+      <Container className="py-16">
+        <EmptyState
+          icon={FileQuestionIcon}
+          title={t("notFoundTitle")}
+          description={t("notFoundBody")}
+        />
+      </Container>
     );
   }
   if (!job) notFound();
@@ -102,17 +104,22 @@ async function JobContent({ params }: Props) {
 // Unknown jobs never reach this page with a 200: proxy.ts answers them with a 404 first.
 export default function JobPage({ params }: Props) {
   return (
-    <Container className="py-10">
-      <Suspense
-        fallback={
-          <div className="flex flex-col gap-6" aria-busy="true">
-            <Skeleton className="h-10 w-2/3" />
-            <Skeleton className="h-64" />
+    <Suspense
+      fallback={
+        <>
+          <div className="bg-navy-grid">
+            <Container className="flex flex-col gap-5 pt-8 pb-32" aria-busy="true">
+              <Skeleton className="h-5 w-32 bg-white/10" />
+              <Skeleton className="h-14 w-2/3 bg-white/10" />
+            </Container>
           </div>
-        }
-      >
-        <JobContent params={params} />
-      </Suspense>
-    </Container>
+          <Container className="-mt-22 pb-20">
+            <Skeleton className="h-72 rounded-2xl" />
+          </Container>
+        </>
+      }
+    >
+      <JobContent params={params} />
+    </Suspense>
   );
 }

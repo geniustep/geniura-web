@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
   return (
     <Menu.Root>
       <Menu.Trigger
-        className="inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm font-medium hover:bg-muted data-popup-open:bg-muted"
+        className="inline-flex h-11 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium hover:bg-muted data-popup-open:bg-muted"
         aria-label={t("current", { language: tLanguages(locale) })}
       >
         <LanguagesIcon className="size-4" aria-hidden="true" />
@@ -36,7 +36,7 @@ export function LanguageSwitcher() {
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner sideOffset={6} align="end" className="z-50 outline-none">
-          <Menu.Popup className="min-w-40 rounded-lg border bg-popover p-1 text-popover-foreground shadow-md transition-[scale,opacity] duration-100 outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0">
+          <Menu.Popup className="min-w-44 rounded-2xl bg-popover p-1.5 text-popover-foreground shadow-float transition-[scale,opacity] duration-100 outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0">
             {locales.map((option) => (
               <Menu.Item
                 key={option}
@@ -45,7 +45,7 @@ export function LanguageSwitcher() {
                 aria-current={option === locale ? "true" : undefined}
                 onClick={() => option !== locale && switchTo(option)}
                 className={cn(
-                  "flex h-10 items-center justify-between gap-4 rounded-md px-3 text-sm outline-none data-highlighted:bg-muted",
+                  "flex h-11 items-center justify-between gap-4 rounded-lg px-3 text-sm outline-none data-highlighted:bg-muted",
                   option === locale && "font-semibold",
                 )}
               >

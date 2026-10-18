@@ -52,7 +52,7 @@ export function SessionsList() {
         {sessions.data.map((session) => (
           <li
             key={session.id}
-            className="flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-3 rounded-2xl bg-muted p-5 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="grid gap-1">
               <div className="flex flex-wrap items-center gap-2">

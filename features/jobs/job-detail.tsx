@@ -2,18 +2,15 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   BadgeCheckIcon,
-  BriefcaseIcon,
   CalendarClockIcon,
-  CalendarIcon,
+  ClipboardCheckIcon,
   GlobeIcon,
-  GraduationCapIcon,
-  MapPinIcon,
-  UsersIcon,
-  WalletIcon,
+  ShieldCheckIcon,
 } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
+import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { JobRequirement, PublicJob } from "@/lib/api/generated/model";
@@ -22,6 +19,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { pickLabel, type Vocabulary } from "@/lib/jobs/labels";
 
 import { formatDate, formatSalary, salaryPeriod } from "./format";
+import { Monogram } from "./monogram";
 import { ReportJobDialog } from "./report-job-dialog";
 
 function Paragraphs({ text }: { text: string }) {
@@ -39,14 +37,11 @@ function Paragraphs({ text }: { text: string }) {
   );
 }
 
-function Fact({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
+function Fact({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex gap-3">
-      <span className="mt-0.5 text-muted-foreground [&_svg]:size-5">{icon}</span>
-      <div className="grid gap-0.5">
-        <dt className="text-sm text-muted-foreground">{label}</dt>
-        <dd className="font-medium">{children}</dd>
-      </div>
+    <div className="flex flex-col gap-0.5">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="font-display text-lg font-semibold">{children}</dd>
     </div>
   );
 }
@@ -95,7 +90,7 @@ function RequirementItem({
   }
 
   return (
-    <li className="flex flex-wrap items-center gap-2 rounded-lg border p-3">
+    <li className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t py-3 first:border-t-0">
       <Badge variant={requirement.is_mandatory ? "primary" : "neutral"}>
         {requirement.is_mandatory ? t("detail.mandatory") : t("detail.optional")}
       </Badge>
@@ -118,183 +113,235 @@ export function JobDetail({ job, vocabulary }: { job: PublicJob; vocabulary: Voc
   const locale = useLocale();
   const format = useFormatter();
   const direction = getDirection(job.source_locale);
+  const uiDirection = getDirection(locale);
   const city = job.location ? pickLabel(vocabulary.locations[job.location], locale) : undefined;
   const salary = formatSalary(format, job.salary);
   const period = salaryPeriod(job.salary);
-  const BackIcon = getDirection(locale) === "rtl" ? ArrowRightIcon : ArrowLeftIcon;
+  const BackIcon = uiDirection === "rtl" ? ArrowRightIcon : ArrowLeftIcon;
   const languageName = new Intl.DisplayNames([locale], { type: "language" }).of(job.source_locale);
+  const place =
+    [city, job.address_text].filter(Boolean).join(" — ") || t(`workMode.${job.work_mode}`);
+  const published = formatDate(format, job.published_at);
+  const expires = formatDate(format, job.expires_at);
+
+  const sectionTitle = "text-2xl font-bold";
 
   return (
-    <div className="flex flex-col gap-8">
-      <Link
-        href="/jobs"
-        className="inline-flex w-fit items-center gap-2 text-sm text-primary hover:underline"
-      >
-        <BackIcon className="size-4" aria-hidden="true" />
-        {t("detail.back")}
-      </Link>
-
-      <header className="flex flex-col gap-3 border-b pb-6">
-        <h1 className="text-2xl font-bold sm:text-3xl" lang={job.source_locale} dir={direction}>
-          {job.title}
-        </h1>
-        <p className="flex flex-wrap items-center gap-2 text-muted-foreground">
-          <bdi className="font-medium text-foreground">{job.organization.name}</bdi>
-          {job.organization.is_verified ? (
-            <span className="inline-flex items-center gap-1 text-success">
-              <BadgeCheckIcon className="size-4" aria-hidden="true" />
-              {t("card.verified")}
-            </span>
-          ) : null}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="info">{t(`contractType.${job.contract_type}`)}</Badge>
-          <Badge variant="info">{t(`workMode.${job.work_mode}`)}</Badge>
-          <Badge variant="neutral">{t(`schedule.${job.schedule}`)}</Badge>
-          {job.is_reviewed ? <Badge variant="outline">{t("card.reviewed")}</Badge> : null}
-          {job.source_locale !== locale && languageName ? (
-            <Badge variant="outline">{t("card.language", { language: languageName })}</Badge>
-          ) : null}
-        </div>
-      </header>
-
-      <div className="grid gap-10 lg:grid-cols-[1fr_20rem]">
-        <div className="flex flex-col gap-8" lang={job.source_locale} dir={direction}>
-          <section aria-labelledby="job-description" className="flex flex-col gap-3">
-            <h2
-              id="job-description"
-              className="text-xl font-semibold"
-              lang={locale}
-              dir={getDirection(locale)}
-            >
-              {t("detail.description")}
-            </h2>
-            <div className="flex flex-col gap-3 leading-relaxed">
-              <Paragraphs text={job.description} />
-            </div>
-          </section>
-          {job.responsibilities ? (
-            <section aria-labelledby="job-responsibilities" className="flex flex-col gap-3">
-              <h2
-                id="job-responsibilities"
-                className="text-xl font-semibold"
-                lang={locale}
-                dir={getDirection(locale)}
+    <>
+      <section className="bg-navy-grid text-white">
+        <Container className="flex flex-col gap-5 pt-8 pb-32">
+          <Link
+            href="/jobs"
+            className="inline-flex w-fit items-center gap-2 text-sm text-on-navy-muted hover:text-white"
+          >
+            <BackIcon className="size-4" aria-hidden="true" />
+            {t("detail.back")}
+          </Link>
+          <div className="flex flex-wrap items-center gap-5">
+            <Monogram name={job.organization.name} size="lg" />
+            <div className="flex min-w-0 flex-col gap-1">
+              <h1
+                className="text-4xl leading-tight font-bold sm:text-5xl"
+                lang={job.source_locale}
+                dir={direction}
               >
-                {t("detail.responsibilities")}
+                {job.title}
+              </h1>
+              <p className="text-lg text-on-navy-muted">
+                <bdi>{job.organization.name}</bdi> · {place}
+              </p>
+            </div>
+          </div>
+          <ul aria-label={t("detail.badgesTitle")} className="flex flex-wrap gap-2.5">
+            {job.organization.is_verified ? (
+              <li className="inline-flex items-center gap-1.5 rounded-full border border-on-navy-success/40 bg-on-navy-success/14 px-3.5 py-1 text-sm font-medium text-on-navy-success">
+                <BadgeCheckIcon className="size-4" aria-hidden="true" />
+                {t("card.verified")}
+              </li>
+            ) : null}
+            {job.is_reviewed ? (
+              <li className="inline-flex items-center gap-1.5 rounded-full border border-on-navy-info/45 bg-on-navy-info/14 px-3.5 py-1 text-sm font-medium text-on-navy-info">
+                <ClipboardCheckIcon className="size-4" aria-hidden="true" />
+                {t("card.reviewed")}
+              </li>
+            ) : null}
+            <li className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/8 px-3.5 py-1 text-sm font-medium">
+              <span aria-hidden="true" className="size-2 rounded-full bg-on-navy-live" />
+              {t("detail.open")}
+            </li>
+            {job.source_locale !== locale && languageName ? (
+              <li className="inline-flex items-center rounded-full border border-white/25 px-3.5 py-1 text-sm">
+                {t("card.language", { language: languageName })}
+              </li>
+            ) : null}
+          </ul>
+        </Container>
+      </section>
+
+      <Container className="-mt-22 grid items-start gap-8 pb-20 lg:grid-cols-[1fr_22rem]">
+        <div className="flex min-w-0 flex-col gap-6">
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-5 rounded-2xl bg-card p-6 shadow-float sm:grid-cols-3 sm:p-7">
+            <Fact label={t("card.salary")}>
+              {salary ? (
+                <>
+                  <bdi>{salary}</bdi>{" "}
+                  {period ? (
+                    <span className="font-sans text-sm font-normal text-muted-foreground">
+                      {t(`salaryPeriod.${period}` as "salaryPeriod.month")}
+                    </span>
+                  ) : null}
+                </>
+              ) : (
+                <span className="text-muted-foreground">{t("card.notDisclosed")}</span>
+              )}
+            </Fact>
+            <Fact label={t("filters.contractType")}>{t(`contractType.${job.contract_type}`)}</Fact>
+            <Fact label={t("filters.workMode")}>{t(`workMode.${job.work_mode}`)}</Fact>
+            <Fact label={t("filters.schedule")}>{t(`schedule.${job.schedule}`)}</Fact>
+            {job.experience_min_years != null ? (
+              <Fact label={t("detail.experience")}>
+                {t("detail.experienceYears", { years: job.experience_min_years })}
+              </Fact>
+            ) : null}
+            {job.education_level ? (
+              <Fact label={t("detail.education")}>
+                {t(`educationLevel.${job.education_level}` as "educationLevel.none")}
+              </Fact>
+            ) : null}
+            <Fact label={t("detail.positions")}>{format.number(job.positions_count)}</Fact>
+            {published ? <Fact label={t("detail.published")}>{published}</Fact> : null}
+            {expires ? <Fact label={t("detail.expires")}>{expires}</Fact> : null}
+          </dl>
+
+          <div className="flex flex-col gap-8 rounded-2xl bg-card p-6 shadow-card sm:p-9">
+            <section
+              aria-labelledby="job-description"
+              className="flex max-w-3xl flex-col gap-3"
+              lang={job.source_locale}
+              dir={direction}
+            >
+              <h2 id="job-description" className={sectionTitle} lang={locale} dir={uiDirection}>
+                {t("detail.description")}
               </h2>
-              <div className="flex flex-col gap-2 leading-relaxed">
-                <Paragraphs text={job.responsibilities} />
+              <div className="flex flex-col gap-3 leading-relaxed">
+                <Paragraphs text={job.description} />
               </div>
             </section>
-          ) : null}
-          {job.requirements.length > 0 ? (
-            <section
-              aria-labelledby="job-requirements"
-              className="flex flex-col gap-3"
-              lang={locale}
-              dir={getDirection(locale)}
-            >
-              <h2 id="job-requirements" className="text-xl font-semibold">
-                {t("detail.requirements")}
-              </h2>
-              <ul className="flex flex-col gap-2">
-                {job.requirements.map((requirement) => (
-                  <RequirementItem
-                    key={requirement.id}
-                    requirement={requirement}
-                    vocabulary={vocabulary}
-                  />
-                ))}
-              </ul>
-            </section>
-          ) : null}
-        </div>
-
-        <aside className="flex flex-col gap-6">
-          <section className="flex flex-col gap-3 rounded-xl border bg-muted/40 p-5">
-            <h2 className="font-semibold">{t("detail.applyTitle")}</h2>
-            <Button disabled aria-describedby="apply-soon">
-              {t("detail.apply")}
-            </Button>
-            <p id="apply-soon" className="text-sm text-muted-foreground">
-              {t("detail.applySoon")}
-            </p>
-          </section>
-
-          <section
-            aria-labelledby="job-facts"
-            className="flex flex-col gap-4 rounded-xl border p-5"
-          >
-            <h2 id="job-facts" className="font-semibold">
-              {t("detail.details")}
-            </h2>
-            <dl className="flex flex-col gap-4">
-              <Fact icon={<MapPinIcon />} label={t("detail.location")}>
-                {[city, job.address_text].filter(Boolean).join(" — ") ||
-                  t(`workMode.${job.work_mode}`)}
-              </Fact>
-              {salary ? (
-                <Fact icon={<WalletIcon />} label={t("card.salary")}>
-                  <bdi>{salary}</bdi>{" "}
-                  {period ? t(`salaryPeriod.${period}` as "salaryPeriod.month") : null}
-                </Fact>
-              ) : null}
-              <Fact icon={<UsersIcon />} label={t("detail.positions")}>
-                {format.number(job.positions_count)}
-              </Fact>
-              {job.experience_min_years != null ? (
-                <Fact icon={<BriefcaseIcon />} label={t("detail.experience")}>
-                  {t("detail.experienceYears", { years: job.experience_min_years })}
-                </Fact>
-              ) : null}
-              {job.education_level ? (
-                <Fact icon={<GraduationCapIcon />} label={t("detail.education")}>
-                  {t(`educationLevel.${job.education_level}` as "educationLevel.none")}
-                </Fact>
-              ) : null}
-              {job.published_at ? (
-                <Fact icon={<CalendarIcon />} label={t("detail.published")}>
-                  {formatDate(format, job.published_at)}
-                </Fact>
-              ) : null}
-              {job.expires_at ? (
-                <Fact icon={<CalendarClockIcon />} label={t("detail.expires")}>
-                  {formatDate(format, job.expires_at)}
-                </Fact>
-              ) : null}
-            </dl>
-          </section>
+            {job.responsibilities ? (
+              <section
+                aria-labelledby="job-responsibilities"
+                className="flex max-w-3xl flex-col gap-3 border-t pt-7"
+                lang={job.source_locale}
+                dir={direction}
+              >
+                <h2
+                  id="job-responsibilities"
+                  className={sectionTitle}
+                  lang={locale}
+                  dir={uiDirection}
+                >
+                  {t("detail.responsibilities")}
+                </h2>
+                <div className="flex flex-col gap-2 leading-relaxed">
+                  <Paragraphs text={job.responsibilities} />
+                </div>
+              </section>
+            ) : null}
+            {job.requirements.length > 0 ? (
+              <section
+                aria-labelledby="job-requirements"
+                className="flex max-w-3xl flex-col gap-3 border-t pt-7"
+              >
+                <h2 id="job-requirements" className={sectionTitle}>
+                  {t("detail.requirements")}
+                </h2>
+                <ul className="flex flex-col">
+                  {job.requirements.map((requirement) => (
+                    <RequirementItem
+                      key={requirement.id}
+                      requirement={requirement}
+                      vocabulary={vocabulary}
+                    />
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+          </div>
 
           <section
             aria-labelledby="job-organization"
-            className="flex flex-col gap-3 rounded-xl border p-5"
+            className="flex flex-col gap-3 rounded-2xl bg-accent p-6 text-foreground sm:p-8"
           >
-            <h2 id="job-organization" className="font-semibold">
+            <p className="text-sm font-semibold text-accent-foreground">
               {t("detail.organization")}
-            </h2>
-            <p className="font-medium">
-              <bdi>{job.organization.name}</bdi>
             </p>
+            <h2 id="job-organization" className={sectionTitle}>
+              <bdi>{job.organization.name}</bdi>
+            </h2>
             {job.organization.website && /^https?:\/\//i.test(job.organization.website) ? (
               <a
                 href={job.organization.website}
                 rel="noopener noreferrer nofollow"
                 target="_blank"
-                className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                className="inline-flex w-fit items-center gap-2 font-medium underline-offset-4 hover:underline"
               >
                 <GlobeIcon className="size-4" aria-hidden="true" />
                 <bdi dir="ltr">{job.organization.website.replace(/^https?:\/\//, "")}</bdi>
               </a>
             ) : null}
             {job.organization.is_verified ? (
-              <p className="text-sm text-muted-foreground">{t("detail.verifiedNote")}</p>
+              <p className="flex max-w-2xl gap-2 text-sm text-accent-foreground">
+                <ShieldCheckIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                {t("detail.verifiedNote")}
+              </p>
             ) : null}
           </section>
+        </div>
 
+        <aside className="flex flex-col gap-4 lg:sticky lg:top-24">
+          <section
+            aria-labelledby="apply-title"
+            className="flex flex-col gap-5 rounded-3xl bg-card p-7 shadow-float"
+          >
+            <h2 id="apply-title" className="sr-only">
+              {t("detail.applyTitle")}
+            </h2>
+            <div className="flex flex-col">
+              <span className="text-sm text-muted-foreground">{t("card.salary")}</span>
+              {salary ? (
+                <span className="font-display text-2xl font-bold">
+                  <bdi>{salary}</bdi>
+                </span>
+              ) : (
+                <span className="font-display text-2xl font-semibold text-muted-foreground">
+                  {t("card.notDisclosed")}
+                </span>
+              )}
+              {salary && period ? (
+                <span className="text-sm text-muted-foreground">
+                  {t(`salaryPeriod.${period}` as "salaryPeriod.month")}
+                </span>
+              ) : null}
+            </div>
+            {expires ? (
+              <p className="flex items-center gap-3 rounded-2xl bg-muted p-4">
+                <CalendarClockIcon className="size-5 shrink-0 text-action" aria-hidden="true" />
+                <span>
+                  <span className="block text-sm text-muted-foreground">{t("detail.expires")}</span>
+                  <span className="font-semibold">{expires}</span>
+                </span>
+              </p>
+            ) : null}
+            <Button variant="action" size="lg" disabled aria-describedby="apply-soon">
+              {t("detail.apply")}
+            </Button>
+            <p id="apply-soon" className="text-center text-sm text-muted-foreground">
+              {t("detail.applySoon")}
+            </p>
+          </section>
           <ReportJobDialog jobId={job.id} />
         </aside>
-      </div>
-    </div>
+      </Container>
+    </>
   );
 }

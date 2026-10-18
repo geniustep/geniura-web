@@ -47,7 +47,7 @@ export function ResetPasswordForm({ uid, token }: { uid: string; token: string }
         title={t("reset.doneTitle")}
         description={t("reset.doneBody")}
         action={
-          <Link href="/login" className="text-sm font-medium text-primary hover:underline">
+          <Link href="/login" className="text-sm font-medium text-action hover:underline">
             {t("backToLogin")}
           </Link>
         }

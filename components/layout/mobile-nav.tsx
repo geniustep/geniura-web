@@ -20,7 +20,7 @@ export function MobileNav() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
-        className="inline-flex size-10 items-center justify-center rounded-md hover:bg-muted md:hidden"
+        className="inline-flex size-11 items-center justify-center rounded-full hover:bg-muted md:hidden"
         aria-label={tCommon("menu")}
       >
         <MenuIcon className="size-5" aria-hidden="true" />
@@ -33,7 +33,7 @@ export function MobileNav() {
               <Link
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="flex h-11 items-center rounded-md px-3 font-medium hover:bg-muted"
+                className="flex h-12 items-center rounded-xl px-3 text-lg font-semibold hover:bg-muted"
               >
                 {t(`nav.${item.key}`)}
               </Link>
@@ -42,7 +42,7 @@ export function MobileNav() {
           {plannedNavItems.map((item) => (
             <li
               key={item}
-              className="flex h-11 items-center justify-between rounded-md px-3 text-muted-foreground"
+              className="flex h-12 items-center justify-between rounded-xl px-3 text-muted-foreground"
             >
               {t(`nav.${item}`)}
               <Badge variant="neutral">{tCommon("comingSoon")}</Badge>

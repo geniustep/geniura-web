@@ -60,7 +60,7 @@ export function JobSearchBar({ options }: { options: SearchOptions }) {
     <form
       role="search"
       onSubmit={submit}
-      className="grid gap-3 sm:grid-cols-[1fr_14rem_auto] sm:items-end"
+      className="grid gap-3 sm:grid-cols-[1fr_15rem_auto] sm:items-end"
     >
       <div className="grid gap-2">
         <Label htmlFor={qId}>{t("search.label")}</Label>
@@ -71,6 +71,7 @@ export function JobSearchBar({ options }: { options: SearchOptions }) {
           enterKeyHint="search"
           maxLength={200}
           placeholder={t("search.placeholder")}
+          className="h-13 md:text-base"
           value={q}
           onChange={(event) => setQ(event.target.value)}
         />
@@ -79,6 +80,7 @@ export function JobSearchBar({ options }: { options: SearchOptions }) {
         <Label htmlFor={locationId}>{t("search.location")}</Label>
         <NativeSelect
           id={locationId}
+          className="h-13 md:text-base"
           value={location}
           onChange={(event) => setLocation(event.target.value)}
         >
@@ -90,7 +92,7 @@ export function JobSearchBar({ options }: { options: SearchOptions }) {
           ))}
         </NativeSelect>
       </div>
-      <Button type="submit" size="md" disabled={isPending}>
+      <Button type="submit" variant="action" size="lg" disabled={isPending}>
         {isPending ? (
           <LoaderCircleIcon className="animate-spin" aria-hidden="true" />
         ) : (
@@ -221,8 +223,11 @@ export function JobFilters({ options }: { options: SearchOptions }) {
 
   return (
     <>
-      <aside aria-label={t("filters.title")} className="hidden lg:block">
-        <h2 className="mb-4 font-semibold">{t("filters.title")}</h2>
+      <aside
+        aria-label={t("filters.title")}
+        className="hidden self-start rounded-2xl bg-card p-6 shadow-card lg:block"
+      >
+        <h2 className="mb-5 text-xl font-semibold">{t("filters.title")}</h2>
         <FilterFields options={options} />
       </aside>
       <div className="lg:hidden">

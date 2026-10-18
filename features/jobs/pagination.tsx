@@ -20,7 +20,7 @@ export function JobsPagination({ state, count }: { state: JobSearchState; count:
 
   const href = (page: number) =>
     serializeJobSearch("/jobs", { ...state, page: page === 1 ? null : page });
-  const linkClass = buttonVariants({ variant: "outline", size: "sm" });
+  const linkClass = buttonVariants({ variant: "outline", size: "md" });
 
   return (
     <nav aria-label={t("label")} className="flex items-center justify-between gap-4">

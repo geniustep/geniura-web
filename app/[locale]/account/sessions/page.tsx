@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
 
-import { Container } from "@/components/layout/container";
-import { PageHeader } from "@/components/patterns/page-header";
+import { PageBand } from "@/components/patterns/page-band";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireSession } from "@/features/account/require-session";
 import { SessionsList } from "@/features/account/sessions-list";
@@ -27,11 +26,12 @@ export default async function SessionsPage({ params }: Props) {
   const t = await getTranslations("Account.sessions");
 
   return (
-    <Container className="grid gap-8 py-10">
-      <PageHeader title={t("title")} description={t("subtitle")} />
-      <Suspense fallback={<Skeleton className="h-40" />}>
-        <Gate locale={locale} />
-      </Suspense>
-    </Container>
+    <PageBand title={t("title")} description={t("subtitle")}>
+      <div className="rounded-2xl bg-card p-6 shadow-float sm:p-8">
+        <Suspense fallback={<Skeleton className="h-40" />}>
+          <Gate locale={locale} />
+        </Suspense>
+      </div>
+    </PageBand>
   );
 }

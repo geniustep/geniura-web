@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+/** Navy band with the page title, then the form on a raised white card (direction A). */
 export function AuthShell({
   title,
   subtitle,
@@ -10,12 +11,18 @@ export function AuthShell({
   children: ReactNode;
 }) {
   return (
-    <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-12 sm:py-16">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold">{title}</h1>
-        {subtitle ? <p className="text-muted-foreground">{subtitle}</p> : null}
+    <div className="flex flex-1 flex-col">
+      <div className="bg-navy-grid pt-14 pb-32 text-white">
+        <div className="mx-auto flex w-full max-w-md flex-col gap-2 px-4">
+          <h1 className="text-4xl font-bold">{title}</h1>
+          {subtitle ? <p className="text-lg text-on-navy-muted">{subtitle}</p> : null}
+        </div>
       </div>
-      {children}
+      <div className="mx-auto -mt-20 w-full max-w-md px-4 pb-20">
+        <div className="flex flex-col gap-6 rounded-3xl bg-card p-6 shadow-float sm:p-8">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

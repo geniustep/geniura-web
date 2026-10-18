@@ -2,71 +2,103 @@
 @import "tw-animate-css";
 
 /*
- * Geniura design tokens — PROVISIONAL palette until the visual identity is approved.
- * Components use semantic tokens only (bg-primary, text-muted-foreground…), never raw colours,
- * so a rebrand is a change in this file. Contrast pairs are chosen for WCAG 2.2 AA (≥ 4.5:1).
+ * Geniura design tokens — visual direction "A — Nuit" (approved 2026-10-18).
+ * Navy ink, warm ivory ground, gold reserved for dark surfaces, one vivid blue for actions.
+ * Components use semantic tokens only (bg-primary, text-muted-foreground…), never raw colours.
+ * Contrast pairs are checked for WCAG 2.2 AA: text ≥ 4.5:1, UI boundaries ≥ 3:1.
+ * Gold #D4A65E is 2.2:1 on white: use it only on navy (7.8:1); on light grounds use gold-ink.
  */
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
-  --background: oklch(0.99 0.003 230);
-  --foreground: oklch(0.22 0.03 245);
-  --card: oklch(1 0 0);
+  --background: #f6f5f1;
+  --foreground: #031e3c;
+  --card: #ffffff;
   --card-foreground: var(--foreground);
-  --popover: oklch(1 0 0);
+  --popover: #ffffff;
   --popover-foreground: var(--foreground);
 
-  /* Deep teal: trust, calm, professional. */
-  --primary: oklch(0.45 0.09 205);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.95 0.015 210);
-  --secondary-foreground: oklch(0.3 0.05 215);
-  --muted: oklch(0.96 0.006 240);
-  --muted-foreground: oklch(0.48 0.02 245);
-  /* Warm accent, used sparingly for highlights. */
-  --accent: oklch(0.95 0.04 75);
-  --accent-foreground: oklch(0.38 0.08 60);
+  /* Navy ink: headings, primary buttons, dark bands. */
+  --primary: #031e3c;
+  --primary-foreground: #ffffff;
+  --secondary: #e9f0f9;
+  --secondary-foreground: #1e4e8c;
+  --muted: #f2f5f7;
+  --muted-foreground: #5d6875;
+  /* Stronger secondary text for chips and labels on muted grounds (8.6:1 on #f2f5f7). */
+  --subtle-foreground: #3e4a57;
+  /* Sand: warm surfaces derived from the gold (service blocks, notices). */
+  --accent: #eadcc0;
+  --accent-foreground: #5c4415;
 
-  --destructive: oklch(0.53 0.2 27);
-  --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.5 0.12 155);
-  --success-foreground: oklch(0.99 0 0);
-  --warning: oklch(0.6 0.13 70);
-  --warning-foreground: oklch(0.22 0.03 60);
+  /* Vivid blue for the main call to action (search, apply) and links. 5.6:1 on white. */
+  --action: #2557d6;
+  --action-foreground: #ffffff;
 
-  --border: oklch(0.9 0.01 240);
-  --input: oklch(0.86 0.012 240);
-  --ring: oklch(0.55 0.11 205);
+  --brand-navy: #031e3c;
+  --brand-navy-deep: #001a36;
+  --brand-navy-raised: #0f3561;
+  --brand-gold: #d4a65e;
+  --brand-gold-soft: #e9c98f;
+  --brand-gold-ink: #8a6420;
+  --on-navy-muted: #c9d3dd;
+  --on-navy-subtle: #a9b6c4;
+  --on-navy-success: #a6e0bf;
+  --on-navy-info: #b5cbff;
+  --on-navy-live: #5fd394;
+
+  --destructive: #a3261e;
+  --destructive-foreground: #ffffff;
+  --success: #1f6b45;
+  --success-foreground: #ffffff;
+  --success-soft: #e8f3ec;
+  --warning: #8a5a00;
+  --warning-foreground: #ffffff;
+  --warning-soft: #fbf1de;
+
+  /* Decorative dividers only; field and control boundaries use --input (3.7:1 on white). */
+  --border: #dce2e7;
+  --input: #7a8694;
+  --ring: #2557d6;
+
+  --font-display:
+    var(--font-display-latin), var(--font-display-arabic), var(--font-latin), var(--font-arabic),
+    ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Dark tokens exist for dashboards later; no theme switch is exposed in PHASE 1. */
+/* Dark tokens exist for dashboards later; no theme switch is exposed yet. */
 .dark {
-  --background: oklch(0.17 0.02 245);
-  --foreground: oklch(0.95 0.01 240);
-  --card: oklch(0.21 0.02 245);
+  --background: #001a36;
+  --foreground: #f2f5f7;
+  --card: #0b2a4d;
   --card-foreground: var(--foreground);
-  --popover: oklch(0.21 0.02 245);
+  --popover: #0b2a4d;
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.72 0.1 200);
-  --primary-foreground: oklch(0.18 0.03 220);
-  --secondary: oklch(0.27 0.03 225);
-  --secondary-foreground: oklch(0.93 0.01 220);
-  --muted: oklch(0.25 0.02 245);
-  --muted-foreground: oklch(0.72 0.02 245);
-  --accent: oklch(0.32 0.05 70);
-  --accent-foreground: oklch(0.92 0.05 80);
-  --destructive: oklch(0.65 0.19 25);
-  --destructive-foreground: oklch(0.15 0 0);
-  --success: oklch(0.7 0.13 155);
-  --success-foreground: oklch(0.16 0.02 155);
-  --warning: oklch(0.78 0.13 75);
-  --warning-foreground: oklch(0.2 0.03 60);
-  --border: oklch(0.32 0.02 245);
-  --input: oklch(0.36 0.02 245);
-  --ring: oklch(0.72 0.1 200);
+  --primary: #ffffff;
+  --primary-foreground: #031e3c;
+  --secondary: #0f3561;
+  --secondary-foreground: #b5cbff;
+  --muted: #0f3561;
+  --muted-foreground: #c9d3dd;
+  --subtle-foreground: #dce2e7;
+  --accent: #3e3424;
+  --accent-foreground: #e9c98f;
+  --action: #6e9bff;
+  --action-foreground: #031e3c;
+  --destructive: #ff8a80;
+  --destructive-foreground: #1a0503;
+  --success: #a6e0bf;
+  --success-foreground: #04210f;
+  --success-soft: #0f3a26;
+  --warning: #f3c56b;
+  --warning-foreground: #2a1c00;
+  --warning-soft: #3a2a07;
+  --border: #23456b;
+  --input: #5b7594;
+  --ring: #6e9bff;
 }
 
 @theme inline {
@@ -93,13 +125,35 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-action: var(--action);
+  --color-action-foreground: var(--action-foreground);
+  --color-success-soft: var(--success-soft);
+  --color-warning-soft: var(--warning-soft);
+  --color-navy: var(--brand-navy);
+  --color-navy-deep: var(--brand-navy-deep);
+  --color-navy-raised: var(--brand-navy-raised);
+  --color-gold: var(--brand-gold);
+  --color-gold-soft: var(--brand-gold-soft);
+  --color-gold-ink: var(--brand-gold-ink);
+  --color-on-navy-muted: var(--on-navy-muted);
+  --color-on-navy-subtle: var(--on-navy-subtle);
+  --color-on-navy-success: var(--on-navy-success);
+  --color-on-navy-info: var(--on-navy-info);
+  --color-on-navy-live: var(--on-navy-live);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+  --radius-2xl: 1.375rem;
+  --radius-3xl: 1.75rem;
+
   --font-sans: var(--font-latin), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --shadow-card: 0 1px 2px rgb(3 30 60 / 0.05), 0 8px 24px rgb(3 30 60 / 0.05);
+  --shadow-float: 0 2px 4px rgb(3 30 60 / 0.06), 0 24px 60px rgb(3 30 60 / 0.14);
+  --shadow-hero: 0 24px 60px rgb(0 0 0 / 0.35);
 }
 
 @layer base {
@@ -121,6 +175,27 @@
   /* Arabic typography: Arabic face first, taller lines, no tracking or synthetic transforms. */
   :lang(ar) {
     --font-sans: var(--font-arabic), var(--font-latin), ui-sans-serif, system-ui, sans-serif;
+    --font-display:
+      var(--font-display-arabic), var(--font-display-arabic-latin), var(--font-arabic),
+      var(--font-latin), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* Latin text inside an Arabic page (a French posting title) keeps the Latin faces, and back. */
+  :lang(fr) {
+    --font-sans: var(--font-latin), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+    --font-display:
+      var(--font-display-latin), var(--font-display-arabic), var(--font-latin), var(--font-arabic),
+      ui-sans-serif, system-ui, sans-serif;
+  }
+
+  :where(h1, h2, h3, h4) {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  :lang(ar) :where(h1, h2, h3, h4),
+  :where(h1, h2, h3, h4):lang(ar) {
+    letter-spacing: normal;
   }
 
   :lang(ar) body,
@@ -130,7 +205,7 @@
   }
 
   :lang(ar) :where(h1, h2, h3, h4) {
-    line-height: 1.45;
+    line-height: 1.4;
   }
 
   :where(h1, h2, h3, h4) {
@@ -151,4 +226,18 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/* Fine 56px grid drawn over navy bands (direction A). Decorative only. */
+@utility bg-navy-grid {
+  background-color: var(--brand-navy);
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Display face of the current language (Readex Pro in Arabic, Bricolage Grotesque in French). */
+@utility font-display {
+  font-family: var(--font-display);
 }
