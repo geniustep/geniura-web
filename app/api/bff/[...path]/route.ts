@@ -1,4 +1,5 @@
 import { allowedBackendPath } from "@/lib/api/bff-routes";
+import { addPrelaunchAccessHeader } from "@/lib/api/prelaunch-access";
 
 type Context = { params: Promise<{ path: string[] }> };
 const COOKIE_NAMES = new Set(["geniura_sid", "geniura_csrftoken"]);
@@ -86,6 +87,7 @@ async function relay(request: Request, context: Context, method: string): Promis
   // Browser-origin validation precedes this trusted server-to-server Origin header.
   // Django still verifies the CSRF cookie and X-CSRFToken on unsafe requests.
   if (method !== "GET") headers.set("Origin", origin);
+  addPrelaunchAccessHeader(headers, destination);
 
   let upstream: Response;
   try {

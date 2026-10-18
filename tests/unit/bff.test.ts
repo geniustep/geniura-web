@@ -128,6 +128,20 @@ describe("BFF route, cookie and CSRF isolation", () => {
     expect(h.get("Cookie")).toBe("geniura_csrftoken=abc");
   });
 
+  it("does not relay a spoofed prelaunch key from the browser", async () => {
+    const path = "api/v1/auth/me";
+    fetchMock.mockResolvedValueOnce(new Response("{}", { status: 200 }));
+    const response = await GET(
+      new Request(`${base}/${path}`, {
+        headers: { "X-Geniura-Prelaunch-Key": "fake-browser-key" },
+      }),
+      ctx(path),
+    );
+    expect(response.status).toBe(200);
+    const forwarded = new Headers(fetchMock.mock.calls[0]![1]?.headers);
+    expect(forwarded.has("X-Geniura-Prelaunch-Key")).toBe(false);
+  });
+
   it("blocks backend redirects and does not leak Location", async () => {
     fetchMock.mockResolvedValueOnce(
       new Response(null, { status: 302, headers: { Location: "https://evil.example" } }),

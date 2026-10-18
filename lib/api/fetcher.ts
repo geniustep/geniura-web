@@ -1,4 +1,5 @@
 import { ApiError, isCsrfFailure } from "./errors";
+import { addPrelaunchAccessHeader } from "./prelaunch-access";
 
 /**
  * The single transport used by the generated client (Orval mutator) on both server and browser.
@@ -91,8 +92,11 @@ async function send(url: string, init: RequestInit, method: string): Promise<Res
     if (token) headers.set("X-CSRFToken", token);
   }
 
+  const destination = apiUrl(url);
+  if (!isBrowser) addPrelaunchAccessHeader(headers, destination);
+
   try {
-    return await fetch(apiUrl(url), {
+    return await fetch(destination, {
       ...init,
       method,
       headers,

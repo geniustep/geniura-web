@@ -3,6 +3,7 @@ import createMiddleware from "next-intl/middleware";
 
 import { locales } from "@/lib/i18n/config";
 import { routing } from "@/lib/i18n/routing";
+import { addPrelaunchAccessHeader } from "@/lib/api/prelaunch-access";
 
 // Locale negotiation (cookie, then Accept-Language) and HTTP status for unknown jobs.
 // This is NOT an authorization layer: every permission is decided by the Django API.
@@ -31,8 +32,11 @@ async function jobExists(id: string): Promise<boolean> {
     "https://api-geniura.geniura.com"
   ).replace(/\/$/, "");
   try {
-    const response = await fetch(`${base}/api/v1/jobs/${id}`, {
-      headers: { Accept: "application/json" },
+    const destination = `${base}/api/v1/jobs/${id}`;
+    const requestHeaders = new Headers({ Accept: "application/json" });
+    addPrelaunchAccessHeader(requestHeaders, destination);
+    const response = await fetch(destination, {
+      headers: requestHeaders,
       signal: AbortSignal.timeout(3000),
       cache: "no-store",
     });
