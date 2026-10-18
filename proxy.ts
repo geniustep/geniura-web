@@ -28,7 +28,7 @@ async function jobExists(id: string): Promise<boolean> {
   const base = (
     process.env.API_BASE_URL ||
     process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "http://localhost:8000"
+    "https://api-geniura.geniura.com"
   ).replace(/\/$/, "");
   try {
     const response = await fetch(`${base}/api/v1/jobs/${id}`, {
