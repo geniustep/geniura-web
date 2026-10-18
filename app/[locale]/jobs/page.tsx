@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { JobResults } from "@/features/jobs/job-results";
 import { FiltersSection, SearchBarSection } from "@/features/jobs/search-controls";
 import { routing } from "@/lib/i18n/routing";
+import { buildSocialMetadata } from "@/lib/seo/social";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -21,6 +22,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
+    ...buildSocialMetadata({
+      locale,
+      pathname: `/${locale}/jobs`,
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+    }),
     // Filtered result pages are not canonical: only the bare listing is.
     alternates: {
       canonical: `/${locale}/jobs`,
