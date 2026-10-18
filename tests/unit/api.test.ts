@@ -108,10 +108,18 @@ describe("apiFetch (browser)", () => {
 });
 
 describe("API errors", () => {
-  it("detects CSRF failures only from the CSRF message", () => {
+  it("detects CSRF failures from stable codes and supported legacy errors", () => {
+    const legacyCsrf = new ApiError(403, {
+      code: "permission_denied",
+      message: "CSRF failed: token missing.",
+    });
+    const forbidden = new ApiError(403, {
+      code: "permission_denied",
+      message: "Not allowed.",
+    });
     expect(isCsrfFailure(new ApiError(403, { code: "csrf_failed" }))).toBe(true);
-    expect(isCsrfFailure(new ApiError(403, { code: "permission_denied", message: "CSRF failed: token missing." }))).toBe(true);
-    expect(isCsrfFailure(new ApiError(403, { code: "permission_denied", message: "Not allowed." }))).toBe(false);
+    expect(isCsrfFailure(legacyCsrf)).toBe(true);
+    expect(isCsrfFailure(forbidden)).toBe(false);
     expect(isCsrfFailure(new ApiError(401, { code: "csrf_failed" }))).toBe(false);
   });
 
