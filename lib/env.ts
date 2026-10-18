@@ -12,7 +12,9 @@ export const env = createEnv({
     API_BASE_URL: z.url().optional(),
   },
   client: {
-    NEXT_PUBLIC_SITE_URL: z.url().default("http://localhost:3000"),
+    // Never emit localhost URLs in production sitemap/metadata when a deploy omits the variable.
+    // Local development still opts into localhost explicitly via .env.local.
+    NEXT_PUBLIC_SITE_URL: z.url().default("https://geniura.com"),
     // Public Django origin the browser calls with credentials, e.g. https://api-geniura.geniura.com.
     NEXT_PUBLIC_API_BASE_URL: z.url().default("https://api-geniura.geniura.com"),
     NEXT_PUBLIC_ALLOW_INDEXING: z
