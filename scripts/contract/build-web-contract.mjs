@@ -24,10 +24,32 @@ const overrides = JSON.parse(await readFile(new URL("contracts/overrides.json", 
 const methods = ["get", "put", "post", "patch", "delete"];
 const applied = [];
 
-// 1. Exclude internal paths.
-for (const path of Object.keys(spec.paths)) {
+// 1. Exclude internal paths AND individual staff-tagged operations on otherwise public paths.
+// Sensitive endpoints may sit outside /staff/ (e.g. signed verification-document downloads).
+for (const [path, pathItem] of Object.entries(spec.paths)) {
   if (overrides.excludedPathPrefixes.prefixes.some((prefix) => path.startsWith(prefix))) {
     delete spec.paths[path];
+    continue;
+  }
+  for (const method of methods) {
+    const operation = pathItem[method];
+    if (operation?.tags?.some((tag) => /\(staff\)/i.test(tag))) {
+      delete pathItem[method];
+    }
+  }
+  if (!methods.some((method) => pathItem[method])) {
+    delete spec.paths[path];
+  }
+}
+// Refuse to publish any remaining staff/audit operations when new tags are introduced.
+for (const [path, item] of Object.entries(spec.paths)) {
+  if (path.startsWith("/api/v1/staff/")) {
+    throw new Error(`Sensitive staff route in web contract: ${path}`);
+  }
+  for (const method of methods) {
+    if (item[method]?.tags?.some((tag) => /\(staff\)/i.test(tag))) {
+      throw new Error(`Sensitive staff operation in web contract: ${method} ${path}`);
+    }
   }
 }
 
