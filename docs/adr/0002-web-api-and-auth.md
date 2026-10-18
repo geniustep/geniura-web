@@ -1,7 +1,7 @@
 # ADR 0002 — ربط الـAPI والمصادقة في الواجهة
 
 - التاريخ: 2026-10-17 — الحالة: Accepted (technical)، بقرارات صاحب المشروع: نسخة عقد مصفّاة،
-  تصحيحات موثقة في نسخة الواجهة، والنطاقان `geniura.com` و`api.geniura.com`.
+  تصحيحات موثقة في نسخة الواجهة، والنطاقان `geniura.com` و`api-geniura.geniura.com`.
 - يكمّل ADR 0002 في geniura-api (جلسات Django + CSRF).
 
 ## القرار
@@ -10,8 +10,9 @@
   `lib/api/generated` (لا تعديل يدوي؛ CI يتحقق من التطابق).
 - **النقل:** `lib/api/fetcher.ts` واحد للخادم والمتصفح:
   - المتصفح يستدعي `NEXT_PUBLIC_API_BASE_URL` مباشرة مع `credentials: include`.
-  - الطرق غير الآمنة ترسل قيمة Cookie `geniura_csrftoken` في `X-CSRFToken`؛ عند رفض CSRF يُجدَّد الرمز
-    مرة واحدة ويعاد الطلب.
+  - الطرق غير الآمنة تستعمل قيمة `csrf_token` المقنّعة المعادة في JSON من `GET /auth/csrf`
+    ضمن `X-CSRFToken` (بدون قراءة Cookie محصورة بمضيف API)؛ عند رفض CSRF يُجدَّد الرمز
+    مرة واحدة ويعاد الطلب، وبعد الدخول يُنسى الرمز القديم ليُجلب عند الطلب التالي.
   - الأخطاء تتحول إلى `ApiError {status, code, message, details, request_id}`؛ الواجهة تترجم `code`
     ولا تعرض `message` الخام، وتعرض `request_id` كمرجع دعم.
 - **الخادم:** `lib/api/server.ts` (`server-only`) يمرّر Cookie الجلسة وCSRF فقط، ولا يُستعمل داخل `'use cache'`.
@@ -26,10 +27,13 @@
   الإطار والإضافات. `'unsafe-inline'` للسكربتات قيد معروف حتى اعتماد SRI.
 
 ## شروط النشر (لوكيل النشر/Backend)
-- `SESSION_COOKIE_DOMAIN=.geniura.com` (ومعه CSRF_COOKIE_DOMAIN): بدونه لا يستطيع JavaScript على
-  `geniura.com` قراءة رمز CSRF، ولا يصل Cookie الجلسة إلى خادم Next.js، فتتعطل المصادقة.
+- لا يلزم توسيع `CSRF_COOKIE_DOMAIN` لقراءة CSRF: رمز JSON يعمل مع Cookie محصورة بمضيف API.
+- الصفحات الخاصة التي تتحقق من الجلسة داخل خادم Next.js لا تستطيع استلام Cookie جلسة محصورة بمضيف API؛
+  تظل هذه الوظيفة معطلة تشغيليًا حتى اعتماد نطاق جلسة مناسب بعد مراجعة أمنية أو استخدام BFF.
+- معاينات Vercel على `vercel.app` تقع خارج موقع `geniura.com`، ولا يُعد دخول حقيقي بواسطة
+  Cookies `SameSite=Lax` فيها اختبارًا صحيحًا؛ استخدم نطاق معاينة تابعًا لـ`geniura.com` أو BFF لاحقًا.
 - `CORS_ALLOWED_ORIGINS` و`CSRF_TRUSTED_ORIGINS` = `https://geniura.com`.
-- `NEXT_PUBLIC_API_BASE_URL=https://api.geniura.com` وقت البناء.
+- `NEXT_PUBLIC_API_BASE_URL=https://api-geniura.geniura.com` وقت البناء.
 
 ## مؤجل
 - MSW للاختبارات على مستوى المكونات (الاختبارات الحالية تحاكي `fetch` مباشرة وتغطي التكامل الحقيقي محليًا).

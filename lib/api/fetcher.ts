@@ -4,46 +4,71 @@ import { ApiError, isCsrfFailure } from "./errors";
  * The single transport used by the generated client (Orval mutator) on both server and browser.
  *
  * Browser: calls the public Django origin with credentials (session cookie `geniura_sid`), and
- * echoes the `geniura_csrftoken` cookie in `X-CSRFToken` for unsafe methods (ADR 0002).
+ * sends the masked csrf_token from GET /auth/csrf JSON in X-CSRFToken (ADR 0002).
+ * The API cookie is host-only and cannot be read through document.cookie on geniura.com.
  * Server: never sends cookies by itself; `lib/api/server.ts` passes them explicitly, and only
  * for requests that must act as the user. Nothing here caches responses.
  */
 
-export const CSRF_COOKIE = "geniura_csrftoken";
 const CSRF_PATH = "/api/v1/auth/csrf";
 const UNSAFE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 const isBrowser = typeof window !== "undefined";
 
 function apiBaseUrl(): string {
-  const publicUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+  const publicUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api-geniura.geniura.com";
   const url = isBrowser ? publicUrl : (process.env.API_BASE_URL ?? publicUrl);
   return url.replace(/\/$/, "");
 }
 
-export function readCookie(name: string): string | undefined {
-  if (!isBrowser) return undefined;
-  const prefix = `${name}=`;
-  return document.cookie
-    .split("; ")
-    .find((part) => part.startsWith(prefix))
-    ?.slice(prefix.length);
+let csrfToken: string | null = null;
+let csrfRequest: Promise<string> | null = null;
+
+/** Clear an in-memory CSRF token after login/logout (Django rotates it on login). */
+export function clearCsrfToken() {
+  csrfToken = null;
 }
 
-let csrfRequest: Promise<void> | null = null;
-
-/** Makes sure the CSRF cookie exists; concurrent callers share one request. */
+/**
+ * Read the masked CSRF token from JSON, not document.cookie. The latter is host-scoped to
+ * api-geniura.geniura.com and is deliberately unreadable by pages on geniura.com.
+ * The browser stores the API cookie and sends it with credentials: include.
+ */
 export async function ensureCsrfToken(force = false): Promise<string | undefined> {
   if (!isBrowser) return undefined;
-  if (force || !readCookie(CSRF_COOKIE)) {
-    csrfRequest ??= fetch(`${apiBaseUrl()}${CSRF_PATH}`, { credentials: "include" })
-      .then(() => undefined)
-      .finally(() => {
-        csrfRequest = null;
-      });
-    await csrfRequest;
-  }
-  return readCookie(CSRF_COOKIE);
+  if (force) csrfToken = null;
+  if (!force && csrfToken) return csrfToken;
+
+  csrfRequest ??= fetch(`${apiBaseUrl()}${CSRF_PATH}`, {
+    credentials: "include",
+    cache: "no-store",
+    headers: { Accept: "application/json" },
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new ApiError(response.status, { code: "csrf_unavailable" });
+      }
+      const data: unknown = await response.json();
+      if (
+        !data ||
+        typeof data !== "object" ||
+        !("csrf_token" in data) ||
+        typeof data.csrf_token !== "string" ||
+        !/^[A-Za-z0-9]{64}$/.test(data.csrf_token)
+      ) {
+        throw new ApiError(0, { code: "invalid_csrf_contract" });
+      }
+      csrfToken = data.csrf_token;
+      return data.csrf_token;
+    })
+    .catch((error: unknown) => {
+      if (error instanceof ApiError) throw error;
+      throw new ApiError(0, { code: "network_error" });
+    })
+    .finally(() => {
+      csrfRequest = null;
+    });
+  return csrfRequest;
 }
 
 async function parseBody(response: Response): Promise<unknown> {
@@ -93,6 +118,9 @@ export const apiFetch = async <T>(url: string, init: RequestInit = {}): Promise<
   }
 
   const body = await parseBody(response);
+  if (response.ok && isBrowser && method === "POST" && url === "/api/v1/auth/login") {
+    clearCsrfToken();
+  }
   if (!response.ok) {
     throw new ApiError(
       response.status,

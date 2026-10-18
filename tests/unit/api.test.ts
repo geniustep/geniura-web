@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ApiError, errorMessageKey, fieldErrors, isCsrfFailure } from "@/lib/api/errors";
-import { apiFetch } from "@/lib/api/fetcher";
+import { apiFetch, clearCsrfToken } from "@/lib/api/fetcher";
 import { safeRedirectPath } from "@/lib/auth/safe-redirect";
 
 const json = (status: number, body: unknown) =>
@@ -9,73 +9,87 @@ const json = (status: number, body: unknown) =>
 
 describe("apiFetch (browser)", () => {
   const fetchMock = vi.fn<typeof fetch>();
+  const tokenOne = "a".repeat(64);
+  const tokenTwo = "b".repeat(64);
 
   beforeEach(() => {
+    clearCsrfToken();
+    fetchMock.mockReset();
     vi.stubGlobal("fetch", fetchMock);
-    document.cookie = "geniura_csrftoken=token-1";
     document.documentElement.lang = "ar";
   });
 
   afterEach(() => {
+    clearCsrfToken();
     fetchMock.mockReset();
     vi.unstubAllGlobals();
-    document.cookie = "geniura_csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
   });
 
-  it("sends credentials and the interface language, without a CSRF header on GET", async () => {
+  it("sends credentials and interface language without CSRF on GET", async () => {
     fetchMock.mockResolvedValueOnce(json(200, { ok: true }));
     await apiFetch("/api/v1/auth/me");
     const [url, init] = fetchMock.mock.calls[0]!;
     const headers = new Headers(init?.headers);
-    expect(url).toBe("http://localhost:8000/api/v1/auth/me");
+    expect(url).toBe("https://api-geniura.geniura.com/api/v1/auth/me");
     expect(init?.credentials).toBe("include");
     expect(headers.get("Accept-Language")).toBe("ar");
     expect(headers.has("X-CSRFToken")).toBe(false);
   });
 
-  it("echoes the CSRF cookie on unsafe methods", async () => {
+  it("gets masked token from JSON, never document.cookie", async () => {
+    document.cookie = "geniura_csrftoken=unrelated-host-cookie";
+    fetchMock.mockResolvedValueOnce(json(200, { detail: "CSRF cookie set.", csrf_token: tokenOne }));
     fetchMock.mockResolvedValueOnce(json(200, {}));
     await apiFetch("/api/v1/auth/login", { method: "POST", body: "{}" });
-    expect(new Headers(fetchMock.mock.calls[0]![1]?.headers).get("X-CSRFToken")).toBe("token-1");
+    expect(fetchMock.mock.calls[0]![0]).toBe("https://api-geniura.geniura.com/api/v1/auth/csrf");
+    expect(fetchMock.mock.calls[0]![1]?.credentials).toBe("include");
+    expect(new Headers(fetchMock.mock.calls[1]![1]?.headers).get("X-CSRFToken")).toBe(tokenOne);
   });
 
-  it("refreshes the CSRF token once and retries after a CSRF rejection", async () => {
+  it("renews JSON token on CSRF failure and retries once", async () => {
     fetchMock
+      .mockResolvedValueOnce(json(200, { csrf_token: tokenOne }))
       .mockResolvedValueOnce(
-        json(403, {
-          code: "permission_denied",
-          message: "CSRF failed: CSRF token missing.",
-          details: {},
-          request_id: "r1",
-        }),
+        json(403, { code: "permission_denied", message: "CSRF failed: token expired.", details: {} }),
       )
-      .mockImplementationOnce(async () => {
-        document.cookie = "geniura_csrftoken=token-2";
-        return json(200, { detail: "CSRF cookie set." });
-      })
+      .mockResolvedValueOnce(json(200, { csrf_token: tokenTwo }))
       .mockResolvedValueOnce(new Response(null, { status: 204 }));
 
     await expect(apiFetch("/api/v1/auth/logout", { method: "POST" })).resolves.toBeUndefined();
-    expect(fetchMock).toHaveBeenCalledTimes(3);
-    expect(fetchMock.mock.calls[1]![0]).toBe("http://localhost:8000/api/v1/auth/csrf");
-    expect(new Headers(fetchMock.mock.calls[2]![1]?.headers).get("X-CSRFToken")).toBe("token-2");
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(new Headers(fetchMock.mock.calls[1]![1]?.headers).get("X-CSRFToken")).toBe(tokenOne);
+    expect(new Headers(fetchMock.mock.calls[3]![1]?.headers).get("X-CSRFToken")).toBe(tokenTwo);
+  });
+
+  it("refetches token on next write after successful login", async () => {
+    fetchMock
+      .mockResolvedValueOnce(json(200, { csrf_token: tokenOne }))
+      .mockResolvedValueOnce(json(200, { id: "user" }))
+      .mockResolvedValueOnce(json(200, { csrf_token: tokenTwo }))
+      .mockResolvedValueOnce(json(200, { ok: true }));
+    await apiFetch("/api/v1/auth/login", { method: "POST", body: "{}" });
+    await apiFetch("/api/v1/me/preferences", { method: "PATCH", body: "{}" });
+    expect(new Headers(fetchMock.mock.calls[3]![1]?.headers).get("X-CSRFToken")).toBe(tokenTwo);
+  });
+
+  it("rejects a missing token without sending an unsafe request", async () => {
+    fetchMock.mockResolvedValueOnce(json(200, { detail: "CSRF cookie set." }));
+    await expect(apiFetch("/api/v1/auth/login", { method: "POST" })).rejects.toMatchObject({
+      code: "invalid_csrf_contract",
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it("does not retry a real permission error", async () => {
+    fetchMock.mockResolvedValueOnce(json(200, { csrf_token: tokenOne }));
     fetchMock.mockResolvedValueOnce(
-      json(403, {
-        code: "permission_denied",
-        message: "You do not have permission.",
-        details: {},
-        request_id: "r2",
-      }),
+      json(403, { code: "permission_denied", message: "You do not have permission.", details: {} }),
     );
     await expect(apiFetch("/api/v1/x", { method: "POST" })).rejects.toMatchObject({
       status: 403,
       code: "permission_denied",
-      request_id: "r2",
     });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it("turns a network failure into a typed error", async () => {

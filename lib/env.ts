@@ -13,8 +13,8 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.url().default("http://localhost:3000"),
-    // Public Django origin the browser calls with credentials, e.g. https://api.geniura.com.
-    NEXT_PUBLIC_API_BASE_URL: z.url().default("http://localhost:8000"),
+    // Public Django origin the browser calls with credentials, e.g. https://api-geniura.geniura.com.
+    NEXT_PUBLIC_API_BASE_URL: z.url().default("https://api-geniura.geniura.com"),
     NEXT_PUBLIC_ALLOW_INDEXING: z
       .enum(["true", "false"])
       .default("false")
