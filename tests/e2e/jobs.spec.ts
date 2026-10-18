@@ -31,6 +31,24 @@ test("the home search lands on the results URL", async ({ page }) => {
   await expect(page).toHaveURL(/\/fr\/jobs\?q=comptable$/);
 });
 
+test("the home page shows the latest jobs or explains the outage", async ({ page }) => {
+  await page.goto("/ar");
+  const latest = page.getByRole("region", { name: "أحدث العروض" });
+  await expect(
+    latest
+      .getByRole("listitem")
+      .first()
+      .or(latest.getByRole("heading", { name: "تعذّر تحميل العروض" }))
+      .or(latest.getByRole("heading", { name: "لا توجد عروض منشورة بعد" })),
+  ).toBeVisible();
+});
+
+test("home search examples land on the results URL", async ({ page }) => {
+  await page.goto("/fr");
+  await page.getByRole("link", { name: "Comptable" }).click();
+  await expect(page).toHaveURL(/\/fr\/jobs\?q=Comptable$/);
+});
+
 test.describe("malformed job ids", () => {
   test.use({
     userAgent: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",

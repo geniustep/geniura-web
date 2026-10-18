@@ -72,6 +72,76 @@
         "title": "Confiance vérifiable",
         "body": "Nous vérifions les entreprises, relisons les offres et affichons leur statut et leur date d’expiration."
       }
+    },
+    "browseAll": "Voir toutes les offres",
+    "examplesLabel": "Exemples de recherche :",
+    "examples": {
+      "one": "Comptable",
+      "two": "Développeur web",
+      "three": "Infirmier",
+      "four": "Technicien de maintenance"
+    },
+    "guarantees": {
+      "title": "Ce que Geniura garantit pour chaque offre",
+      "verified": {
+        "title": "Entreprise vérifiée",
+        "body": "Nous vérifions l’identité de l’entreprise avant d’afficher le badge de vérification."
+      },
+      "reviewed": {
+        "title": "Offre relue et datée",
+        "body": "Chaque offre affiche son statut, sa date de publication et sa date limite."
+      },
+      "private": {
+        "title": "Votre profil reste privé",
+        "body": "Seules les entreprises auprès desquelles vous postulez, ou que vous autorisez, y ont accès."
+      }
+    },
+    "audience": {
+      "title": "Une plateforme pour les deux côtés du recrutement",
+      "seekers": {
+        "title": "Pour les candidats",
+        "items": {
+          "one": "Consulter les offres et postuler gratuitement",
+          "two": "Suivre l’état de chaque candidature, étape par étape",
+          "three": "Contrôler la visibilité de votre profil et retirer votre accord à tout moment"
+        },
+        "cta": "Commencer la recherche"
+      },
+      "employers": {
+        "title": "Pour les entreprises",
+        "items": {
+          "one": "Publier des offres et gérer candidatures et entretiens",
+          "two": "Un service de présélection et d’évaluation assuré par l’équipe Geniura",
+          "three": "Un badge de vérification qui rassure les candidats"
+        },
+        "cta": "Espace entreprises"
+      }
+    },
+    "latest": {
+      "title": "Offres récentes",
+      "subtitle": "Les dernières offres publiées par les entreprises présentes sur la plateforme.",
+      "all": "Toutes les offres",
+      "emptyTitle": "Aucune offre publiée pour l’instant",
+      "emptyBody": "Les offres les plus récentes apparaîtront ici dès leur publication."
+    },
+    "steps": {
+      "title": "Comment fonctionne Geniura",
+      "search": {
+        "title": "Cherchez",
+        "body": "Par métier, ville ou type de contrat, en arabe comme en français."
+      },
+      "apply": {
+        "title": "Postulez gratuitement",
+        "body": "Choisissez ce que vous partagez de votre profil avant d’envoyer votre candidature."
+      },
+      "follow": {
+        "title": "Suivez la décision",
+        "body": "Vous voyez où en est votre candidature, et la décision finale revient à une personne, pas à une machine."
+      }
+    },
+    "cta": {
+      "title": "Commencez par une offre qui vous correspond",
+      "body": "La consultation est ouverte à tous sans compte, et la candidature reste toujours gratuite."
     }
   },
   "Status": {

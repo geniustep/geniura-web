@@ -9,7 +9,14 @@ import { pickLabel, type Vocabulary } from "@/lib/jobs/labels";
 
 import { formatDate, formatSalary, salaryPeriod } from "./format";
 
-export function JobCard({ job, vocabulary }: { job: PublicJobList; vocabulary: Vocabulary }) {
+type JobCardProps = {
+  job: PublicJobList;
+  vocabulary: Vocabulary;
+  /** Heading level of the job title, to fit the outline of the page that lists the card. */
+  headingLevel?: "h2" | "h3";
+};
+
+export function JobCard({ job, vocabulary, headingLevel: Heading = "h2" }: JobCardProps) {
   const t = useTranslations("Jobs");
   const locale = useLocale();
   const format = useFormatter();
@@ -22,7 +29,7 @@ export function JobCard({ job, vocabulary }: { job: PublicJobList; vocabulary: V
     <article className="group relative flex flex-col gap-3 rounded-xl border bg-card p-5 transition-colors hover:border-primary/50">
       <div className="flex flex-col gap-1">
         {/* The posting keeps its own language and direction inside the translated interface. */}
-        <h2
+        <Heading
           className="text-lg font-semibold"
           lang={job.source_locale}
           dir={getDirection(job.source_locale)}
@@ -33,7 +40,7 @@ export function JobCard({ job, vocabulary }: { job: PublicJobList; vocabulary: V
           >
             {job.title}
           </Link>
-        </h2>
+        </Heading>
         <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
           <bdi>{job.organization.name}</bdi>
           {job.organization.is_verified ? (
