@@ -10,6 +10,7 @@ export default function robots(): MetadataRoute.Robots {
   }
 
   return {
+    sitemap: `${env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")}/sitemap.xml`,
     rules: {
       userAgent: "*",
       allow: "/",
