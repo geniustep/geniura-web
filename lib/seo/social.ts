@@ -24,19 +24,23 @@ export function buildSocialMetadata({
   const imageAlt =
     locale === "ar" ? "Geniura — التوظيف وتطوير الكفاءات" : "Geniura — Recrutement et compétences";
 
+  const commonOpenGraph = {
+    title,
+    description,
+    url,
+    siteName: "Geniura",
+    locale: locale === "ar" ? "ar_MA" : "fr_MA",
+    alternateLocale: routing.locales
+      .filter((code) => code !== locale)
+      .map((code) => (code === "ar" ? "ar_MA" : "fr_MA")),
+    images: [{ url: imageUrl, width: 1200, height: 630, alt: imageAlt }],
+  };
+
   return {
-    openGraph: {
-      type,
-      title,
-      description,
-      url,
-      siteName: "Geniura",
-      locale: locale === "ar" ? "ar_MA" : "fr_MA",
-      alternateLocale: routing.locales
-        .filter((code) => code !== locale)
-        .map((code) => (code === "ar" ? "ar_MA" : "fr_MA")),
-      images: [{ url: imageUrl, width: 1200, height: 630, alt: imageAlt }],
-    },
+    openGraph:
+      type === "article"
+        ? { ...commonOpenGraph, type: "article" }
+        : { ...commonOpenGraph, type: "website" },
     twitter: {
       card: "summary_large_image",
       title,
