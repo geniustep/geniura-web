@@ -5,7 +5,7 @@
 - يكمّل ADR 0002 في geniura-api (جلسات Django + CSRF).
 
 ## القرار
-- **العقد:** `contracts/openapi.web.v1.yaml` (انظر `contracts/README.md`)، مصدره geniura-api@239ebd9.
+- **العقد:** `contracts/openapi.web.v1.yaml` (انظر `contracts/README.md`)، مصدره geniura-api@4d8472c3 (مزامنة 2026-10-18).
 - **العميل:** Orval 8 يولّد أنواع TypeScript ودوال fetch وHooks لـ TanStack Query ومخططات Zod في
   `lib/api/generated` (لا تعديل يدوي؛ CI يتحقق من التطابق).
 - **النقل:** `lib/api/fetcher.ts` واحد للخادم والمتصفح:
@@ -46,5 +46,7 @@
 - لا يمكن اعتبار تسجيل الدخول متكاملًا على `vercel.app` أو API ما زال يعيد 503.
 - لا تغيّر `SESSION_COOKIE_DOMAIN` إلى `.geniura.com` قبل مراجعة أمنية للنطاقات الفرعية
   والتحقق من إطلاق نطاق الواجهة؛ البديل BFF يحتاج تنفيذًا وتدقيقًا منفصلًا.
-- ينبغي تجديد `contracts/openapi.web.v1.yaml` و`lib/api/generated` معًا بواسطة
-  `pnpm api:contract` و`pnpm api:generate` على نسخة محلية من عقد Backend الأحدث، قبل تجميد V1.
+- جرى تحديث `contracts/openapi.web.v1.yaml` و`lib/api/generated` معًا من Backend
+  `4d8472c3`، بعد استبعاد عمليات فريق Geniura واختبار بناء Next.js.
+- يظل اختبار المصادقة الحقيقي على Staging غير منجز، ولا يُستنتج من نجاح CI اعتماد
+  `SESSION_COOKIE_DOMAIN` أو جاهزية API العام.

@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@239ebd9.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
  * OpenAPI spec version: 1.0.0-dev
  */
 
@@ -52,6 +52,7 @@ export * from "./consentCreatePurposeEnum";
 export * from "./consentCreateRequest";
 export * from "./consentPurposeEnum";
 export * from "./contractTypeEnum";
+export * from "./csrfResponse";
 export * from "./dataRightsRequest";
 export * from "./dataRightsRequestKindEnum";
 export * from "./dataRightsRequestRequest";
@@ -259,6 +260,10 @@ export * from "./uploadIntentRequest";
 export * from "./uploadIntentResponse";
 export * from "./uploadIntentResponseUpload";
 export * from "./userSignupIntentEnum";
+export * from "./verificationDocument";
+export * from "./verificationDocumentFileTypeEnum";
+export * from "./verificationDocumentKindEnum";
+export * from "./verificationDocumentUploadRequest";
 export * from "./verificationStatus";
 export * from "./verificationSubmission";
 export * from "./verificationSubmissionRequest";

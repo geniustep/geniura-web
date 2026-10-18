@@ -5,12 +5,12 @@ info:
   description: |-
     Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
 
-    Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@239ebd9.
+    Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
 paths:
   /api/v1/auth/csrf:
     get:
       operationId: auth_csrf_retrieve
-      description: Sets the CSRF cookie. The SPA echoes its value in the X-CSRFToken header.
+      description: Sets the host-scoped CSRF cookie and returns a masked csrf_token in JSON. Cross-origin SPAs send this value in X-CSRFToken with credentials included.
       tags:
         - Auth
       security:
@@ -20,7 +20,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Detail"
+                $ref: "#/components/schemas/CsrfResponse"
           description: ""
         default:
           description: Error envelope
@@ -4051,6 +4051,115 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/organizations/{org_id}/verification-submissions/{submission_id}/documents:
+    get:
+      operationId: organizations_verification_submissions_documents_list
+      parameters:
+        - in: path
+          name: org_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: submission_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - Organizations
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VerificationDocument"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: organizations_verification_submissions_documents_create
+      description: PDF/JPEG/PNG, scanned before storage; visible only to Trust officers.
+      parameters:
+        - in: path
+          name: org_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: submission_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - Organizations
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/VerificationDocumentUploadRequest"
+        required: true
+      security:
+        - sessionCookie: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerificationDocument"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/organizations/{org_id}/verification-submissions/{submission_id}/documents/{document_id}:
+    delete:
+      operationId: organizations_verification_submissions_documents_destroy
+      parameters:
+        - in: path
+          name: document_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: org_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: submission_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - Organizations
+      security:
+        - sessionCookie: []
+      responses:
+        "204":
+          description: No response body
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/organizations/invitations/accept:
     post:
       operationId: organizations_invitations_accept_create
@@ -5070,6 +5179,16 @@ components:
         * `apprenticeship` - Apprenticeship
         * `freelance` - Freelance
         * `seasonal` - Seasonal
+    CsrfResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+        csrf_token:
+          type: string
+      required:
+        - csrf_token
+        - detail
     DataRightsRequest:
       type: object
       description: Rejects unknown input keys (protection against mass assignment and silent typos).
@@ -9138,6 +9257,75 @@ components:
       description: |-
         * `candidate` - Candidate
         * `employer` - Employer
+    VerificationDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        submission:
+          type: string
+          format: uuid
+          readOnly: true
+        kind:
+          allOf:
+            - $ref: "#/components/schemas/VerificationDocumentKindEnum"
+          readOnly: true
+        file_type:
+          allOf:
+            - $ref: "#/components/schemas/VerificationDocumentFileTypeEnum"
+          readOnly: true
+        size:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - created_at
+        - file_type
+        - id
+        - kind
+        - size
+        - submission
+    VerificationDocumentFileTypeEnum:
+      enum:
+        - pdf
+        - jpeg
+        - png
+      type: string
+      description: |-
+        * `pdf` - Pdf
+        * `jpeg` - Jpeg
+        * `png` - Png
+    VerificationDocumentKindEnum:
+      enum:
+        - rc_extract
+        - ice_certificate
+        - legal_statutes
+        - mandate
+        - other
+      type: string
+      description: |-
+        * `rc_extract` - Rc Extract
+        * `ice_certificate` - Ice Certificate
+        * `legal_statutes` - Legal Statutes
+        * `mandate` - Mandate
+        * `other` - Other
+    VerificationDocumentUploadRequest:
+      type: object
+      description: Rejects unknown input keys (protection against mass assignment and silent typos).
+      properties:
+        kind:
+          $ref: "#/components/schemas/VerificationDocumentKindEnum"
+        file:
+          type: string
+          format: binary
+      required:
+        - file
+        - kind
     VerificationStatus:
       type: object
       properties:
@@ -9661,4 +9849,4 @@ components:
       type: apiKey
       in: cookie
       name: geniura_sid
-      description: HttpOnly session cookie set by POST /api/v1/auth/login. Unsafe methods also require the X-CSRFToken header (value of the geniura_csrftoken cookie, see GET /api/v1/auth/csrf).
+      description: HttpOnly session cookie set by POST /api/v1/auth/login. Unsafe methods also require the X-CSRFToken header (masked csrf_token returned by GET /api/v1/auth/csrf).

@@ -1,13 +1,13 @@
 {
   "sourceRepository": "geniustep/geniura-api (private)",
   "sourceFile": "docs/openapi/openapi.yaml",
-  "sourceCommit": "239ebd9",
-  "sourceSha256": "3c1f7f0afd026c6a75ac9838e2ae47a640305ad213c028152044f37afaab8811",
-  "outputSha256": "ebcace8791ae3aa0e83182091d4b780b6dde4a12dda57eb7d16383ed7ad2959c",
-  "operations": 146,
-  "paths": 111,
-  "schemasKept": 219,
-  "schemasPruned": 78,
+  "sourceCommit": "4d8472c33a92b387f21e7107f714c325a4fbe2f8",
+  "sourceSha256": "9fc68e16bc0adf7e0b41fdec19bf8f688521f0121291457ea58902c70c522649",
+  "outputSha256": "1fd47a2d219666d98c52646750efabeca601e4e28ee9a6735848b063f87dbad0",
+  "operations": 149,
+  "paths": 113,
+  "schemasKept": 224,
+  "schemasPruned": 0,
   "corrections": [
     "paginated: /api/v1/candidates/me/applications",
     "paginated: /api/v1/candidates/me/interviews",
@@ -27,5 +27,7 @@
     "vocabulary: /api/v1/taxonomy/sectors",
     "vocabulary: /api/v1/taxonomy/skills",
     "error envelope: ErrorResponse + default response on every operation"
-  ]
+  ],
+  "upstreamGitBlobSha": "a200454b800bc7ff657f55f7e6efc96125fa2b48",
+  "sourceHashScope": "public-only, prefiltered copy of private upstream (not whole private OpenAPI)"
 }

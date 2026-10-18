@@ -18,14 +18,14 @@
 | اللغات الأربع وترتيبها | NOT APPROVED | `ar,fr` مؤقتًا في `lib/i18n/config.ts` |
 | الهوية البصرية (ألوان، خط، شعار) | NOT APPROVED | قيم مؤقتة موسومة في الكود |
 | Sentry / Storybook / الوضع الداكن المرئي | DEFERRED | ADR 0001 (CSP نُفّذت في PHASE 2) |
-| **PHASE 2** — عقد API مصفّى ومثبّت (geniura-api@239ebd9) مع تصحيحات موثقة | IMPLEMENTED | `contracts/`؛ 111 مسارًا، 146 عملية |
+| **PHASE 2** — عقد API مصفّى ومثبّت (geniura-api@4d8472c3) مع تصحيحات موثقة | IMPLEMENTED | `contracts/`؛ 113 مسارًا، 149 عملية |
 | عميل مولّد (Orval: fetch + TanStack Query + Zod) وفحص التطابق في CI | IMPLEMENTED | `lib/api/generated`، خطوة CI |
 | النقل: CSRF، credentials، تجديد الرمز، أخطاء موحدة مع مرجع دعم | IMPLEMENTED · TESTED | `tests/unit/api.test.ts` |
 | الدخول، التسجيل، نسيت كلمة المرور، إعادة التعيين، تأكيد البريد، حسابي، الجلسات وإنهاؤها، الخروج | IMPLEMENTED · TESTED | E2E عام + `tests/integration` ضد geniura-api محلي (8/8) |
 | حماية الصفحات الخاصة من Django، `no-store`، منع open redirect، CSP | IMPLEMENTED · TESTED | E2E + integration |
 | اختبارات التكامل مع Backend في CI | DEFERRED | المستودع الخلفي خاص؛ تُشغّل محليًا (`pnpm test:integration`) |
-| تصحيحات العقد في المصدر، `capabilities`، رمز CSRF مميز | بانتظار Backend | `docs/07-BACKEND-COORDINATION.md` |
-| النطاقان geniura.com / api.geniura.com | Approved (صاحب المشروع) | إعدادات النشر في ADR 0002 للواجهة |
+| مزامنة OpenAPI وتصحيح CSRF | IMPLEMENTED · TESTED | `contracts/source.json` و`lib/api/generated`؛ بقية تصحيحات pagination مؤجلة للمصدر |
+| النطاقان geniura.com / api-geniura.geniura.com | Approved (صاحب المشروع) | إعدادات النشر في ADR 0002 للواجهة |
 | **PHASE 3** — بحث الوظائف بفلاتر في URL، ترقيم صفحات، درج فلاتر للهاتف، حالات فارغة وتعطل | IMPLEMENTED · TESTED | E2E عام (دون Backend) + integration |
 | تفاصيل الوظيفة: لغة/اتجاه الإعلان، المتطلبات، المؤسسة، الإبلاغ المجهول | IMPLEMENTED · TESTED | integration (بلاغ حقيقي 201) |
 | JobPosting JSON-LD، canonical بلغة الإعلان، sitemap، 404 حقيقية للوظائف غير المتاحة | IMPLEMENTED · TESTED | unit + integration (Googlebot ← 404) |

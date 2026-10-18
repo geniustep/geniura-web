@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@239ebd9.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
  * OpenAPI spec version: 1.0.0-dev
  */
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -36,6 +36,8 @@ import type {
   PaginatedOrganizationPage,
   PatchedMembershipUpdateRequest,
   PatchedOrganizationRequest,
+  VerificationDocument,
+  VerificationDocumentUploadRequest,
   VerificationStatus,
   VerificationSubmission,
   VerificationSubmissionRequest,
@@ -1560,6 +1562,401 @@ export const useOrganizationsVerificationSubmissionsCreate = <
 > => {
   return useMutation(
     getOrganizationsVerificationSubmissionsCreateMutationOptions(options),
+    queryClient,
+  );
+};
+export const getOrganizationsVerificationSubmissionsDocumentsListUrl = (
+  orgId: string,
+  submissionId: string,
+) => {
+  return `/api/v1/organizations/${orgId}/verification-submissions/${submissionId}/documents`;
+};
+
+export const organizationsVerificationSubmissionsDocumentsList = async (
+  orgId: string,
+  submissionId: string,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<VerificationDocument[]> => {
+  return apiFetch<VerificationDocument[]>(
+    getOrganizationsVerificationSubmissionsDocumentsListUrl(orgId, submissionId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getOrganizationsVerificationSubmissionsDocumentsListQueryKey = (
+  orgId: string,
+  submissionId: string,
+) => {
+  return [
+    `/api/v1/organizations/${orgId}/verification-submissions/${submissionId}/documents`,
+  ] as const;
+};
+
+export const getOrganizationsVerificationSubmissionsDocumentsListQueryOptions = <
+  TData = Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+  TError = ErrorResponse,
+>(
+  orgId: string,
+  submissionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getOrganizationsVerificationSubmissionsDocumentsListQueryKey(orgId, submissionId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>
+  > = ({ signal }) =>
+    organizationsVerificationSubmissionsDocumentsList(orgId, submissionId, {
+      signal,
+      ...requestOptions,
+    });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled:
+      orgId !== null && orgId !== undefined && submissionId !== null && submissionId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type OrganizationsVerificationSubmissionsDocumentsListQueryResult = NonNullable<
+  Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>
+>;
+export type OrganizationsVerificationSubmissionsDocumentsListQueryError = ErrorResponse;
+
+export function useOrganizationsVerificationSubmissionsDocumentsList<
+  TData = Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+  TError = ErrorResponse,
+>(
+  orgId: string,
+  submissionId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+          TError,
+          Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useOrganizationsVerificationSubmissionsDocumentsList<
+  TData = Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+  TError = ErrorResponse,
+>(
+  orgId: string,
+  submissionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+          TError,
+          Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useOrganizationsVerificationSubmissionsDocumentsList<
+  TData = Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+  TError = ErrorResponse,
+>(
+  orgId: string,
+  submissionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useOrganizationsVerificationSubmissionsDocumentsList<
+  TData = Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+  TError = ErrorResponse,
+>(
+  orgId: string,
+  submissionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsList>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getOrganizationsVerificationSubmissionsDocumentsListQueryOptions(
+    orgId,
+    submissionId,
+    options,
+  );
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getOrganizationsVerificationSubmissionsDocumentsCreateUrl = (
+  orgId: string,
+  submissionId: string,
+) => {
+  return `/api/v1/organizations/${orgId}/verification-submissions/${submissionId}/documents`;
+};
+
+/**
+ * PDF/JPEG/PNG, scanned before storage; visible only to Trust officers.
+ */
+export const organizationsVerificationSubmissionsDocumentsCreate = async (
+  orgId: string,
+  submissionId: string,
+  verificationDocumentUploadRequest: VerificationDocumentUploadRequest,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<VerificationDocument> => {
+  const formData = new FormData();
+  formData.append(`kind`, verificationDocumentUploadRequest.kind);
+  formData.append(`file`, verificationDocumentUploadRequest.file);
+
+  return apiFetch<VerificationDocument>(
+    getOrganizationsVerificationSubmissionsDocumentsCreateUrl(orgId, submissionId),
+    {
+      ...options,
+      method: "POST",
+      body: formData,
+    },
+  );
+};
+
+export const getOrganizationsVerificationSubmissionsDocumentsCreateMutationKey = () =>
+  ["organizationsVerificationSubmissionsDocumentsCreate"] as const;
+
+export const getOrganizationsVerificationSubmissionsDocumentsCreateMutationOptions = <
+  TError = ErrorResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsCreate>>,
+    TError,
+    OrganizationsVerificationSubmissionsDocumentsCreateMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsCreate>>,
+  TError,
+  OrganizationsVerificationSubmissionsDocumentsCreateMutationVariables,
+  TContext
+> => {
+  const mutationKey = getOrganizationsVerificationSubmissionsDocumentsCreateMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsCreate>>,
+    OrganizationsVerificationSubmissionsDocumentsCreateMutationVariables
+  > = (props) => {
+    const { orgId, submissionId, data } = props ?? {};
+
+    return organizationsVerificationSubmissionsDocumentsCreate(
+      orgId,
+      submissionId,
+      data,
+      requestOptions,
+    );
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type OrganizationsVerificationSubmissionsDocumentsCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsCreate>>
+>;
+export type OrganizationsVerificationSubmissionsDocumentsCreateMutationBody =
+  VerificationDocumentUploadRequest;
+export type OrganizationsVerificationSubmissionsDocumentsCreateMutationError = ErrorResponse;
+export type OrganizationsVerificationSubmissionsDocumentsCreateMutationVariables = {
+  orgId: string;
+  submissionId: string;
+  data: VerificationDocumentUploadRequest;
+};
+
+export const useOrganizationsVerificationSubmissionsDocumentsCreate = <
+  TError = ErrorResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsCreate>>,
+      TError,
+      OrganizationsVerificationSubmissionsDocumentsCreateMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsCreate>>,
+  TError,
+  OrganizationsVerificationSubmissionsDocumentsCreateMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getOrganizationsVerificationSubmissionsDocumentsCreateMutationOptions(options),
+    queryClient,
+  );
+};
+export const getOrganizationsVerificationSubmissionsDocumentsDestroyUrl = (
+  orgId: string,
+  submissionId: string,
+  documentId: string,
+) => {
+  return `/api/v1/organizations/${orgId}/verification-submissions/${submissionId}/documents/${documentId}`;
+};
+
+export const organizationsVerificationSubmissionsDocumentsDestroy = async (
+  orgId: string,
+  submissionId: string,
+  documentId: string,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<void> => {
+  return apiFetch<void>(
+    getOrganizationsVerificationSubmissionsDocumentsDestroyUrl(orgId, submissionId, documentId),
+    {
+      ...options,
+      method: "DELETE",
+    },
+  );
+};
+
+export const getOrganizationsVerificationSubmissionsDocumentsDestroyMutationKey = () =>
+  ["organizationsVerificationSubmissionsDocumentsDestroy"] as const;
+
+export const getOrganizationsVerificationSubmissionsDocumentsDestroyMutationOptions = <
+  TError = ErrorResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsDestroy>>,
+    TError,
+    OrganizationsVerificationSubmissionsDocumentsDestroyMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsDestroy>>,
+  TError,
+  OrganizationsVerificationSubmissionsDocumentsDestroyMutationVariables,
+  TContext
+> => {
+  const mutationKey = getOrganizationsVerificationSubmissionsDocumentsDestroyMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsDestroy>>,
+    OrganizationsVerificationSubmissionsDocumentsDestroyMutationVariables
+  > = (props) => {
+    const { orgId, submissionId, documentId } = props ?? {};
+
+    return organizationsVerificationSubmissionsDocumentsDestroy(
+      orgId,
+      submissionId,
+      documentId,
+      requestOptions,
+    );
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type OrganizationsVerificationSubmissionsDocumentsDestroyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsDestroy>>
+>;
+
+export type OrganizationsVerificationSubmissionsDocumentsDestroyMutationError = ErrorResponse;
+export type OrganizationsVerificationSubmissionsDocumentsDestroyMutationVariables = {
+  orgId: string;
+  submissionId: string;
+  documentId: string;
+};
+
+export const useOrganizationsVerificationSubmissionsDocumentsDestroy = <
+  TError = ErrorResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsDestroy>>,
+      TError,
+      OrganizationsVerificationSubmissionsDocumentsDestroyMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof organizationsVerificationSubmissionsDocumentsDestroy>>,
+  TError,
+  OrganizationsVerificationSubmissionsDocumentsDestroyMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getOrganizationsVerificationSubmissionsDocumentsDestroyMutationOptions(options),
     queryClient,
   );
 };

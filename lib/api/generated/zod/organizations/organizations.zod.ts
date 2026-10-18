@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@239ebd9.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
@@ -685,6 +685,71 @@ export const OrganizationsVerificationSubmissionsCreateResponse = zod
     created_at: zod.iso.datetime({ offset: true }),
   })
   .describe("Rejects unknown input keys (protection against mass assignment and silent typos).");
+
+export const OrganizationsVerificationSubmissionsDocumentsListParams = zod.object({
+  org_id: zod.uuid(),
+  submission_id: zod.uuid(),
+});
+
+export const OrganizationsVerificationSubmissionsDocumentsListResponseItem = zod.object({
+  id: zod.uuid(),
+  submission: zod.uuid(),
+  kind: zod
+    .enum(["rc_extract", "ice_certificate", "legal_statutes", "mandate", "other"])
+    .describe(
+      "* `rc_extract` - Rc Extract\n* `ice_certificate` - Ice Certificate\n* `legal_statutes` - Legal Statutes\n* `mandate` - Mandate\n* `other` - Other",
+    ),
+  file_type: zod
+    .enum(["pdf", "jpeg", "png"])
+    .describe("* `pdf` - Pdf\n* `jpeg` - Jpeg\n* `png` - Png"),
+  size: zod.int(),
+  created_at: zod.iso.datetime({ offset: true }),
+});
+export const OrganizationsVerificationSubmissionsDocumentsListResponse = zod.array(
+  OrganizationsVerificationSubmissionsDocumentsListResponseItem,
+);
+
+/**
+ * PDF/JPEG/PNG, scanned before storage; visible only to Trust officers.
+ */
+export const OrganizationsVerificationSubmissionsDocumentsCreateParams = zod.object({
+  org_id: zod.uuid(),
+  submission_id: zod.uuid(),
+});
+
+export const OrganizationsVerificationSubmissionsDocumentsCreateBody = zod
+  .object({
+    kind: zod
+      .enum(["rc_extract", "ice_certificate", "legal_statutes", "mandate", "other"])
+      .describe(
+        "* `rc_extract` - Rc Extract\n* `ice_certificate` - Ice Certificate\n* `legal_statutes` - Legal Statutes\n* `mandate` - Mandate\n* `other` - Other",
+      ),
+    file: zod.instanceof(Blob),
+  })
+  .describe("Rejects unknown input keys (protection against mass assignment and silent typos).");
+
+export const OrganizationsVerificationSubmissionsDocumentsCreateResponse = zod.object({
+  id: zod.uuid(),
+  submission: zod.uuid(),
+  kind: zod
+    .enum(["rc_extract", "ice_certificate", "legal_statutes", "mandate", "other"])
+    .describe(
+      "* `rc_extract` - Rc Extract\n* `ice_certificate` - Ice Certificate\n* `legal_statutes` - Legal Statutes\n* `mandate` - Mandate\n* `other` - Other",
+    ),
+  file_type: zod
+    .enum(["pdf", "jpeg", "png"])
+    .describe("* `pdf` - Pdf\n* `jpeg` - Jpeg\n* `png` - Png"),
+  size: zod.int(),
+  created_at: zod.iso.datetime({ offset: true }),
+});
+
+export const OrganizationsVerificationSubmissionsDocumentsDestroyParams = zod.object({
+  document_id: zod.uuid(),
+  org_id: zod.uuid(),
+  submission_id: zod.uuid(),
+});
+
+export const OrganizationsVerificationSubmissionsDocumentsDestroyResponse = zod.void();
 
 export const organizationsInvitationsAcceptCreateBodyTokenMax = 128;
 

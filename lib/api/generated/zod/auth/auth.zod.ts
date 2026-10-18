@@ -4,16 +4,17 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@239ebd9.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
 
 /**
- * Sets the CSRF cookie. The SPA echoes its value in the X-CSRFToken header.
+ * Sets the host-scoped CSRF cookie and returns a masked csrf_token in JSON. Cross-origin SPAs send this value in X-CSRFToken with credentials included.
  */
 export const AuthCsrfRetrieveResponse = zod.object({
   detail: zod.string(),
+  csrf_token: zod.string(),
 });
 
 export const AuthEmailResendCreateResponse = zod.object({
