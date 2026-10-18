@@ -38,7 +38,9 @@ describe("apiFetch (browser)", () => {
 
   it("gets masked token from JSON, never document.cookie", async () => {
     document.cookie = "geniura_csrftoken=unrelated-host-cookie";
-    fetchMock.mockResolvedValueOnce(json(200, { detail: "CSRF cookie set.", csrf_token: tokenOne }));
+    fetchMock.mockResolvedValueOnce(
+      json(200, { detail: "CSRF cookie set.", csrf_token: tokenOne }),
+    );
     fetchMock.mockResolvedValueOnce(json(200, {}));
     await apiFetch("/api/v1/auth/login", { method: "POST", body: "{}" });
     expect(fetchMock.mock.calls[0]![0]).toBe("https://api-geniura.geniura.com/api/v1/auth/csrf");
@@ -50,7 +52,11 @@ describe("apiFetch (browser)", () => {
     fetchMock
       .mockResolvedValueOnce(json(200, { csrf_token: tokenOne }))
       .mockResolvedValueOnce(
-        json(403, { code: "permission_denied", message: "CSRF failed: token expired.", details: {} }),
+        json(403, {
+          code: "permission_denied",
+          message: "CSRF failed: token expired.",
+          details: {},
+        }),
       )
       .mockResolvedValueOnce(json(200, { csrf_token: tokenTwo }))
       .mockResolvedValueOnce(new Response(null, { status: 204 }));
