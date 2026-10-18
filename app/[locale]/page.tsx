@@ -30,6 +30,9 @@ import { LatestJobs } from "@/features/home/latest-jobs";
 import { getDirection } from "@/lib/i18n/config";
 import { Link } from "@/lib/i18n/navigation";
 import { routing } from "@/lib/i18n/routing";
+import { jsonLdScript } from "@/lib/seo/json-ld";
+import { buildSiteIdentityGraph } from "@/lib/seo/site-identity";
+import { buildSocialMetadata } from "@/lib/seo/social";
 import { cn } from "@/lib/utils";
 
 type HomePageProps = {
@@ -38,7 +41,14 @@ type HomePageProps = {
 
 export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
   return {
+    ...buildSocialMetadata({
+      locale,
+      pathname: `/${locale}`,
+      title: t("title"),
+      description: t("description"),
+    }),
     alternates: {
       canonical: `/${locale}`,
       languages: Object.fromEntries([
@@ -99,6 +109,10 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(buildSiteIdentityGraph()) }}
+      />
       <div className="border-b bg-accent/60 text-accent-foreground">
         <Container className="py-2 text-center text-sm">{tCommon("underConstruction")}</Container>
       </div>
