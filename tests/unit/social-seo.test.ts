@@ -69,7 +69,7 @@ describe("public site JSON-LD", () => {
         "@id": `${origin}/#website`,
         name: "Geniura",
         url: `${origin}/`,
-        inLanguage: ["ar", "fr"],
+        inLanguage: ["ar", "fr", "en", "es"],
         publisher: { "@id": `${origin}/#organization` },
       },
     ]);

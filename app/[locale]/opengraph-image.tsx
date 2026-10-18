@@ -7,7 +7,11 @@ export const contentType = "image/png";
 /** Temporary typography-led card until the final visual identity is approved. */
 export default async function OpenGraphImage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const subtitle = locale === "fr" ? "Emploi · Talents · Compétences" : "Jobs · Talent · Skills";
+  const subtitles: Record<string, string> = {
+    fr: "Emploi · Talents · Compétences",
+    es: "Empleo · Talento · Competencias",
+  };
+  const subtitle = subtitles[locale] ?? "Jobs · Talent · Skills";
 
   return new ImageResponse(
     <div

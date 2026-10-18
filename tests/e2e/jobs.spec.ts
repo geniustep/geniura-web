@@ -72,7 +72,7 @@ test("sitemap emits canonical public URLs rather than development origins", asyn
   const body = await response.text();
   const origin = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://geniura.com").replace(/\/$/, "");
 
-  for (const locale of ["ar", "fr"]) {
+  for (const locale of ["ar", "fr", "en", "es"]) {
     expect(body).toContain(`<loc>${origin}/${locale}</loc>`);
     expect(body).toContain(`<loc>${origin}/${locale}/jobs</loc>`);
   }
@@ -84,7 +84,7 @@ test("sitemap emits canonical public URLs rather than development origins", asyn
 });
 
 test("job listings expose social metadata but remain noindex before launch", async ({ page }) => {
-  for (const locale of ["ar", "fr"]) {
+  for (const locale of ["ar", "fr", "en", "es"]) {
     await page.goto(`/${locale}/jobs`);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",

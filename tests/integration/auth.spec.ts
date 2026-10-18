@@ -97,7 +97,7 @@ test.describe("email links", () => {
   test("verification link goes through the locale redirect and needs a click", async ({ page }) => {
     const link = await lastLink("/verify-email", email);
     await page.goto(link);
-    await expect(page).toHaveURL(/\/(ar|fr)\/verify-email\?token=/);
+    await expect(page).toHaveURL(/\/(ar|fr|en|es)\/verify-email\?token=/);
     await page
       .getByRole("button")
       .filter({ hasText: /تأكيد بريدي|Confirmer mon adresse/ })

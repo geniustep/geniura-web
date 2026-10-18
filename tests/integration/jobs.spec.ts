@@ -88,5 +88,5 @@ test("a visitor can report a job anonymously", async ({ page, request }) => {
 
 test("the sitemap lists published jobs", async ({ request }) => {
   const body = await (await request.get("/sitemap.xml")).text();
-  expect(body).toMatch(/\/(ar|fr)\/jobs\/[0-9a-f-]{36}/);
+  expect(body).toMatch(/\/(ar|fr|en|es)\/jobs\/[0-9a-f-]{36}/);
 });

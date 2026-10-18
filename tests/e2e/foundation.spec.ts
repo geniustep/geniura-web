@@ -4,6 +4,8 @@ import { expect, test } from "@playwright/test";
 const pages = [
   { locale: "ar", dir: "rtl", heading: /عروض عمل/ },
   { locale: "fr", dir: "ltr", heading: /Des offres d’emploi/ },
+  { locale: "en", dir: "ltr", heading: /Job offers/ },
+  { locale: "es", dir: "ltr", heading: /Ofertas de empleo/ },
 ] as const;
 
 for (const { locale, dir, heading } of pages) {
@@ -34,9 +36,31 @@ for (const { locale, dir, heading } of pages) {
   });
 }
 
-test("redirects the bare origin to a locale", async ({ page }) => {
-  await page.goto("/");
-  await expect(page).toHaveURL(/\/ar$/);
+test.describe("Arabic browser", () => {
+  test.use({ locale: "ar-MA" });
+
+  test("redirects the bare origin to Arabic", async ({ page }) => {
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/ar$/);
+  });
+});
+
+test.describe("English browser", () => {
+  test.use({ locale: "en-US" });
+
+  test("negotiates English from Accept-Language", async ({ page }) => {
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/en$/);
+  });
+});
+
+test.describe("Spanish browser", () => {
+  test.use({ locale: "es-ES" });
+
+  test("negotiates Spanish from Accept-Language", async ({ page }) => {
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/es$/);
+  });
 });
 
 test.describe("French browser", () => {
@@ -79,7 +103,7 @@ test("robots.txt disallows everything before launch", async ({ request }) => {
 });
 
 test("home pages publish localized social cards and brand identity", async ({ page, request }) => {
-  for (const locale of ["ar", "fr"]) {
+  for (const locale of ["ar", "fr", "en", "es"]) {
     await page.goto(`/${locale}`);
     await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
     await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(

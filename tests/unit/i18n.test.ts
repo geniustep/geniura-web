@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 
 import ar from "@/messages/ar.json";
+import en from "@/messages/en.json";
+import es from "@/messages/es.json";
 import fr from "@/messages/fr.json";
 import { applicationStatuses } from "@/components/patterns/status-badge";
 import { provenanceSources } from "@/components/patterns/provenance-tag";
 import { defaultLocale, formattingLocale, getDirection, locales } from "@/lib/i18n/config";
 
-const catalogs = { ar, fr } as const;
+const catalogs = { ar, fr, en, es } as const;
 
 describe("locale configuration", () => {
   it("has a message catalog for every configured locale", () => {
@@ -20,6 +22,8 @@ describe("locale configuration", () => {
   it("derives the document direction from the locale", () => {
     expect(getDirection("ar")).toBe("rtl");
     expect(getDirection("fr")).toBe("ltr");
+    expect(getDirection("en")).toBe("ltr");
+    expect(getDirection("es")).toBe("ltr");
   });
 
   it("formats Arabic dates and numbers with Latin digits for Morocco", () => {

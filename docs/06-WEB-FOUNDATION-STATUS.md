@@ -15,7 +15,7 @@
 | منع الفهرسة قبل الإطلاق (robots + `noindex`) | IMPLEMENTED · TESTED | E2E |
 | فحص الخصائص المنطقية (RTL) وتطابق ملفات الرسائل | IMPLEMENTED | `pnpm check:css`، `pnpm check:messages` |
 | CI (lint، تنسيق، فحوص، اختبارات، build، audit، E2E) بلا أسرار وبلا نشر | IMPLEMENTED · TESTED | `.github/workflows/ci.yml`؛ نجاح المهمتين quality وe2e على `8773893` في [التشغيل 39072732925](https://github.com/geniustep/geniura-web/actions/runs/39072732925) |
-| اللغات الأربع وترتيبها | NOT APPROVED | `ar,fr` مؤقتًا في `lib/i18n/config.ts` |
+| اللغات الأربع وترتيبها | APPROVED (2026-10-18) | `ar,fr,en,es` في `lib/i18n/config.ts` مع `messages/en.json` و`messages/es.json`؛ يتبقى اعتمادها في geniura-api |
 | الهوية البصرية (ألوان، خط، شعار) | APPROVED — الاتجاه A «Nuit» (2026-10-18) | الأزرق البحري والعاجي والذهبي على الداكن فقط، وأزرق للإجراء الرئيسي؛ Readex Pro وBricolage Grotesque للعناوين وIBM Plex للنصوص (`styles/globals.css`، `styles/fonts.ts`)؛ الشعار الأصلي دون تعديل |
 | Sentry / Storybook / الوضع الداكن المرئي | DEFERRED | ADR 0001 (CSP نُفّذت في PHASE 2) |
 | **PHASE 2** — عقد API مصفّى ومثبّت (geniura-api@4d8472c3) مع تصحيحات موثقة | IMPLEMENTED | `contracts/`؛ 113 مسارًا، 149 عملية |

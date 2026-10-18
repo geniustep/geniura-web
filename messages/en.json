@@ -1,0 +1,585 @@
+{
+  "Metadata": {
+    "title": "Geniura — Recruitment and skills development",
+    "titleTemplate": "%s · Geniura",
+    "description": "Moroccan platform for recruitment and skills development: job offers, free applications, pre-selection services and explained matching."
+  },
+  "Common": {
+    "skipToContent": "Skip to content",
+    "comingSoon": "Coming soon",
+    "close": "Close",
+    "menu": "Menu"
+  },
+  "Header": {
+    "homeLabel": "Geniura — home",
+    "nav": {
+      "jobs": "Jobs",
+      "employers": "Employers",
+      "skills": "Skills"
+    },
+    "signIn": "Sign in",
+    "register": "Create an account"
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "current": "Current language: {language}"
+  },
+  "Languages": {
+    "ar": "العربية",
+    "fr": "Français",
+    "en": "English",
+    "es": "Español"
+  },
+  "Footer": {
+    "tagline": "A Moroccan platform with international ambition for recruitment and skills.",
+    "legal": "Privacy and terms",
+    "rights": "© Geniura · Morocco",
+    "promise": "Applying is always free. Your profile is only visible to the companies you apply to.",
+    "ctaTitle": "Start with a job that suits you.",
+    "ctaBody": "Anyone can browse without an account, and applying is always free.",
+    "ctaButton": "Browse jobs",
+    "seekers": "Job seekers",
+    "employers": "Employers",
+    "language": "Language",
+    "browseJobs": "Jobs",
+    "createAccount": "Create an account",
+    "signIn": "Sign in",
+    "publishJob": "Post a job",
+    "recruitmentService": "Recruitment service",
+    "skills": "Skills development",
+    "trustTitle": "Our principles",
+    "trustFree": "Free applications",
+    "trustPrivate": "Private profile by default",
+    "trustHuman": "Human decisions",
+    "employersSpace": "Employer space"
+  },
+  "Home": {
+    "eyebrow": "Recruitment platform in Morocco",
+    "titleLead": "Job offers,",
+    "titleAccent": "finally clear.",
+    "subtitle": "Salary, requirements and closing date visible before you apply. Then the real status of your application, at every step.",
+    "searchPlaceholder": "Accountant, Comptable, محاسب…",
+    "searchHint": "Type in any language.",
+    "examplesLabel": "Try searching:",
+    "examples": {
+      "one": "Accountant",
+      "two": "Web developer",
+      "three": "Nurse",
+      "four": "Maintenance technician"
+    },
+    "preview": {
+      "label": "Example of an application being followed",
+      "example": "Example",
+      "jobTitle": "Accountant",
+      "company": "Distribution company (example)",
+      "monogram": "DC",
+      "submittedOn": "Oct 14",
+      "reviewOn": "Oct 16",
+      "interviewOn": "Thursday, Oct 23 · 10:00",
+      "decision": "Company’s decision"
+    },
+    "free": {
+      "title": "Applying is always free",
+      "body": "You will never be asked to pay to browse or apply."
+    },
+    "latest": {
+      "title": "Latest jobs",
+      "subtitle": "Every card shows the salary status, even when the company does not disclose it.",
+      "all": "See all jobs",
+      "emptyTitle": "No jobs published yet",
+      "emptyBody": "The latest jobs will appear here as soon as they are published."
+    },
+    "steps": {
+      "title": "You always know where your application stands.",
+      "search": {
+        "title": "Search without an account",
+        "body": "Salary, requirements and conditions are visible from the search results, in any language."
+      },
+      "apply": {
+        "title": "Review what you share",
+        "body": "Before sending, you see exactly what the company will receive from your profile."
+      },
+      "follow": {
+        "title": "Follow the real status",
+        "body": "Every step comes from an action by the company, and the final decision is made by a person, not a machine."
+      }
+    },
+    "employers": {
+      "eyebrow": "Geniura for employers",
+      "title": "Post a job and manage your applications.",
+      "body": "Receive applications, talk to candidates and organise interviews in one place.",
+      "learnMore": "Discover the employer space"
+    },
+    "service": {
+      "eyebrow": "Recruitment service",
+      "title": "Let us handle pre-selection.",
+      "body": "Describe your need and the number of positions: the Geniura team helps you select and assess profiles.",
+      "learnMore": "Learn more about the service"
+    }
+  },
+  "Status": {
+    "application": {
+      "submitted": "Submitted",
+      "in_review": "Under review",
+      "shortlisted": "Shortlisted",
+      "interview": "Interview",
+      "offer": "Offer",
+      "hired": "Hired",
+      "rejected": "Not selected",
+      "withdrawn": "Withdrawn",
+      "closed": "Closed"
+    }
+  },
+  "Provenance": {
+    "asserted": "Declared by you",
+    "extracted": "Extracted and confirmed",
+    "verified": "Verified"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "body": "The page may have moved or is no longer available.",
+    "back": "Back to home"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "body": "This page could not be loaded. You can try again.",
+    "retry": "Try again"
+  },
+  "DesignSystem": {
+    "title": "Design system",
+    "intro": "Internal page to review tokens and components in both directions. Not indexed.",
+    "colors": "Colours",
+    "typography": "Typography",
+    "buttons": "Buttons",
+    "forms": "Form fields",
+    "badges": "Badges and statuses",
+    "feedback": "Loading and empty states",
+    "dialogs": "Dialogs",
+    "sampleHeading": "HR officer — Casablanca",
+    "sampleBody": "Sample text mixing English, العربية, recruiter@example.com and the number 2026 to check direction.",
+    "fieldLabel": "Job title",
+    "fieldPlaceholder": "E.g. accountant",
+    "fieldHint": "Write in any language; equivalent titles will be suggested later.",
+    "textareaLabel": "Short description",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "outline": "Outline",
+    "ghost": "Ghost",
+    "destructive": "Delete",
+    "disabled": "Disabled",
+    "toast": "Show a notification",
+    "toastMessage": "Saved (sample notification)",
+    "emptyTitle": "No results",
+    "emptyBody": "Try removing filters or widening the city.",
+    "openSheet": "Open a side panel",
+    "sheetTitle": "Filters",
+    "sheetBody": "Example of a filter drawer on mobile."
+  },
+  "Auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Access your Geniura account.",
+      "submit": "Sign in",
+      "forgot": "Forgot your password?",
+      "noAccount": "No account yet?",
+      "toRegister": "Create an account"
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Registration is free. We will send a confirmation link to your address.",
+      "submit": "Create account",
+      "intentLabel": "I am",
+      "intent": {
+        "candidate": "looking for a job",
+        "employer": "representing a company"
+      },
+      "hasAccount": "Already have an account?",
+      "toLogin": "Sign in",
+      "doneTitle": "Check your inbox",
+      "doneBody": "If the address is valid, you will receive a confirmation message within a few minutes. Remember to check your spam folder."
+    },
+    "forgot": {
+      "title": "Forgot password",
+      "subtitle": "Enter your address to receive a reset link.",
+      "submit": "Send the link",
+      "doneTitle": "Check your inbox",
+      "doneBody": "If an account exists with this address, you will receive a reset link."
+    },
+    "reset": {
+      "title": "New password",
+      "subtitle": "Choose a new password.",
+      "submit": "Save",
+      "missingLink": "The link is incomplete. Request a new one.",
+      "doneTitle": "Password changed",
+      "doneBody": "Your other sessions have been closed. You can sign in."
+    },
+    "verify": {
+      "title": "Confirm your email address",
+      "subtitle": "Click the button to confirm your address.",
+      "submit": "Confirm my address",
+      "missingLink": "The link is incomplete. Request a new link from your account.",
+      "doneTitle": "Address confirmed",
+      "doneBody": "You can now apply and create a company."
+    },
+    "fields": {
+      "email": "Email address",
+      "password": "Password",
+      "newPassword": "New password",
+      "fullName": "Full name",
+      "optional": "optional"
+    },
+    "backToLogin": "Back to sign in",
+    "submitting": "Sending…"
+  },
+  "Account": {
+    "title": "My account",
+    "subtitle": "Your details and sessions.",
+    "email": "Email address",
+    "name": "Name",
+    "joined": "Joined",
+    "verified": "Confirmed",
+    "notVerified": "Not confirmed",
+    "verifyBanner": "Your address is not confirmed yet. This is required to apply and to create a company.",
+    "resend": "Resend the confirmation link",
+    "resent": "If possible, a new link has been sent.",
+    "sessionsLink": "Devices and sessions",
+    "logout": "Sign out",
+    "loggedOut": "You are signed out.",
+    "sessions": {
+      "title": "Devices and sessions",
+      "subtitle": "Sessions open on your account. Close any you do not recognise.",
+      "current": "This device",
+      "lastSeen": "Last activity",
+      "started": "Opened on",
+      "unknownDevice": "Unknown device",
+      "revoke": "Close session",
+      "revoked": "Session closed.",
+      "empty": "No other sessions."
+    }
+  },
+  "UserMenu": {
+    "account": "My account",
+    "sessions": "Devices and sessions",
+    "logout": "Sign out",
+    "label": "Account menu"
+  },
+  "Errors": {
+    "api": {
+      "invalid_credentials": "Incorrect email or password.",
+      "invalid_token": "Invalid or expired link. Request a new one.",
+      "invalid_current_password": "Current password is incorrect.",
+      "not_authenticated": "Your session has expired. Please sign in again.",
+      "permission_denied": "You are not allowed to perform this action.",
+      "csrf_failed": "The security check failed. Refresh the page, then try again.",
+      "not_found": "Item not found.",
+      "rate_limited": "Too many attempts. Please wait before trying again.",
+      "validation_error": "Please check the highlighted fields.",
+      "network_error": "Cannot reach the server. Check your connection and try again.",
+      "unknown_error": "Something went wrong. Please try again."
+    },
+    "reference": "Support reference: {id}"
+  },
+  "Validation": {
+    "required": "This field is required.",
+    "invalid_format": "Invalid format.",
+    "too_small": "Value too short.",
+    "too_big": "Value too long.",
+    "invalid": "Invalid value."
+  },
+  "Jobs": {
+    "metaTitle": "Jobs",
+    "metaDescription": "Search the jobs published on Geniura by occupation, city and contract type.",
+    "title": "Jobs",
+    "subtitle": "Jobs published by verified companies. Applying is free.",
+    "search": {
+      "label": "Keywords",
+      "placeholder": "Occupation, skill or job title… in any language",
+      "submit": "Search",
+      "location": "City",
+      "anyLocation": "All cities"
+    },
+    "filters": {
+      "title": "Filters",
+      "open": "Filters",
+      "apply": "Show results",
+      "clear": "Clear filters",
+      "occupation": "Occupation",
+      "sector": "Sector",
+      "contractType": "Contract type",
+      "workMode": "Work mode",
+      "schedule": "Schedule",
+      "posted": "Date posted",
+      "sort": "Sort by",
+      "any": "Any",
+      "postedWithin": "{days, plural, =1 {Last 24 hours} other {Last # days}}"
+    },
+    "sort": {
+      "relevance": "Relevance",
+      "newest": "Newest",
+      "expiring_soon": "Closing soon"
+    },
+    "results": {
+      "count": "{count, plural, =0 {No jobs} one {# job} other {# jobs}}",
+      "emptyTitle": "No matching jobs",
+      "emptyBody": "Try other keywords or remove some filters.",
+      "errorTitle": "Jobs could not be loaded",
+      "errorBody": "The service is temporarily unavailable. Please try again in a moment.",
+      "depthLimit": "Only the first pages are shown. Refine your search to reach other results."
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page} of {total}"
+    },
+    "card": {
+      "posted": "Posted {date}",
+      "expires": "Closes {date}",
+      "salary": "Salary",
+      "verified": "Verified company",
+      "reviewed": "Reviewed by the Geniura team",
+      "language": "Posted in {language}",
+      "notDisclosed": "Salary not disclosed",
+      "view": "View job"
+    },
+    "contractType": {
+      "permanent": "Permanent",
+      "fixed_term": "Fixed-term",
+      "temporary": "Temporary",
+      "internship": "Internship",
+      "apprenticeship": "Apprenticeship",
+      "freelance": "Freelance",
+      "seasonal": "Seasonal"
+    },
+    "workMode": {
+      "onsite": "On-site",
+      "hybrid": "Hybrid",
+      "remote": "Remote"
+    },
+    "schedule": {
+      "full_time": "Full-time",
+      "part_time": "Part-time",
+      "shifts": "Shift work"
+    },
+    "salaryPeriod": {
+      "hour": "per hour",
+      "day": "per day",
+      "month": "per month",
+      "year": "per year"
+    },
+    "educationLevel": {
+      "none": "No diploma",
+      "primary": "Primary school",
+      "secondary": "Secondary school",
+      "baccalaureate": "Baccalaureate",
+      "vocational": "Vocational training",
+      "bac_plus_2": "Bac +2 (2-year degree)",
+      "bac_plus_3": "Bac +3 (bachelor’s)",
+      "bac_plus_5": "Bac +5 (master’s)",
+      "doctorate": "Doctorate"
+    },
+    "requirementKind": {
+      "skill": "Skill",
+      "occupation_experience": "Occupational experience",
+      "language": "Language",
+      "education": "Education level",
+      "certification": "Certification",
+      "license": "Licence"
+    },
+    "skillLevel": {
+      "unspecified": "",
+      "basic": "basic",
+      "intermediate": "intermediate",
+      "advanced": "advanced",
+      "expert": "expert"
+    },
+    "detail": {
+      "back": "Back to jobs",
+      "description": "Description",
+      "responsibilities": "Responsibilities",
+      "requirements": "Requirements",
+      "mandatory": "Required",
+      "optional": "Preferred",
+      "details": "Job details",
+      "location": "Location",
+      "positions": "Positions",
+      "experience": "Experience required",
+      "experienceYears": "{years, plural, =0 {Beginners welcome} one {# year} other {# years}}",
+      "education": "Education level",
+      "published": "Posted",
+      "expires": "Closing date",
+      "organization": "Company",
+      "website": "Website",
+      "verifiedNote": "Geniura has verified the company’s identity. This does not guarantee every detail of the job: report anything suspicious.",
+      "applyTitle": "Application",
+      "applySoon": "Applying through Geniura will be available soon. Never pay to apply.",
+      "apply": "Apply for this job",
+      "unknownLabel": "Not specified",
+      "notFoundTitle": "Job unavailable",
+      "notFoundBody": "This job may have been closed or may have expired.",
+      "open": "Published and active",
+      "badgesTitle": "What we have verified"
+    },
+    "report": {
+      "open": "Report this job",
+      "title": "Report a job",
+      "body": "The trust team will review your report. Do not include unnecessary personal data.",
+      "category": "Reason",
+      "description": "Details (optional)",
+      "submit": "Send report",
+      "done": "Thank you. Your report has been received and will be reviewed.",
+      "categories": {
+        "fraud": "Fraud",
+        "fee_request": "Request for money",
+        "misleading": "Misleading information",
+        "discrimination": "Discrimination",
+        "harassment": "Harassment",
+        "inappropriate": "Inappropriate content",
+        "spam": "Spam",
+        "privacy": "Privacy violation",
+        "other": "Other reason"
+      }
+    },
+    "eyebrow": "Jobs"
+  },
+  "Employers": {
+    "metaTitle": "Employers",
+    "metaDescription": "Post your jobs and manage your applications, or entrust pre-selection and assessment to the Geniura team.",
+    "eyebrow": "Geniura for employers",
+    "titleLead": "Hire the right people,",
+    "titleAccent": "with clarity.",
+    "subtitle": "Post your job and manage applications yourself, or let the Geniura team help you pre-select and assess. Two separate paths, each with clear rules.",
+    "status": "The employer space is being prepared. Create your account now and choose “representing a company” to be ready when it opens.",
+    "ctaRegister": "Create a company account",
+    "ctaHow": "How it works",
+    "preview": {
+      "label": "Example of application management",
+      "example": "Example",
+      "job": "Accountant · Casablanca",
+      "count": "3 applications",
+      "candidateA": "Candidate A",
+      "candidateB": "Candidate B",
+      "candidateC": "Candidate C",
+      "skill": "Accounting software",
+      "language": "French",
+      "note": "Every piece of information shows its source: declared, extracted or verified."
+    },
+    "pathsTitle": "Two paths, each with its purpose",
+    "pathsSubtitle": "Posting a job and ordering a recruitment service are two different things.",
+    "publish": {
+      "eyebrow": "Post a job",
+      "title": "Run your recruitment yourself.",
+      "body": "For companies that want to receive and process applications directly.",
+      "items": {
+        "one": "A short posting flow: title and city, tasks and requirements, then preview and submit",
+        "two": "A searchable, filterable applications table, without exposing anyone who has not applied",
+        "three": "Statuses, interviews and messages in one place",
+        "four": "Job review when needed, and a closing date visible to job seekers"
+      }
+    },
+    "service": {
+      "eyebrow": "Request a recruitment service",
+      "title": "Let us handle pre-selection.",
+      "body": "For companies that want professional support to select and assess candidates.",
+      "items": {
+        "one": "You specify the number of positions, skills, conditions, location and scope",
+        "two": "A clear service proposal, and your approval before any work starts",
+        "three": "Pre-selection and assessment by the Geniura team, with limited access rights",
+        "four": "A shortlist you can consult with controlled access"
+      }
+    },
+    "trustTitle": "Trust you can verify",
+    "trust": {
+      "verified": {
+        "title": "Verified company",
+        "body": "We verify the company’s identity with supporting documents. Verification does not guarantee every detail of a job."
+      },
+      "privacy": {
+        "title": "Candidate privacy",
+        "body": "No bulk CV downloads, and no company can see another company’s files or decisions."
+      },
+      "human": {
+        "title": "Human decisions",
+        "body": "Matching explains its reasons and never rejects a candidate automatically."
+      },
+      "roles": {
+        "title": "Roles and permissions",
+        "body": "Owner, admin, recruiter, assessor: each member only accesses what their task requires."
+      }
+    },
+    "stepsTitle": "Getting started",
+    "steps": {
+      "account": {
+        "title": "Create your account",
+        "body": "Registration is free. Choose “representing a company”."
+      },
+      "verify": {
+        "title": "Get your company verified",
+        "body": "When the space opens, you submit the company’s documents for an internal review."
+      },
+      "publish": {
+        "title": "Post or request",
+        "body": "Post your first job yourself, or describe your need to the recruitment service."
+      }
+    }
+  },
+  "Skills": {
+    "metaTitle": "Skills development",
+    "metaDescription": "Optional upskilling suggestions tied to the requirements of a specific job, with no purchase required and no promise of a job.",
+    "eyebrow": "Skills development",
+    "titleLead": "Build the skill",
+    "titleAccent": "you are actually missing.",
+    "subtitle": "We compare the requirements of a specific job with your profile, explain what matches and what is missing, then suggest optional learning paths. No purchase required, no promise of a job.",
+    "status": "This service is being prepared and is not open yet.",
+    "ctaJobs": "Browse jobs",
+    "preview": {
+      "label": "Example of a profile compared with a job",
+      "example": "Example",
+      "job": "Accountant · job requirements",
+      "match1": "Accounting software",
+      "match1Note": "In your profile",
+      "match2": "Professional French",
+      "match2Note": "In your profile",
+      "gap": "Advanced Excel",
+      "gapNote": "Not in your profile",
+      "suggestion": "Suggested path: Excel for accounting",
+      "optional": "Optional — you can apply right now"
+    },
+    "stepsTitle": "From the job to the skill",
+    "steps": {
+      "choose": {
+        "title": "You choose a job",
+        "body": "Suggestions start from the requirements of a real job, never from a general judgement about you."
+      },
+      "compare": {
+        "title": "We compare and explain",
+        "body": "We separate what you declared, what was extracted from your CV and what is verified, and show what is missing."
+      },
+      "decide": {
+        "title": "You decide",
+        "body": "Apply now, or train first. The choice is always yours."
+      }
+    },
+    "principlesTitle": "Rules we do not compromise on",
+    "principles": {
+      "optional": {
+        "title": "Always optional",
+        "body": "No course purchase is ever required to send an application."
+      },
+      "job": {
+        "title": "Tied to a job",
+        "body": "The gap is measured against a specific job’s requirements, not a person’s worth."
+      },
+      "noPromise": {
+        "title": "No false promises",
+        "body": "Training does not guarantee a job, and we will never say otherwise."
+      },
+      "source": {
+        "title": "Clear source",
+        "body": "Every skill shows its source, and extracted data never becomes “verified” on its own."
+      }
+    },
+    "partnersTitle": "Assessment and training partners",
+    "partnersBody": "We are selecting assessment and training partners linked to labour-market needs. No partner will have access to the candidate database."
+  }
+}

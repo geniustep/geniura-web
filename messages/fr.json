@@ -26,7 +26,9 @@
   },
   "Languages": {
     "ar": "العربية",
-    "fr": "Français"
+    "fr": "Français",
+    "en": "English",
+    "es": "Español"
   },
   "Footer": {
     "tagline": "Plateforme marocaine à ambition internationale pour le recrutement et les compétences.",

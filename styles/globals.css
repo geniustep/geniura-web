@@ -181,7 +181,9 @@
   }
 
   /* Latin text inside an Arabic page (a French posting title) keeps the Latin faces, and back. */
-  :lang(fr) {
+  :lang(fr),
+  :lang(en),
+  :lang(es) {
     --font-sans: var(--font-latin), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
     --font-display:
       var(--font-display-latin), var(--font-display-arabic), var(--font-latin), var(--font-arabic),

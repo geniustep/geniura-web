@@ -1,0 +1,585 @@
+{
+  "Metadata": {
+    "title": "Geniura — Reclutamiento y desarrollo de competencias",
+    "titleTemplate": "%s · Geniura",
+    "description": "Plataforma marroquí de reclutamiento y desarrollo de competencias: ofertas de empleo, candidatura gratuita, servicios de preselección y matching explicado."
+  },
+  "Common": {
+    "skipToContent": "Ir al contenido",
+    "comingSoon": "Próximamente",
+    "close": "Cerrar",
+    "menu": "Menú"
+  },
+  "Header": {
+    "homeLabel": "Geniura — inicio",
+    "nav": {
+      "jobs": "Ofertas de empleo",
+      "employers": "Empresas",
+      "skills": "Competencias"
+    },
+    "signIn": "Iniciar sesión",
+    "register": "Crear una cuenta"
+  },
+  "LanguageSwitcher": {
+    "label": "Idioma",
+    "current": "Idioma actual: {language}"
+  },
+  "Languages": {
+    "ar": "العربية",
+    "fr": "Français",
+    "en": "English",
+    "es": "Español"
+  },
+  "Footer": {
+    "tagline": "Plataforma marroquí con ambición internacional para el reclutamiento y las competencias.",
+    "legal": "Privacidad y condiciones",
+    "rights": "© Geniura · Marruecos",
+    "promise": "Postularse es siempre gratis. Tu perfil solo lo ven las empresas a las que te postulas.",
+    "ctaTitle": "Empieza por una oferta que te encaje.",
+    "ctaBody": "Cualquiera puede consultar sin cuenta, y postularse es siempre gratis.",
+    "ctaButton": "Ver las ofertas",
+    "seekers": "Candidatos",
+    "employers": "Empresas",
+    "language": "Idioma",
+    "browseJobs": "Ofertas de empleo",
+    "createAccount": "Crear una cuenta",
+    "signIn": "Iniciar sesión",
+    "publishJob": "Publicar una oferta",
+    "recruitmentService": "Servicio de reclutamiento",
+    "skills": "Desarrollo de competencias",
+    "trustTitle": "Nuestros principios",
+    "trustFree": "Candidatura gratuita",
+    "trustPrivate": "Perfil privado por defecto",
+    "trustHuman": "Decisión humana",
+    "employersSpace": "Espacio empresas"
+  },
+  "Home": {
+    "eyebrow": "Plataforma de reclutamiento en Marruecos",
+    "titleLead": "Ofertas de empleo,",
+    "titleAccent": "por fin claras.",
+    "subtitle": "Salario, requisitos y fecha límite visibles antes de postularte. Después, el estado real de tu candidatura en cada etapa.",
+    "searchPlaceholder": "Contable, Comptable, محاسب…",
+    "searchHint": "Escribe en cualquier idioma.",
+    "examplesLabel": "Ejemplos de búsqueda:",
+    "examples": {
+      "one": "Contable",
+      "two": "Desarrollador web",
+      "three": "Enfermero",
+      "four": "Técnico de mantenimiento"
+    },
+    "preview": {
+      "label": "Ejemplo de seguimiento de una candidatura",
+      "example": "Ejemplo",
+      "jobTitle": "Contable",
+      "company": "Empresa de distribución (ejemplo)",
+      "monogram": "ED",
+      "submittedOn": "14 oct.",
+      "reviewOn": "16 oct.",
+      "interviewOn": "Jueves 23 oct. · 10:00",
+      "decision": "Decisión de la empresa"
+    },
+    "free": {
+      "title": "Postularse es siempre gratis",
+      "body": "Nunca se te pedirá ningún pago para consultar o postularte."
+    },
+    "latest": {
+      "title": "Ofertas recientes",
+      "subtitle": "Cada tarjeta muestra el salario, incluso cuando la empresa no lo publica.",
+      "all": "Ver todas las ofertas",
+      "emptyTitle": "Aún no hay ofertas publicadas",
+      "emptyBody": "Las ofertas más recientes aparecerán aquí en cuanto se publiquen."
+    },
+    "steps": {
+      "title": "Siempre sabes en qué punto está tu candidatura.",
+      "search": {
+        "title": "Busca sin crear una cuenta",
+        "body": "Salario, requisitos y condiciones visibles desde la búsqueda, en cualquier idioma."
+      },
+      "apply": {
+        "title": "Revisa lo que compartes",
+        "body": "Antes de enviar, ves exactamente lo que la empresa recibirá de tu perfil."
+      },
+      "follow": {
+        "title": "Sigue el estado real",
+        "body": "Cada etapa procede de una acción de la empresa, y la decisión final la toma una persona, no una máquina."
+      }
+    },
+    "employers": {
+      "eyebrow": "Geniura para empresas",
+      "title": "Publica una oferta y gestiona tus candidaturas.",
+      "body": "Recibe candidaturas, habla con los candidatos y organiza entrevistas en un solo lugar.",
+      "learnMore": "Descubre el espacio empresas"
+    },
+    "service": {
+      "eyebrow": "Servicio de reclutamiento",
+      "title": "Déjanos la preselección.",
+      "body": "Describe tu necesidad y el número de puestos: el equipo de Geniura te ayuda a seleccionar y evaluar perfiles.",
+      "learnMore": "Más información sobre el servicio"
+    }
+  },
+  "Status": {
+    "application": {
+      "submitted": "Enviada",
+      "in_review": "En revisión",
+      "shortlisted": "Preseleccionada",
+      "interview": "Entrevista",
+      "offer": "Oferta",
+      "hired": "Contratado/a",
+      "rejected": "No seleccionada",
+      "withdrawn": "Retirada",
+      "closed": "Cerrada"
+    }
+  },
+  "Provenance": {
+    "asserted": "Declarado por ti",
+    "extracted": "Extraído y confirmado",
+    "verified": "Verificado"
+  },
+  "NotFound": {
+    "title": "Página no encontrada",
+    "body": "Es posible que la página se haya movido o ya no esté disponible.",
+    "back": "Volver al inicio"
+  },
+  "Error": {
+    "title": "Se produjo un error inesperado",
+    "body": "No se pudo cargar esta página. Puedes volver a intentarlo.",
+    "retry": "Reintentar"
+  },
+  "DesignSystem": {
+    "title": "Sistema de diseño",
+    "intro": "Página interna para revisar tokens y componentes en ambas direcciones. No indexada.",
+    "colors": "Colores",
+    "typography": "Tipografía",
+    "buttons": "Botones",
+    "forms": "Campos de formulario",
+    "badges": "Insignias y estados",
+    "feedback": "Carga y estados vacíos",
+    "dialogs": "Ventanas",
+    "sampleHeading": "Responsable de RR. HH. — Casablanca",
+    "sampleBody": "Texto de prueba que mezcla español, العربية, recruiter@example.com y el número 2026 para comprobar la dirección.",
+    "fieldLabel": "Puesto",
+    "fieldPlaceholder": "Ej.: contable",
+    "fieldHint": "Escribe en cualquier idioma; más adelante se propondrán puestos equivalentes.",
+    "textareaLabel": "Descripción breve",
+    "primary": "Principal",
+    "secondary": "Secundario",
+    "outline": "Contorno",
+    "ghost": "Discreto",
+    "destructive": "Eliminar",
+    "disabled": "Desactivado",
+    "toast": "Mostrar una notificación",
+    "toastMessage": "Guardado (notificación de prueba)",
+    "emptyTitle": "Sin resultados",
+    "emptyBody": "Prueba a quitar filtros o a ampliar la ciudad.",
+    "openSheet": "Abrir un panel lateral",
+    "sheetTitle": "Filtros",
+    "sheetBody": "Ejemplo de panel de filtros en móvil."
+  },
+  "Auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "Accede a tu cuenta de Geniura.",
+      "submit": "Entrar",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿Aún no tienes cuenta?",
+      "toRegister": "Crear una cuenta"
+    },
+    "register": {
+      "title": "Crear una cuenta",
+      "subtitle": "El registro es gratuito. Enviaremos un enlace de confirmación a tu dirección.",
+      "submit": "Crear la cuenta",
+      "intentLabel": "Soy",
+      "intent": {
+        "candidate": "buscando empleo",
+        "employer": "representante de una empresa"
+      },
+      "hasAccount": "¿Ya tienes cuenta?",
+      "toLogin": "Iniciar sesión",
+      "doneTitle": "Revisa tu correo",
+      "doneBody": "Si la dirección es válida, recibirás un mensaje de confirmación en unos minutos. Revisa también la carpeta de correo no deseado."
+    },
+    "forgot": {
+      "title": "Contraseña olvidada",
+      "subtitle": "Indica tu dirección para recibir un enlace de restablecimiento.",
+      "submit": "Enviar el enlace",
+      "doneTitle": "Revisa tu correo",
+      "doneBody": "Si existe una cuenta con esta dirección, recibirás un enlace de restablecimiento."
+    },
+    "reset": {
+      "title": "Nueva contraseña",
+      "subtitle": "Elige una nueva contraseña.",
+      "submit": "Guardar",
+      "missingLink": "El enlace está incompleto. Solicita uno nuevo.",
+      "doneTitle": "Contraseña cambiada",
+      "doneBody": "Se han cerrado tus otras sesiones. Ya puedes iniciar sesión."
+    },
+    "verify": {
+      "title": "Confirmar la dirección de correo",
+      "subtitle": "Haz clic en el botón para confirmar tu dirección.",
+      "submit": "Confirmar mi dirección",
+      "missingLink": "El enlace está incompleto. Solicita un nuevo enlace desde tu cuenta.",
+      "doneTitle": "Dirección confirmada",
+      "doneBody": "Ya puedes postularte y crear una empresa."
+    },
+    "fields": {
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "newPassword": "Nueva contraseña",
+      "fullName": "Nombre completo",
+      "optional": "opcional"
+    },
+    "backToLogin": "Volver a iniciar sesión",
+    "submitting": "Enviando…"
+  },
+  "Account": {
+    "title": "Mi cuenta",
+    "subtitle": "Tus datos y tus sesiones.",
+    "email": "Correo electrónico",
+    "name": "Nombre",
+    "joined": "Registro",
+    "verified": "Confirmada",
+    "notVerified": "Sin confirmar",
+    "verifyBanner": "Tu dirección aún no está confirmada. Es necesario para postularte y crear una empresa.",
+    "resend": "Reenviar el enlace de confirmación",
+    "resent": "Si es posible, se ha enviado un nuevo enlace.",
+    "sessionsLink": "Dispositivos y sesiones",
+    "logout": "Cerrar sesión",
+    "loggedOut": "Has cerrado sesión.",
+    "sessions": {
+      "title": "Dispositivos y sesiones",
+      "subtitle": "Sesiones abiertas en tu cuenta. Cierra las que no reconozcas.",
+      "current": "Este dispositivo",
+      "lastSeen": "Última actividad",
+      "started": "Abierta el",
+      "unknownDevice": "Dispositivo desconocido",
+      "revoke": "Cerrar la sesión",
+      "revoked": "Sesión cerrada.",
+      "empty": "No hay otras sesiones."
+    }
+  },
+  "UserMenu": {
+    "account": "Mi cuenta",
+    "sessions": "Dispositivos y sesiones",
+    "logout": "Cerrar sesión",
+    "label": "Menú de la cuenta"
+  },
+  "Errors": {
+    "api": {
+      "invalid_credentials": "Correo o contraseña incorrectos.",
+      "invalid_token": "Enlace no válido o caducado. Solicita uno nuevo.",
+      "invalid_current_password": "La contraseña actual es incorrecta.",
+      "not_authenticated": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+      "permission_denied": "No tienes permiso para realizar esta acción.",
+      "csrf_failed": "La comprobación de seguridad ha fallado. Actualiza la página y vuelve a intentarlo.",
+      "not_found": "Elemento no encontrado.",
+      "rate_limited": "Demasiados intentos. Espera antes de volver a intentarlo.",
+      "validation_error": "Revisa los campos señalados.",
+      "network_error": "No se puede conectar con el servidor. Comprueba tu conexión y vuelve a intentarlo.",
+      "unknown_error": "Se produjo un error inesperado. Vuelve a intentarlo."
+    },
+    "reference": "Referencia de soporte: {id}"
+  },
+  "Validation": {
+    "required": "Este campo es obligatorio.",
+    "invalid_format": "Formato no válido.",
+    "too_small": "Valor demasiado corto.",
+    "too_big": "Valor demasiado largo.",
+    "invalid": "Valor no válido."
+  },
+  "Jobs": {
+    "metaTitle": "Ofertas de empleo",
+    "metaDescription": "Busca entre las ofertas publicadas en Geniura por profesión, ciudad y tipo de contrato.",
+    "title": "Ofertas de empleo",
+    "subtitle": "Ofertas publicadas por empresas verificadas. Postularse es gratis.",
+    "search": {
+      "label": "Palabras clave",
+      "placeholder": "Profesión, competencia o puesto… en cualquier idioma",
+      "submit": "Buscar",
+      "location": "Ciudad",
+      "anyLocation": "Todas las ciudades"
+    },
+    "filters": {
+      "title": "Filtros",
+      "open": "Filtros",
+      "apply": "Ver resultados",
+      "clear": "Borrar filtros",
+      "occupation": "Profesión",
+      "sector": "Sector",
+      "contractType": "Tipo de contrato",
+      "workMode": "Modalidad",
+      "schedule": "Jornada",
+      "posted": "Fecha de publicación",
+      "sort": "Ordenar por",
+      "any": "Todos",
+      "postedWithin": "{days, plural, =1 {Últimas 24 horas} other {Últimos # días}}"
+    },
+    "sort": {
+      "relevance": "Relevancia",
+      "newest": "Más recientes",
+      "expiring_soon": "Cierran pronto"
+    },
+    "results": {
+      "count": "{count, plural, =0 {Ninguna oferta} one {# oferta} other {# ofertas}}",
+      "emptyTitle": "Ninguna oferta coincide",
+      "emptyBody": "Prueba con otras palabras clave o quita algunos filtros.",
+      "errorTitle": "No se pudieron cargar las ofertas",
+      "errorBody": "El servicio no está disponible en este momento. Vuelve a intentarlo en un instante.",
+      "depthLimit": "Solo se muestran las primeras páginas. Afina la búsqueda para llegar a otros resultados."
+    },
+    "pagination": {
+      "label": "Paginación",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {page} de {total}"
+    },
+    "card": {
+      "posted": "Publicada el {date}",
+      "expires": "Cierra el {date}",
+      "salary": "Salario",
+      "verified": "Empresa verificada",
+      "reviewed": "Revisada por el equipo de Geniura",
+      "language": "Oferta en {language}",
+      "notDisclosed": "Salario no publicado",
+      "view": "Ver la oferta"
+    },
+    "contractType": {
+      "permanent": "Indefinido",
+      "fixed_term": "Temporal (duración determinada)",
+      "temporary": "Trabajo temporal (ETT)",
+      "internship": "Prácticas",
+      "apprenticeship": "Formación en alternancia",
+      "freelance": "Autónomo",
+      "seasonal": "De temporada"
+    },
+    "workMode": {
+      "onsite": "Presencial",
+      "hybrid": "Híbrido",
+      "remote": "Teletrabajo"
+    },
+    "schedule": {
+      "full_time": "Jornada completa",
+      "part_time": "Media jornada",
+      "shifts": "Por turnos"
+    },
+    "salaryPeriod": {
+      "hour": "por hora",
+      "day": "por día",
+      "month": "al mes",
+      "year": "al año"
+    },
+    "educationLevel": {
+      "none": "Sin titulación",
+      "primary": "Primaria",
+      "secondary": "Secundaria",
+      "baccalaureate": "Bachillerato",
+      "vocational": "Formación profesional",
+      "bac_plus_2": "Bac +2 (2 años de estudios superiores)",
+      "bac_plus_3": "Bac +3 (grado)",
+      "bac_plus_5": "Bac +5 (máster)",
+      "doctorate": "Doctorado"
+    },
+    "requirementKind": {
+      "skill": "Competencia",
+      "occupation_experience": "Experiencia en la profesión",
+      "language": "Idioma",
+      "education": "Nivel de estudios",
+      "certification": "Certificación",
+      "license": "Permiso"
+    },
+    "skillLevel": {
+      "unspecified": "",
+      "basic": "básico",
+      "intermediate": "intermedio",
+      "advanced": "avanzado",
+      "expert": "experto"
+    },
+    "detail": {
+      "back": "Volver a las ofertas",
+      "description": "Descripción",
+      "responsibilities": "Funciones",
+      "requirements": "Requisitos",
+      "mandatory": "Obligatorio",
+      "optional": "Deseable",
+      "details": "Detalles de la oferta",
+      "location": "Lugar",
+      "positions": "Puestos",
+      "experience": "Experiencia requerida",
+      "experienceYears": "{years, plural, =0 {Sin experiencia previa} one {# año} other {# años}}",
+      "education": "Nivel de estudios",
+      "published": "Publicación",
+      "expires": "Fecha límite",
+      "organization": "Empresa",
+      "website": "Sitio web",
+      "verifiedNote": "Geniura ha verificado la identidad de la empresa. Esto no garantiza cada detalle de la oferta: denuncia cualquier elemento sospechoso.",
+      "applyTitle": "Candidatura",
+      "applySoon": "Pronto podrás postularte a través de Geniura. Nunca pagues por postularte.",
+      "apply": "Postularme a esta oferta",
+      "unknownLabel": "No especificado",
+      "notFoundTitle": "Oferta no disponible",
+      "notFoundBody": "Es posible que esta oferta se haya cerrado o haya caducado.",
+      "open": "Publicada y vigente",
+      "badgesTitle": "Lo que hemos verificado"
+    },
+    "report": {
+      "open": "Denunciar esta oferta",
+      "title": "Denunciar una oferta",
+      "body": "El equipo de confianza revisará tu denuncia. No incluyas datos personales innecesarios.",
+      "category": "Motivo",
+      "description": "Detalles (opcional)",
+      "submit": "Enviar la denuncia",
+      "done": "Gracias. Hemos recibido tu denuncia y la revisaremos.",
+      "categories": {
+        "fraud": "Fraude",
+        "fee_request": "Petición de dinero",
+        "misleading": "Información engañosa",
+        "discrimination": "Discriminación",
+        "harassment": "Acoso",
+        "inappropriate": "Contenido inapropiado",
+        "spam": "Spam",
+        "privacy": "Vulneración de la privacidad",
+        "other": "Otro motivo"
+      }
+    },
+    "eyebrow": "Ofertas de empleo"
+  },
+  "Employers": {
+    "metaTitle": "Empresas",
+    "metaDescription": "Publica tus ofertas y gestiona tus candidaturas, o confía la preselección y la evaluación al equipo de Geniura.",
+    "eyebrow": "Geniura para empresas",
+    "titleLead": "Contrata a los perfiles adecuados,",
+    "titleAccent": "con claridad.",
+    "subtitle": "Publica tu oferta y gestiona tú mismo las candidaturas, o deja que el equipo de Geniura te ayude a preseleccionar y evaluar. Dos recorridos distintos, cada uno con reglas claras.",
+    "status": "El espacio empresas está en preparación. Crea tu cuenta ahora eligiendo «representante de una empresa» para estar listo cuando abra.",
+    "ctaRegister": "Crear una cuenta de empresa",
+    "ctaHow": "Cómo funciona",
+    "preview": {
+      "label": "Ejemplo de gestión de candidaturas",
+      "example": "Ejemplo",
+      "job": "Contable · Casablanca",
+      "count": "3 candidaturas",
+      "candidateA": "Candidato A",
+      "candidateB": "Candidato B",
+      "candidateC": "Candidato C",
+      "skill": "Software contable",
+      "language": "Francés",
+      "note": "Cada dato indica su origen: declarado, extraído o verificado."
+    },
+    "pathsTitle": "Dos recorridos, cada uno con su función",
+    "pathsSubtitle": "Publicar una oferta y contratar un servicio de reclutamiento son dos cosas distintas.",
+    "publish": {
+      "eyebrow": "Publicar una oferta",
+      "title": "Gestiona tú mismo la contratación.",
+      "body": "Para la empresa que quiere recibir y tramitar directamente las candidaturas.",
+      "items": {
+        "one": "Una publicación breve: puesto y ciudad, funciones y requisitos, y luego vista previa y envío",
+        "two": "Una tabla de candidaturas filtrable, sin exponer a quien no se ha postulado",
+        "three": "Estados, entrevistas y mensajes en un solo lugar",
+        "four": "Revisión de la oferta si es necesario, y fecha de cierre visible para los candidatos"
+      }
+    },
+    "service": {
+      "eyebrow": "Solicitar un servicio de reclutamiento",
+      "title": "Déjanos la preselección.",
+      "body": "Para la empresa que quiere apoyo profesional para seleccionar y evaluar.",
+      "items": {
+        "one": "Indicas el número de puestos, las competencias, las condiciones, el lugar y el alcance",
+        "two": "Una propuesta de servicio clara, y tu aprobación antes de empezar",
+        "three": "Preselección y evaluación por el equipo de Geniura, con permisos limitados",
+        "four": "Una lista corta que consultas con acceso controlado"
+      }
+    },
+    "trustTitle": "Una confianza verificable",
+    "trust": {
+      "verified": {
+        "title": "Empresa verificada",
+        "body": "Verificamos la identidad de la empresa con documentos. La verificación no garantiza cada detalle de una oferta."
+      },
+      "privacy": {
+        "title": "Privacidad de los candidatos",
+        "body": "Ninguna descarga masiva de CV, y ninguna empresa ve los expedientes o decisiones de otra."
+      },
+      "human": {
+        "title": "Decisión humana",
+        "body": "El matching explica sus razones y nunca rechaza a un candidato de forma automática."
+      },
+      "roles": {
+        "title": "Roles y permisos",
+        "body": "Creador, administrador, reclutador, evaluador: cada miembro solo accede a lo que su tarea exige."
+      }
+    },
+    "stepsTitle": "Para empezar",
+    "steps": {
+      "account": {
+        "title": "Crea tu cuenta",
+        "body": "El registro es gratuito. Elige «representante de una empresa»."
+      },
+      "verify": {
+        "title": "Verifica tu empresa",
+        "body": "Cuando abra el espacio, enviarás los documentos de la empresa para una revisión interna."
+      },
+      "publish": {
+        "title": "Publica o solicita",
+        "body": "Publica tu primera oferta, o describe tu necesidad al servicio de reclutamiento."
+      }
+    }
+  },
+  "Skills": {
+    "metaTitle": "Desarrollo de competencias",
+    "metaDescription": "Propuestas de formación opcionales, ligadas a los requisitos de un puesto concreto, sin compra obligatoria ni promesa de contratación.",
+    "eyebrow": "Desarrollo de competencias",
+    "titleLead": "Desarrolla la competencia",
+    "titleAccent": "que realmente te falta.",
+    "subtitle": "Comparamos los requisitos de un puesto concreto con tu perfil, explicamos lo que encaja y lo que falta, y proponemos itinerarios opcionales. Sin compra obligatoria ni promesa de contratación.",
+    "status": "Este servicio está en preparación y aún no está abierto.",
+    "ctaJobs": "Ver las ofertas",
+    "preview": {
+      "label": "Ejemplo de comparación entre un perfil y un puesto",
+      "example": "Ejemplo",
+      "job": "Contable · requisitos de la oferta",
+      "match1": "Software contable",
+      "match1Note": "En tu perfil",
+      "match2": "Francés profesional",
+      "match2Note": "En tu perfil",
+      "gap": "Excel avanzado",
+      "gapNote": "No figura en tu perfil",
+      "suggestion": "Itinerario sugerido: Excel para contabilidad",
+      "optional": "Opcional: puedes postularte ya"
+    },
+    "stepsTitle": "Del puesto a la competencia",
+    "steps": {
+      "choose": {
+        "title": "Eliges un puesto",
+        "body": "Las propuestas parten de los requisitos de una oferta real, nunca de un juicio general sobre ti."
+      },
+      "compare": {
+        "title": "Comparamos y explicamos",
+        "body": "Distinguimos lo que has declarado, lo extraído de tu CV y lo verificado, y mostramos lo que falta."
+      },
+      "decide": {
+        "title": "Tú decides",
+        "body": "Postularte ya o formarte antes: la decisión siempre es tuya."
+      }
+    },
+    "principlesTitle": "Reglas innegociables",
+    "principles": {
+      "optional": {
+        "title": "Siempre opcional",
+        "body": "Nunca exigimos comprar un curso para enviar una candidatura."
+      },
+      "job": {
+        "title": "Ligado a un puesto",
+        "body": "La carencia se mide frente a los requisitos de una oferta, no frente al valor de una persona."
+      },
+      "noPromise": {
+        "title": "Sin falsas promesas",
+        "body": "Formarse no garantiza un empleo, y nunca diremos lo contrario."
+      },
+      "source": {
+        "title": "Origen explícito",
+        "body": "Cada competencia indica su origen; un dato extraído nunca pasa a «verificado» por sí solo."
+      }
+    },
+    "partnersTitle": "Socios de evaluación y formación",
+    "partnersBody": "Estamos seleccionando socios de evaluación y formación ligados a las necesidades del mercado laboral. Ningún socio tendrá acceso a la base de candidatos."
+  }
+}
