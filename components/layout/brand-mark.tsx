@@ -1,14 +1,14 @@
-// PROVISIONAL wordmark until the visual identity is approved.
+import Image from "next/image";
+
+// Display the original supplied logo without changing its proportions.
 export function BrandMark() {
   return (
-    <span className="inline-flex items-center gap-2 font-bold" dir="ltr">
-      <span
-        aria-hidden="true"
-        className="inline-flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground"
-      >
-        G
-      </span>
-      <span className="text-lg tracking-tight">Geniura</span>
-    </span>
+    <Image
+      src="/brand/logo.png"
+      alt="Geniura"
+      width={144}
+      height={48}
+      className="h-10 w-auto object-contain"
+    />
   );
 }
