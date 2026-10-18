@@ -80,6 +80,40 @@ test("robots.txt disallows everything before launch", async ({ request }) => {
   expect(body).toMatch(/Disallow: \/\s*$/m);
 });
 
+test("home pages publish localized social cards and brand identity", async ({ page, request }) => {
+  for (const locale of ["ar", "fr"]) {
+    await page.goto(`/${locale}`);
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      "content",
+      `https://geniura.com/${locale}`,
+    );
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      "content",
+      new RegExp(`^https://geniura\\.com/${locale}/opengraph-image`),
+    );
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      "content",
+      "summary_large_image",
+    );
+
+    const graph = await page.locator('script[type="application/ld+json"]').first().textContent();
+    expect(graph).toBeTruthy();
+    const data = JSON.parse(graph ?? "{}");
+    expect(data["@graph"]).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ "@type": "Organization", name: "Geniura" }),
+        expect.objectContaining({ "@type": "WebSite", name: "Geniura" }),
+      ]),
+    );
+
+    const image = await request.get(`/${locale}/opengraph-image`);
+    expect(image.ok()).toBe(true);
+    expect(image.headers()["content-type"]).toContain("image/png");
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  }
+});
+
 test("design-system page is never indexed", async ({ page }) => {
   await page.goto("/fr/design-system");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
