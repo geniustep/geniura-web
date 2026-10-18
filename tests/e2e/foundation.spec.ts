@@ -69,10 +69,8 @@ test("sends security headers", async ({ request }) => {
   expect(headers["x-frame-options"]).toBe("DENY");
   expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
   expect(headers["x-powered-by"]).toBeUndefined();
-  const apiOrigin = new URL(
-    process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api-geniura.geniura.com",
-  ).origin;
-  expect(headers["content-security-policy"]).toContain(`connect-src 'self' ${apiOrigin}`);
+  expect(headers["content-security-policy"]).toContain("connect-src 'self'");
+  expect(headers["content-security-policy"]).not.toContain("api-geniura.geniura.com");
 });
 
 test("robots.txt disallows everything before launch", async ({ request }) => {

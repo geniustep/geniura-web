@@ -30,7 +30,7 @@ describe("apiFetch (browser)", () => {
     await apiFetch("/api/v1/auth/me");
     const [url, init] = fetchMock.mock.calls[0]!;
     const headers = new Headers(init?.headers);
-    expect(url).toBe("https://api-geniura.geniura.com/api/v1/auth/me");
+    expect(url).toBe("/api/bff/api/v1/auth/me");
     expect(init?.credentials).toBe("include");
     expect(headers.get("Accept-Language")).toBe("ar");
     expect(headers.has("X-CSRFToken")).toBe(false);
@@ -43,7 +43,7 @@ describe("apiFetch (browser)", () => {
     );
     fetchMock.mockResolvedValueOnce(json(200, {}));
     await apiFetch("/api/v1/auth/login", { method: "POST", body: "{}" });
-    expect(fetchMock.mock.calls[0]![0]).toBe("https://api-geniura.geniura.com/api/v1/auth/csrf");
+    expect(fetchMock.mock.calls[0]![0]).toBe("/api/bff/api/v1/auth/csrf");
     expect(fetchMock.mock.calls[0]![1]?.credentials).toBe("include");
     expect(new Headers(fetchMock.mock.calls[1]![1]?.headers).get("X-CSRFToken")).toBe(tokenOne);
   });

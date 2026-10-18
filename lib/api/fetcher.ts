@@ -3,9 +3,9 @@ import { ApiError, isCsrfFailure } from "./errors";
 /**
  * The single transport used by the generated client (Orval mutator) on both server and browser.
  *
- * Browser: calls the public Django origin with credentials (session cookie `geniura_sid`), and
+ * Browser: calls the same-origin Next.js BFF with credentials (session cookie `geniura_sid`), and
  * sends the masked csrf_token from GET /auth/csrf JSON in X-CSRFToken (ADR 0002).
- * The API cookie is host-only and cannot be read through document.cookie on geniura.com.
+ * The BFF bridges host-only HttpOnly cookies to the web origin.
  * Server: never sends cookies by itself; `lib/api/server.ts` passes them explicitly, and only
  * for requests that must act as the user. Nothing here caches responses.
  */
@@ -15,10 +15,13 @@ const UNSAFE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 const isBrowser = typeof window !== "undefined";
 
-function apiBaseUrl(): string {
-  const publicUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api-geniura.geniura.com";
-  const url = isBrowser ? publicUrl : (process.env.API_BASE_URL ?? publicUrl);
-  return url.replace(/\/$/, "");
+function apiUrl(path: string): string {
+  if (isBrowser) return `/api/bff${path}`;
+  const base =
+    process.env.API_BASE_URL ??
+    process.env.NEXT_PUBLIC_API_BASE_URL ??
+    "https://api-geniura.geniura.com";
+  return `${base.replace(/\/$/, "")}${path}`;
 }
 
 let csrfToken: string | null = null;
@@ -30,16 +33,14 @@ export function clearCsrfToken() {
 }
 
 /**
- * Read the masked CSRF token from JSON, not document.cookie. The latter is host-scoped to
- * api-geniura.geniura.com and is deliberately unreadable by pages on geniura.com.
- * The browser stores the API cookie and sends it with credentials: include.
+ * Read masked CSRF from JSON; the CSRF cookie stays HttpOnly and is handled by the BFF.
  */
 export async function ensureCsrfToken(force = false): Promise<string | undefined> {
   if (!isBrowser) return undefined;
   if (force) csrfToken = null;
   if (!force && csrfToken) return csrfToken;
 
-  csrfRequest ??= fetch(`${apiBaseUrl()}${CSRF_PATH}`, {
+  csrfRequest ??= fetch(apiUrl(CSRF_PATH), {
     credentials: "include",
     cache: "no-store",
     headers: { Accept: "application/json" },
@@ -91,7 +92,7 @@ async function send(url: string, init: RequestInit, method: string): Promise<Res
   }
 
   try {
-    return await fetch(`${apiBaseUrl()}${url}`, {
+    return await fetch(apiUrl(url), {
       ...init,
       method,
       headers,

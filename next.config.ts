@@ -4,20 +4,18 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./lib/i18n/request.ts");
 
 const isDev = process.env.NODE_ENV !== "production";
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api-geniura.geniura.com";
-const apiOrigin = new URL(apiBaseUrl).origin;
 
 // Static CSP without nonces, so public pages keep their prerendered shell (a nonce forces dynamic
 // rendering). `'unsafe-inline'` for scripts remains required by Next.js inline bootstrapping until
 // hash-based SRI is adopted; the other directives still block framing, plugins, foreign form
-// targets, and network calls to anything but this site and the Django API.
+// targets, and browser network calls outside this origin (Django is reached server-side).
 const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  `connect-src 'self' ${apiOrigin}${isDev ? " ws:" : ""}`,
+  `connect-src 'self'${isDev ? " ws:" : ""}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
