@@ -4,10 +4,10 @@ import Image from "next/image";
 export function BrandMark() {
   return (
     <Image
-      src="/brand/logo.png"
+      src="/brand/logo.svg"
       alt="Geniura"
-      width={144}
-      height={48}
+      width={171}
+      height={50}
       className="h-10 w-auto object-contain"
     />
   );
