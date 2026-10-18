@@ -53,8 +53,8 @@ describe("apiFetch (browser)", () => {
       .mockResolvedValueOnce(json(200, { csrf_token: tokenOne }))
       .mockResolvedValueOnce(
         json(403, {
-          code: "permission_denied",
-          message: "CSRF failed: token expired.",
+          code: "csrf_failed",
+          message: "CSRF verification failed.",
           details: {},
         }),
       )
@@ -109,14 +109,17 @@ describe("apiFetch (browser)", () => {
 
 describe("API errors", () => {
   it("detects CSRF failures only from the CSRF message", () => {
-    expect(isCsrfFailure(new ApiError(403, { message: "CSRF failed: token missing." }))).toBe(true);
-    expect(isCsrfFailure(new ApiError(403, { message: "Not allowed." }))).toBe(false);
+    expect(isCsrfFailure(new ApiError(403, { code: "csrf_failed" }))).toBe(true);
+    expect(isCsrfFailure(new ApiError(403, { code: "permission_denied", message: "CSRF failed: token missing." }))).toBe(true);
+    expect(isCsrfFailure(new ApiError(403, { code: "permission_denied", message: "Not allowed." }))).toBe(false);
+    expect(isCsrfFailure(new ApiError(401, { code: "csrf_failed" }))).toBe(false);
   });
 
   it("maps unknown codes to a generic message key", () => {
     expect(errorMessageKey(new ApiError(401, { code: "invalid_credentials" }))).toBe(
       "invalid_credentials",
     );
+    expect(errorMessageKey(new ApiError(403, { code: "csrf_failed" }))).toBe("csrf_failed");
     expect(errorMessageKey(new ApiError(500, { code: "server_error" }))).toBe("unknown_error");
     expect(errorMessageKey(new Error("boom"))).toBe("unknown_error");
   });

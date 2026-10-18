@@ -25,9 +25,13 @@ export function isApiError(error: unknown): error is ApiError {
   return error instanceof ApiError;
 }
 
-/** Django reports CSRF rejections as a generic 403 `permission_denied` with a "CSRF failed" message. */
+/** Prefer the stable CSRF error code. Support legacy staging until it is upgraded. */
 export function isCsrfFailure(error: ApiError): boolean {
-  return error.status === 403 && error.message.startsWith("CSRF failed");
+  return (
+    error.status === 403 &&
+    (error.code === "csrf_failed" ||
+      (error.code === "permission_denied" && error.message.startsWith("CSRF failed")))
+  );
 }
 
 /**
@@ -63,6 +67,7 @@ export const knownErrorCodes = [
   "invalid_current_password",
   "not_authenticated",
   "permission_denied",
+  "csrf_failed",
   "not_found",
   "rate_limited",
   "validation_error",

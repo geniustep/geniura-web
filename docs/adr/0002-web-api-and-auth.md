@@ -11,8 +11,9 @@
 - **النقل:** `lib/api/fetcher.ts` واحد للخادم والمتصفح:
   - المتصفح يستدعي `NEXT_PUBLIC_API_BASE_URL` مباشرة مع `credentials: include`.
   - الطرق غير الآمنة تستعمل قيمة `csrf_token` المقنّعة المعادة في JSON من `GET /auth/csrf`
-    ضمن `X-CSRFToken` (بدون قراءة Cookie محصورة بمضيف API)؛ عند رفض CSRF يُجدَّد الرمز
-    مرة واحدة ويعاد الطلب، وبعد الدخول يُنسى الرمز القديم ليُجلب عند الطلب التالي.
+    ضمن `X-CSRFToken` (بدون قراءة Cookie محصورة بمضيف API)؛ عند رفض `csrf_failed` يُجدَّد الرمز
+    مرة واحدة ويعاد الطلب، وبعد الدخول والخروج يُنسى الرمز القديم ليُجلب عند الطلب التالي.
+    حتى تحديث Staging يُقبل شكل الخطأ القديم `permission_denied` فقط إذا تطابق نص CSRF.
   - الأخطاء تتحول إلى `ApiError {status, code, message, details, request_id}`؛ الواجهة تترجم `code`
     ولا تعرض `message` الخام، وتعرض `request_id` كمرجع دعم.
 - **الخادم:** `lib/api/server.ts` (`server-only`) يمرّر Cookie الجلسة وCSRF فقط، ولا يُستعمل داخل `'use cache'`.
@@ -38,3 +39,12 @@
 ## مؤجل
 - MSW للاختبارات على مستوى المكونات (الاختبارات الحالية تحاكي `fetch` مباشرة وتغطي التكامل الحقيقي محليًا).
 - MFA (Backend، قبل الإطلاق لحسابات فريق Geniura).
+
+## شرط التحقق المتكامل
+- النسخة الجديدة من Django على `geniura-api/dev` تعيد `csrf_failed` لكل رفض CSRF، وتستعمل Cookie
+  `geniura_csrftoken` محصورة بمضيف API و`HttpOnly`، مع تسليم الرمز مقنّعًا في JSON.
+- لا يمكن اعتبار تسجيل الدخول متكاملًا على `vercel.app` أو API ما زال يعيد 503.
+- لا تغيّر `SESSION_COOKIE_DOMAIN` إلى `.geniura.com` قبل مراجعة أمنية للنطاقات الفرعية
+  والتحقق من إطلاق نطاق الواجهة؛ البديل BFF يحتاج تنفيذًا وتدقيقًا منفصلًا.
+- ينبغي تجديد `contracts/openapi.web.v1.yaml` و`lib/api/generated` معًا بواسطة
+  `pnpm api:contract` و`pnpm api:generate` على نسخة محلية من عقد Backend الأحدث، قبل تجميد V1.
