@@ -45,9 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = job.description.replace(/\s+/g, " ").trim().slice(0, 160);
   const title = `${job.title} — ${job.organization.name}`;
   const pathname = canonicalPath(job.id, job.source_locale, locale);
-  const socialLocale = hasLocale(routing.locales, job.source_locale)
-    ? job.source_locale
-    : locale;
+  const socialLocale = hasLocale(routing.locales, job.source_locale) ? job.source_locale : locale;
   return {
     title,
     description,

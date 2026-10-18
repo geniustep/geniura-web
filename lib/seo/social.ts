@@ -22,9 +22,7 @@ export function buildSocialMetadata({
   const url = new URL(pathname, env.NEXT_PUBLIC_SITE_URL).toString();
   const imageUrl = new URL(`/${locale}/opengraph-image`, env.NEXT_PUBLIC_SITE_URL).toString();
   const imageAlt =
-    locale === "ar"
-      ? "Geniura — التوظيف وتطوير الكفاءات"
-      : "Geniura — Recrutement et compétences";
+    locale === "ar" ? "Geniura — التوظيف وتطوير الكفاءات" : "Geniura — Recrutement et compétences";
 
   return {
     openGraph: {
