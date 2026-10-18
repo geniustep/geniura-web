@@ -13,6 +13,7 @@ for (const { locale, dir, heading } of pages) {
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
       await expect(page.locator("html")).toHaveAttribute("dir", dir);
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
+      await expect(page.getByRole("banner").getByRole("img", { name: "Geniura" })).toBeVisible();
     });
 
     test("has no serious or critical accessibility violations", async ({ page }) => {
@@ -68,6 +69,10 @@ test("sends security headers", async ({ request }) => {
   expect(headers["x-frame-options"]).toBe("DENY");
   expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
   expect(headers["x-powered-by"]).toBeUndefined();
+  const apiOrigin = new URL(
+    process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api-geniura.geniura.com",
+  ).origin;
+  expect(headers["content-security-policy"]).toContain(`connect-src 'self' ${apiOrigin}`);
 });
 
 test("robots.txt disallows everything before launch", async ({ request }) => {
