@@ -66,9 +66,7 @@ test("the jobs listing is linked from the header", async ({ page, isMobile }) =>
   await expect(page).toHaveURL(/\/fr\/jobs$/);
 });
 
-test("sitemap emits canonical public URLs rather than development origins", async ({
-  request,
-}) => {
+test("sitemap emits canonical public URLs rather than development origins", async ({ request }) => {
   const response = await request.get("/sitemap.xml");
   expect(response.ok()).toBe(true);
   const body = await response.text();
@@ -85,9 +83,7 @@ test("sitemap emits canonical public URLs rather than development origins", asyn
   }
 });
 
-test("job listings expose social metadata but remain noindex before launch", async ({
-  page,
-}) => {
+test("job listings expose social metadata but remain noindex before launch", async ({ page }) => {
   for (const locale of ["ar", "fr"]) {
     await page.goto(`/${locale}/jobs`);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
