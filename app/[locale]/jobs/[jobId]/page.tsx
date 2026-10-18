@@ -16,6 +16,7 @@ import { routing } from "@/lib/i18n/routing";
 import { pickLabel, type Vocabulary } from "@/lib/jobs/labels";
 import { buildJobPostingJsonLd } from "@/lib/seo/job-posting";
 import { jsonLdScript } from "@/lib/seo/json-ld";
+import { buildSocialMetadata } from "@/lib/seo/social";
 
 type Props = { params: Promise<{ locale: string; jobId: string }> };
 
@@ -43,11 +44,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const description = job.description.replace(/\s+/g, " ").trim().slice(0, 160);
   const title = `${job.title} — ${job.organization.name}`;
+  const pathname = canonicalPath(job.id, job.source_locale, locale);
+  const socialLocale = hasLocale(routing.locales, job.source_locale)
+    ? job.source_locale
+    : locale;
   return {
     title,
     description,
-    alternates: { canonical: canonicalPath(job.id, job.source_locale, locale) },
-    openGraph: { type: "article", title, description, locale },
+    alternates: { canonical: pathname },
+    ...buildSocialMetadata({ locale: socialLocale, pathname, title, description, type: "article" }),
   };
 }
 
