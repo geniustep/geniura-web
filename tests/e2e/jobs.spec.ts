@@ -66,8 +66,43 @@ test("the jobs listing is linked from the header", async ({ page, isMobile }) =>
   await expect(page).toHaveURL(/\/fr\/jobs$/);
 });
 
-test("sitemap lists public pages only", async ({ request }) => {
-  const body = await (await request.get("/sitemap.xml")).text();
-  expect(body).toContain("/ar/jobs");
+test("sitemap emits canonical public URLs rather than development origins", async ({
+  request,
+}) => {
+  const response = await request.get("/sitemap.xml");
+  expect(response.ok()).toBe(true);
+  const body = await response.text();
+  const origin = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://geniura.com").replace(/\/$/, "");
+
+  for (const locale of ["ar", "fr"]) {
+    expect(body).toContain(`<loc>${origin}/${locale}</loc>`);
+    expect(body).toContain(`<loc>${origin}/${locale}/jobs</loc>`);
+  }
   expect(body).not.toMatch(/\/(account|login|register|design-system)/);
+  if (process.env.CI) {
+    expect(body).not.toContain("localhost");
+    expect(body).not.toContain("127.0.0.1");
+  }
+});
+
+test("job listings expose social metadata but remain noindex before launch", async ({
+  page,
+}) => {
+  for (const locale of ["ar", "fr"]) {
+    await page.goto(`/${locale}/jobs`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      `https://geniura.com/${locale}/jobs`,
+    );
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      "content",
+      `https://geniura.com/${locale}/jobs`,
+    );
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      "content",
+      "summary_large_image",
+    );
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    expect(await page.locator('script[type="application/ld+json"]').count()).toBe(0);
+  }
 });
