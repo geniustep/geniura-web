@@ -72,6 +72,13 @@ export const knownErrorCodes = [
   "rate_limited",
   "validation_error",
   "network_error",
+  "precondition_failed",
+  "share_request_expired",
+  "duplicate_application",
+  "email_not_verified",
+  "resume_not_ready",
+  "resume_limit_reached",
+  "file_too_large",
 ] as const;
 
 export type KnownErrorCode = (typeof knownErrorCodes)[number];

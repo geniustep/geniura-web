@@ -12,6 +12,7 @@ const INPUT_HEADERS = [
   "idempotency-key",
   "x-request-id",
   "if-none-match",
+  "if-match",
 ] as const;
 const OUTPUT_HEADERS = [
   "content-type",
@@ -19,6 +20,7 @@ const OUTPUT_HEADERS = [
   "x-request-id",
   "retry-after",
   "allow",
+  "etag",
 ] as const;
 
 function reject(status: number, code: string): Response {

@@ -4,11 +4,15 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
  * OpenAPI spec version: 1.0.0-dev
  */
 
 export * from "./_jobRef";
+export * from "./accessLog";
+export * from "./accessLogEvent";
+export * from "./accessLogEventKindEnum";
+export * from "./accessLogSummary";
 export * from "./actionEnum";
 export * from "./applicantMatch";
 export * from "./applicantMatchList";
@@ -25,7 +29,6 @@ export * from "./candidateApplicationDetailTimelineItem";
 export * from "./candidateAssessment";
 export * from "./candidateProfile";
 export * from "./candidateProfileAvailabilityEnum";
-export * from "./candidateProfileCompleteness";
 export * from "./candidateSkill";
 export * from "./candidateSkillRequest";
 export * from "./candidatesMeCertificationsListParams";
@@ -42,6 +45,7 @@ export * from "./certification";
 export * from "./certificationKindEnum";
 export * from "./certificationRequest";
 export * from "./closeJobRequest";
+export * from "./completeness";
 export * from "./completionEvidence";
 export * from "./completionEvidenceKindEnum";
 export * from "./completionEvidenceRequest";
@@ -69,6 +73,7 @@ export * from "./enrollRequest";
 export * from "./entryFeedbackRequest";
 export * from "./errorResponse";
 export * from "./errorResponseDetails";
+export * from "./existingObject";
 export * from "./experience";
 export * from "./experienceRequest";
 export * from "./extractedItem";

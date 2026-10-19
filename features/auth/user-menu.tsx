@@ -1,7 +1,13 @@
 "use client";
 
 import { Menu } from "@base-ui/react/menu";
-import { LogInIcon, LogOutIcon, MonitorSmartphoneIcon, UserRoundIcon } from "lucide-react";
+import {
+  IdCardIcon,
+  LogInIcon,
+  LogOutIcon,
+  MonitorSmartphoneIcon,
+  UserRoundIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -67,6 +73,10 @@ export function UserMenu() {
             <div className="px-3 py-2 text-xs text-muted-foreground">
               <bdi>{me.data.email}</bdi>
             </div>
+            <Menu.LinkItem render={<Link href="/account/profile" />} className={itemClass}>
+              <IdCardIcon aria-hidden="true" />
+              {t("profile")}
+            </Menu.LinkItem>
             <Menu.LinkItem render={<Link href="/account" />} className={itemClass}>
               <UserRoundIcon aria-hidden="true" />
               {t("account")}

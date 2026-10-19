@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
@@ -205,6 +205,17 @@ export const CandidatesMeResumesExtractionRetrieveResponse = zod.object({
       reviewed_at: zod.iso.datetime({ offset: true }).nullable(),
       applied_object_type: zod.string(),
       applied_object_id: zod.uuid().nullable(),
+      existing_object: zod
+        .union([
+          zod.object({
+            type: zod.string(),
+            id: zod.uuid(),
+          }),
+          zod.null(),
+        ])
+        .describe(
+          "The fact already in the profile that this pending item repeats; review it with 'update_existing' or 'dismiss' rather than creating a duplicate.",
+        ),
     }),
   ),
 });
@@ -286,8 +297,10 @@ export const CandidatesMeResumesReviewCreateBody = zod
         .object({
           item: zod.uuid(),
           action: zod
-            .enum(["confirm", "correct", "dismiss"])
-            .describe("* `confirm` - confirm\n* `correct` - correct\n* `dismiss` - dismiss"),
+            .enum(["confirm", "correct", "dismiss", "update_existing"])
+            .describe(
+              "* `confirm` - confirm\n* `correct` - correct\n* `dismiss` - dismiss\n* `update_existing` - update_existing",
+            ),
           corrected_payload: zod.record(zod.string(), zod.unknown()).optional(),
         })
         .describe(
@@ -301,6 +314,7 @@ export const CandidatesMeResumesReviewCreateResponse = zod.object({
   confirmed: zod.int(),
   corrected: zod.int(),
   dismissed: zod.int(),
+  updated: zod.int(),
 });
 
 export const candidatesMeResumesUploadIntentCreateBodyDisplayNameMax = 80;
