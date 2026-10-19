@@ -60,7 +60,7 @@ export function NotificationPreferences() {
     .map((item) => ({
       category: item.category as PreferenceItemRequest["category"],
       channel: item.channel as PreferenceItemRequest["channel"],
-      enabled: edits[preferenceKey(item.category, item.channel)],
+      enabled: edits[preferenceKey(item.category, item.channel)] ?? item.enabled,
     }));
 
   return (
