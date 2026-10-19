@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
  * OpenAPI spec version: 1.0.0-dev
  */
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -24,6 +24,7 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  AccessLog,
   CandidateAssessment,
   CandidateProfile,
   CandidateSkill,
@@ -84,6 +85,9 @@ export const getCandidatesMeRetrieveUrl = () => {
   return `/api/v1/candidates/me`;
 };
 
+/**
+ * Returns a weak ETag (profile_updated_at). Send it back in If-Match on PATCH.
+ */
 export const candidatesMeRetrieve = async (
   options?: Parameters<typeof apiFetch>[1],
 ): Promise<CandidateProfile> => {
@@ -201,6 +205,9 @@ export const getCandidatesMePartialUpdateUrl = () => {
   return `/api/v1/candidates/me`;
 };
 
+/**
+ * Optional If-Match (ETag or profile_updated_at): 412 precondition_failed when the profile changed since it was read; nothing is saved.
+ */
 export const candidatesMePartialUpdate = async (
   patchedCandidateProfileRequest?: PatchedCandidateProfileRequest,
   options?: Parameters<typeof apiFetch>[1],
@@ -296,6 +303,129 @@ export const useCandidatesMePartialUpdate = <TError = ErrorResponse, TContext = 
 > => {
   return useMutation(getCandidatesMePartialUpdateMutationOptions(options), queryClient);
 };
+export const getCandidatesMeAccessLogRetrieveUrl = () => {
+  return `/api/v1/candidates/me/access-log`;
+};
+
+/**
+ * Who received or opened the caller's data and when: organizations only, never individual employees or their notes.
+ */
+export const candidatesMeAccessLogRetrieve = async (
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<AccessLog> => {
+  return apiFetch<AccessLog>(getCandidatesMeAccessLogRetrieveUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getCandidatesMeAccessLogRetrieveQueryKey = () => {
+  return [`/api/v1/candidates/me/access-log`] as const;
+};
+
+export const getCandidatesMeAccessLogRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>,
+  TError = ErrorResponse,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getCandidatesMeAccessLogRetrieveQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>> = ({
+    signal,
+  }) => candidatesMeAccessLogRetrieve({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type CandidatesMeAccessLogRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>
+>;
+export type CandidatesMeAccessLogRetrieveQueryError = ErrorResponse;
+
+export function useCandidatesMeAccessLogRetrieve<
+  TData = Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>,
+  TError = ErrorResponse,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useCandidatesMeAccessLogRetrieve<
+  TData = Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>,
+  TError = ErrorResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useCandidatesMeAccessLogRetrieve<
+  TData = Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>,
+  TError = ErrorResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useCandidatesMeAccessLogRetrieve<
+  TData = Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>,
+  TError = ErrorResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof candidatesMeAccessLogRetrieve>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getCandidatesMeAccessLogRetrieveQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
 export const getCandidatesMeAssessmentsListUrl = () => {
   return `/api/v1/candidates/me/assessments`;
 };

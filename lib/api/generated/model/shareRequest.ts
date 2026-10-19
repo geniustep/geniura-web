@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
  * OpenAPI spec version: 1.0.0-dev
  */
 import type { ShareRequestStatusEnum } from "./shareRequestStatusEnum";
@@ -18,4 +18,6 @@ export interface ShareRequest {
   readonly created_at: string;
   /** @nullable */
   readonly responded_at: string | null;
+  /** @nullable */
+  readonly expires_at: string | null;
 }

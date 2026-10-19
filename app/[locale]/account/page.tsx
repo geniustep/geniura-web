@@ -1,4 +1,9 @@
-import { CircleCheckIcon, MonitorSmartphoneIcon, TriangleAlertIcon } from "lucide-react";
+import {
+  CircleCheckIcon,
+  IdCardIcon,
+  MonitorSmartphoneIcon,
+  TriangleAlertIcon,
+} from "lucide-react";
 import type { Metadata } from "next";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
@@ -63,6 +68,10 @@ async function AccountDetails({ locale }: { locale: string }) {
         </div>
       </dl>
       <div className="flex flex-wrap gap-3">
+        <Link href="/account/profile" className={buttonVariants({ variant: "primary" })}>
+          <IdCardIcon aria-hidden="true" />
+          {t("profileLink")}
+        </Link>
         <Link href="/account/sessions" className={buttonVariants({ variant: "outline" })}>
           <MonitorSmartphoneIcon aria-hidden="true" />
           {t("sessionsLink")}

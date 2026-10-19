@@ -33,3 +33,12 @@ pnpm check
 - ملفات `lib/api/generated` مولّدة عبر Orval 8.43.0 وتخضع لفحص إعادة التوليد في CI.
 - لا يزال `contracts/overrides.json` يطبّق 13 تصحيح ترقيم صفحات، و4 تصحيحات قواميس، وغلاف الأخطاء؛ لم تتغير هذه العقود في مصدر Backend.
 - تنزيل ملف تحقق المؤسسة الموقّع مخصص لفريق الثقة، لذلك يبقى مستبعدًا من عقد الواجهة العامة.
+
+## مزامنة 2026-10-19 — geniura-api@ec0890a5 (الملف المهني v1.1)
+- المصدر: فرع `feat/candidate-profile-v1-1` في geniura-api، commit `ec0890a5ae22a7f07bcd870add6540aa776a464f`.
+- العقد: **114 مسارًا، 150 عملية**. الجديد: `GET /api/v1/candidates/me/access-log`، و`completeness.has_shareable_resume`،
+  و`existing_object` على عناصر الاستخراج مع إجراء المراجعة `update_existing`، و`expires_at` وحالة `expired` لطلبات المشاركة،
+  و`organization_name` على الموافقات.
+- التزامن التفاؤلي: Django يعيد `ETag` ويقبل `If-Match` على `PATCH /candidates/me` وعلى عناصر الملف؛ الـBFF يمرر
+  `If-Match` ذهابًا و`ETag` إيابًا. التعارض يعود `412 precondition_failed`.
+- `source.json.sourceSha256` هنا بصمة الملف الخاص الكامل عند هذا الـcommit (البصمة فقط؛ الملف نفسه غير منشور).
