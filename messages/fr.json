@@ -255,6 +255,59 @@
       "revoke": "Fermer la session",
       "revoked": "Session fermée.",
       "empty": "Aucune autre session."
+    },
+    "emailReadOnly": "L’adresse e-mail est en lecture seule et ne peut pas être modifiée ici.",
+    "settings": {
+      "title": "Informations et préférences",
+      "description": "Modifiez votre nom, la langue de l’interface et le fuseau horaire de votre compte.",
+      "fullName": "Nom complet",
+      "language": "Langue préférée",
+      "languageHint": "Après l’enregistrement, la page s’affichera dans la langue choisie.",
+      "timeZone": "Fuseau horaire",
+      "timeZoneHint": "Saisissez un fuseau horaire valide, par exemple Africa/Casablanca.",
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement…",
+      "saved": "Informations et préférences enregistrées."
+    },
+    "security": {
+      "title": "Changer le mot de passe",
+      "description": "Protégez votre compte avec un mot de passe fort et unique.",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le nouveau mot de passe",
+      "passwordHint": "Utilisez au moins 12 caractères.",
+      "sessionsHint": "Après ce changement, les autres sessions seront fermées ; vous resterez connecté sur cet appareil.",
+      "save": "Changer le mot de passe",
+      "saving": "Modification…",
+      "changed": "Mot de passe modifié ; les autres sessions ont été fermées."
+    },
+    "notifications": {
+      "title": "Préférences de notification",
+      "description": "Choisissez les notifications à recevoir sur les canaux disponibles.",
+      "save": "Enregistrer les préférences",
+      "saving": "Enregistrement…",
+      "saved": "Préférences de notification enregistrées.",
+      "retry": "Réessayer",
+      "unavailable": "indisponible",
+      "mandatory": "obligatoire",
+      "mandatoryHint": "Les notifications de sécurité dans l’application sont obligatoires. WhatsApp n’est pas activé.",
+      "channels": {
+        "in_app": "Dans l’application",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "categories": {
+        "security": "Sécurité du compte",
+        "applications": "Candidatures",
+        "interviews": "Entretiens",
+        "organization": "Organisations",
+        "recruitment": "Recrutement",
+        "assessments": "Évaluations",
+        "training": "Formations",
+        "messages": "Messages",
+        "trust": "Confiance",
+        "privacy": "Confidentialité"
+      }
     }
   },
   "UserMenu": {
@@ -284,7 +337,8 @@
     "invalid_format": "Format invalide.",
     "too_small": "Valeur trop courte.",
     "too_big": "Valeur trop longue.",
-    "invalid": "Valeur invalide."
+    "invalid": "Valeur invalide.",
+    "mismatch": "Les deux mots de passe ne correspondent pas."
   },
   "Jobs": {
     "metaTitle": "Offres d’emploi",
