@@ -11,7 +11,8 @@ const isDev = process.env.NODE_ENV !== "production";
 // targets, and browser network calls outside this origin (Django is reached server-side).
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  // Cloudflare's analytics beacon is injected by the hosting layer, not by Next.js.
+  `script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
