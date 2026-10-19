@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LogoutButton, ResendVerificationButton } from "@/features/account/account-actions";
+import { AccountSettings, ChangePasswordForm } from "@/features/account/account-settings";
+import { NotificationPreferences } from "@/features/account/notification-preferences";
 import { requireSession } from "@/features/account/require-session";
 import { Link } from "@/lib/i18n/navigation";
 
@@ -45,6 +47,7 @@ async function AccountDetails({ locale }: { locale: string }) {
               {me.is_email_verified ? t("verified") : t("notVerified")}
             </Badge>
           </dd>
+          <p className="text-xs text-muted-foreground">{t("emailReadOnly")}</p>
         </div>
         <div className="grid gap-1">
           <dt className="text-sm text-muted-foreground">{t("name")}</dt>
@@ -65,6 +68,21 @@ async function AccountDetails({ locale }: { locale: string }) {
           {t("sessionsLink")}
         </Link>
         <LogoutButton />
+      </div>
+      <div className="border-t border-border pt-6">
+        <AccountSettings
+          initial={{
+            full_name: me.full_name,
+            preferred_locale: me.preferred_locale,
+            time_zone: me.time_zone,
+          }}
+        />
+      </div>
+      <div className="border-t border-border pt-6">
+        <NotificationPreferences />
+      </div>
+      <div className="border-t border-border pt-6">
+        <ChangePasswordForm />
       </div>
     </div>
   );
