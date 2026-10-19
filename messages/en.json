@@ -255,6 +255,59 @@
       "revoke": "Close session",
       "revoked": "Session closed.",
       "empty": "No other sessions."
+    },
+    "emailReadOnly": "Your email address is read-only and cannot be changed here.",
+    "settings": {
+      "title": "Details and preferences",
+      "description": "Update your name, preferred interface language and account time zone.",
+      "fullName": "Full name",
+      "language": "Preferred language",
+      "languageHint": "After saving, your account page will open in the chosen language.",
+      "timeZone": "Time zone",
+      "timeZoneHint": "Enter a valid time zone such as Africa/Casablanca.",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Account details and preferences saved."
+    },
+    "security": {
+      "title": "Change password",
+      "description": "Protect your account with a strong, unique password.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "passwordHint": "Use at least 12 characters.",
+      "sessionsHint": "Changing your password signs out other devices while keeping this session active.",
+      "save": "Change password",
+      "saving": "Updating…",
+      "changed": "Password changed. Other sessions were signed out."
+    },
+    "notifications": {
+      "title": "Notification preferences",
+      "description": "Choose the alerts you receive through available channels.",
+      "save": "Save notification preferences",
+      "saving": "Saving…",
+      "saved": "Notification preferences saved.",
+      "retry": "Try again",
+      "unavailable": "unavailable",
+      "mandatory": "required",
+      "mandatoryHint": "In-app security notifications cannot be disabled. WhatsApp notifications are not enabled.",
+      "channels": {
+        "in_app": "In-app",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "categories": {
+        "security": "Account security",
+        "applications": "Applications",
+        "interviews": "Interviews",
+        "organization": "Organizations",
+        "recruitment": "Recruitment",
+        "assessments": "Assessments",
+        "training": "Training",
+        "messages": "Messages",
+        "trust": "Trust",
+        "privacy": "Privacy"
+      }
     }
   },
   "UserMenu": {
@@ -284,7 +337,8 @@
     "invalid_format": "Invalid format.",
     "too_small": "Value too short.",
     "too_big": "Value too long.",
-    "invalid": "Invalid value."
+    "invalid": "Invalid value.",
+    "mismatch": "The passwords do not match."
   },
   "Jobs": {
     "metaTitle": "Jobs",

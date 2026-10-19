@@ -2,7 +2,7 @@
  * Turns zod issues into translation keys (`Validation.<key>`) so client-side messages follow the
  * interface language. These checks only improve the experience; Django validates everything again.
  */
-const keys = new Set(["required", "invalid_format", "too_small", "too_big"]);
+const keys = new Set(["required", "invalid_format", "too_small", "too_big", "mismatch"]);
 
 export const keyedZodErrors = {
   error: (issue: { code: string; minimum?: unknown; input?: unknown }) => {
