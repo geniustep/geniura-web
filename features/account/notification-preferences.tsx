@@ -113,7 +113,13 @@ export function NotificationPreferences() {
                       <label
                         key={key}
                         className="flex min-h-8 items-center gap-2 text-sm"
-                        title={!item.available ? t("unavailable") : mandatory ? t("mandatory") : undefined}
+                        title={
+                          !item.available
+                            ? t("unavailable")
+                            : mandatory
+                              ? t("mandatory")
+                              : undefined
+                        }
                       >
                         <input
                           type="checkbox"

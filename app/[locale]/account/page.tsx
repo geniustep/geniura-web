@@ -70,7 +70,13 @@ async function AccountDetails({ locale }: { locale: string }) {
         <LogoutButton />
       </div>
       <div className="border-t border-border pt-6">
-        <AccountSettings initial={{ full_name: me.full_name, preferred_locale: me.preferred_locale, time_zone: me.time_zone }} />
+        <AccountSettings
+          initial={{
+            full_name: me.full_name,
+            preferred_locale: me.preferred_locale,
+            time_zone: me.time_zone,
+          }}
+        />
       </div>
       <div className="border-t border-border pt-6">
         <NotificationPreferences />

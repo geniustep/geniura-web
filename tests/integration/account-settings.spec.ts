@@ -33,7 +33,9 @@ test("candidate edits account settings and changes password", async ({ page, req
   await page.reload();
   await expect(page.getByLabel("Nom complet")).toHaveValue("فحص إعدادات جنيورا");
 
-  const compulsory = page.getByRole("checkbox", { name: "Sécurité du compte — Dans l’application" });
+  const compulsory = page.getByRole("checkbox", {
+    name: "Sécurité du compte — Dans l’application",
+  });
   await expect(compulsory).toBeDisabled();
   const applications = page.getByRole("checkbox", { name: "Candidatures — Dans l’application" });
   const wasEnabled = await applications.isChecked();
@@ -42,7 +44,9 @@ test("candidate edits account settings and changes password", async ({ page, req
   await page.getByRole("button", { name: "Enregistrer les préférences" }).click();
   await expect(page.getByRole("button", { name: "Enregistrer les préférences" })).toBeDisabled();
   await page.reload();
-  expect(await page.getByRole("checkbox", { name: "Candidatures — Dans l’application" }).isChecked()).toBe(!wasEnabled);
+  expect(
+    await page.getByRole("checkbox", { name: "Candidatures — Dans l’application" }).isChecked(),
+  ).toBe(!wasEnabled);
 
   await page.getByLabel("Mot de passe actuel").fill(initialPassword);
   await page.getByLabel("Nouveau mot de passe", { exact: true }).fill(nextPassword);

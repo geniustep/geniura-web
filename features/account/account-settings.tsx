@@ -74,7 +74,11 @@ export function AccountSettings({ initial }: { initial: AccountInitialPreference
           time_zone: saved.time_zone || "Africa/Casablanca",
         });
         const chosenLocale = saved.preferred_locale;
-        if (chosenLocale && chosenLocale !== locale && ["ar", "fr", "en", "es"].includes(chosenLocale)) {
+        if (
+          chosenLocale &&
+          chosenLocale !== locale &&
+          ["ar", "fr", "en", "es"].includes(chosenLocale)
+        ) {
           router.replace("/account", { locale: chosenLocale as ProfileInput["preferred_locale"] });
         } else {
           router.refresh();
@@ -203,9 +207,7 @@ export function ChangePasswordForm() {
         return queryClient.invalidateQueries({ queryKey: getMeSessionsListQueryKey() });
       },
       onError: (error) =>
-        setGeneral(
-          applyServerErrors(error, form.setError, ["current_password", "new_password"]),
-        ),
+        setGeneral(applyServerErrors(error, form.setError, ["current_password", "new_password"])),
     },
   });
 
