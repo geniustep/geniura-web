@@ -5,7 +5,7 @@ info:
   description: |-
     Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
 
-    Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
+    Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
 paths:
   /api/v1/auth/csrf:
     get:
@@ -256,6 +256,7 @@ paths:
   /api/v1/candidates/me:
     get:
       operationId: candidates_me_retrieve
+      description: Returns a weak ETag (profile_updated_at). Send it back in If-Match on PATCH.
       tags:
         - Candidates
       security:
@@ -275,6 +276,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
     patch:
       operationId: candidates_me_partial_update
+      description: "Optional If-Match (ETag or profile_updated_at): 412 precondition_failed when the profile changed since it was read; nothing is saved."
       tags:
         - Candidates
       requestBody:
@@ -290,6 +292,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CandidateProfile"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/candidates/me/access-log:
+    get:
+      operationId: candidates_me_access_log_retrieve
+      description: "Who received or opened the caller's data and when: organizations only, never individual employees or their notes."
+      tags:
+        - Candidates
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessLog"
           description: ""
         default:
           description: Error envelope
@@ -4468,16 +4491,117 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
+    AccessLog:
+      type: object
+      properties:
+        organization_activity_visible:
+          type: boolean
+          description: False while organization openings and downloads are not shared with candidates (feature flag).
+        summary:
+          $ref: "#/components/schemas/AccessLogSummary"
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/AccessLogEvent"
+      required:
+        - events
+        - organization_activity_visible
+        - summary
+    AccessLogEvent:
+      type: object
+      properties:
+        kind:
+          $ref: "#/components/schemas/AccessLogEventKindEnum"
+        occurred_at:
+          type: string
+          format: date-time
+        organization_name:
+          type: string
+        job_title:
+          type: string
+        application_id:
+          type: string
+          format: uuid
+          nullable: true
+        resume_id:
+          type: string
+          format: uuid
+          nullable: true
+        share_request_id:
+          type: string
+          format: uuid
+          nullable: true
+        consent_id:
+          type: string
+          format: uuid
+          nullable: true
+        item_type:
+          type: string
+          nullable: true
+        item_id:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+        - application_id
+        - consent_id
+        - item_id
+        - item_type
+        - job_title
+        - kind
+        - occurred_at
+        - organization_name
+        - resume_id
+        - share_request_id
+    AccessLogEventKindEnum:
+      enum:
+        - application_submitted
+        - application_withdrawn
+        - application_viewed
+        - resume_downloaded
+        - share_requested
+        - share_accepted
+        - share_declined
+        - share_expired
+        - share_revoked
+        - item_verified
+      type: string
+      description: |-
+        * `application_submitted` - application_submitted
+        * `application_withdrawn` - application_withdrawn
+        * `application_viewed` - application_viewed
+        * `resume_downloaded` - resume_downloaded
+        * `share_requested` - share_requested
+        * `share_accepted` - share_accepted
+        * `share_declined` - share_declined
+        * `share_expired` - share_expired
+        * `share_revoked` - share_revoked
+        * `item_verified` - item_verified
+    AccessLogSummary:
+      type: object
+      properties:
+        organizations_with_access:
+          type: integer
+        resume_downloads:
+          type: integer
+        share_requests_pending:
+          type: integer
+      required:
+        - organizations_with_access
+        - resume_downloads
+        - share_requests_pending
     ActionEnum:
       enum:
         - confirm
         - correct
         - dismiss
+        - update_existing
       type: string
       description: |-
         * `confirm` - confirm
         * `correct` - correct
         * `dismiss` - dismiss
+        * `update_existing` - update_existing
     ApplicantMatch:
       type: object
       properties:
@@ -4804,9 +4928,8 @@ components:
           format: date-time
           readOnly: true
         completeness:
-          type: object
-          additionalProperties: {}
-          description: Informational checklist only; never a gate for applying.
+          allOf:
+            - $ref: "#/components/schemas/Completeness"
           readOnly: true
       required:
         - completeness
@@ -4998,6 +5121,31 @@ components:
         close_open_applications:
           type: boolean
           default: false
+    Completeness:
+      type: object
+      properties:
+        has_headline:
+          type: boolean
+        has_city:
+          type: boolean
+        has_skills:
+          type: boolean
+        has_experience:
+          type: boolean
+        has_languages:
+          type: boolean
+        has_resume:
+          type: boolean
+        has_shareable_resume:
+          type: boolean
+      required:
+        - has_city
+        - has_experience
+        - has_headline
+        - has_languages
+        - has_resume
+        - has_shareable_resume
+        - has_skills
     CompletionEvidence:
       type: object
       description: Rejects unknown input keys (protection against mass assignment and silent typos).
@@ -5098,6 +5246,10 @@ components:
           format: uuid
           readOnly: true
           nullable: true
+        organization_name:
+          type: string
+          readOnly: true
+          nullable: true
         context_type:
           type: string
           readOnly: true
@@ -5128,6 +5280,7 @@ components:
         - id
         - is_active
         - organization
+        - organization_name
         - purpose
         - revoked_at
         - text_version
@@ -5505,6 +5658,17 @@ components:
           maxLength: 3000
       required:
         - org_status
+    ExistingObject:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+          format: uuid
+      required:
+        - id
+        - type
     Experience:
       type: object
       description: Rejects unknown input keys (protection against mass assignment and silent typos).
@@ -5640,11 +5804,18 @@ components:
           format: uuid
           readOnly: true
           nullable: true
+        existing_object:
+          allOf:
+            - $ref: "#/components/schemas/ExistingObject"
+          nullable: true
+          readOnly: true
+          description: The fact already in the profile that this pending item repeats; review it with 'update_existing' or 'dismiss' rather than creating a duplicate.
       required:
         - applied_object_id
         - applied_object_type
         - confidence
         - evidence_snippet
+        - existing_object
         - id
         - kind
         - payload
@@ -8714,10 +8885,13 @@ components:
           type: integer
         dismissed:
           type: integer
+        updated:
+          type: integer
       required:
         - confirmed
         - corrected
         - dismissed
+        - updated
     Sector:
       type: object
       properties:
@@ -8860,8 +9034,14 @@ components:
           format: date-time
           readOnly: true
           nullable: true
+        expires_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
       required:
         - created_at
+        - expires_at
         - id
         - message
         - order_title
@@ -8874,12 +9054,14 @@ components:
         - accepted
         - declined
         - cancelled
+        - expired
       type: string
       description: |-
         * `pending` - Pending
         * `accepted` - Accepted
         * `declined` - Declined
         * `cancelled` - Cancelled
+        * `expired` - Expired
     ShareResponseRequest:
       type: object
       description: Rejects unknown input keys (protection against mass assignment and silent typos).

@@ -308,13 +308,15 @@
         "trust": "Trust",
         "privacy": "Privacy"
       }
-    }
+    },
+    "profileLink": "My professional profile"
   },
   "UserMenu": {
     "account": "My account",
     "sessions": "Devices and sessions",
     "logout": "Sign out",
-    "label": "Account menu"
+    "label": "Account menu",
+    "profile": "My professional profile"
   },
   "Errors": {
     "api": {
@@ -328,7 +330,14 @@
       "rate_limited": "Too many attempts. Please wait before trying again.",
       "validation_error": "Please check the highlighted fields.",
       "network_error": "Cannot reach the server. Check your connection and try again.",
-      "unknown_error": "Something went wrong. Please try again."
+      "unknown_error": "Something went wrong. Please try again.",
+      "precondition_failed": "Changed on another device. Review the latest version, then save.",
+      "share_request_expired": "This request has expired.",
+      "duplicate_application": "You already applied for this job.",
+      "email_not_verified": "Confirm your email address first.",
+      "resume_not_ready": "This CV has not passed the safety check yet.",
+      "resume_limit_reached": "Maximum number of versions reached. Delete one first.",
+      "file_too_large": "The file is larger than allowed."
     },
     "reference": "Support reference: {id}"
   },
@@ -635,5 +644,423 @@
     },
     "partnersTitle": "Assessment and training partners",
     "partnersBody": "We are selecting assessment and training partners linked to labour-market needs. No partner will have access to the candidate database."
+  },
+  "Profile": {
+    "pages": {
+      "eyebrow": "Job seeker space",
+      "profile": {
+        "title": "My professional profile",
+        "subtitle": "Introduce yourself once and update it whenever you like. Nothing is shared without your consent."
+      },
+      "resumes": {
+        "title": "My CVs",
+        "subtitle": "Your CV versions, their safety check, reading, and the review of what was read."
+      },
+      "privacy": {
+        "title": "Who can see my profile?",
+        "subtitle": "Your profile's visibility, and the permissions you gave each organization."
+      },
+      "accessLog": {
+        "title": "Access history",
+        "subtitle": "Who received or opened your data, and when."
+      },
+      "review": {
+        "title": "Review what we read in your CV",
+        "subtitle": "Nothing is added to your profile until you decide."
+      }
+    },
+    "nav": {
+      "label": "Profile sections",
+      "profile": "Profile",
+      "resumes": "My CVs",
+      "privacy": "Privacy",
+      "accessLog": "History"
+    },
+    "sections": {
+      "educations": {
+        "title": "Education",
+        "addTitle": "Add education",
+        "editTitle": "Edit education",
+        "hint": "School, qualification and dates. The school name is enough to start.",
+        "empty": "No education added yet."
+      },
+      "experiences": {
+        "title": "Experience",
+        "addTitle": "Add experience",
+        "editTitle": "Edit experience",
+        "hint": "A job, internship or volunteering. No experience is required for a first job.",
+        "empty": "No experience yet. That is normal when looking for a first job."
+      },
+      "skills": {
+        "title": "Skills",
+        "addTitle": "Add a skill",
+        "editTitle": "Edit skill",
+        "hint": "Pick the skill from the approved list, then your level if you want.",
+        "empty": "No skills added yet."
+      },
+      "languages": {
+        "title": "Languages",
+        "addTitle": "Add a language",
+        "editTitle": "Edit language",
+        "hint": "A language you work in and your level. Unrelated to the site's display language.",
+        "empty": "No languages added yet."
+      },
+      "certifications": {
+        "title": "Certificates and licences",
+        "addTitle": "Add a certificate or licence",
+        "editTitle": "Edit certificate or licence",
+        "hint": "The expiry date shows whether a licence a job asks for is still valid.",
+        "empty": "No certificates or licences added yet."
+      }
+    },
+    "fields": {
+      "institution": "School",
+      "degree": "Qualification",
+      "level": "Level",
+      "field_of_study": "Field",
+      "start_date": "From",
+      "end_date": "To",
+      "title": "Job title",
+      "employer_name": "Employer",
+      "is_current": "I work here now",
+      "description": "Duties",
+      "skill": "Skill",
+      "years": "Years of practice",
+      "language_code": "Language",
+      "kind": "Type",
+      "name": "Name",
+      "issuer": "Issued by",
+      "issued_at": "Issue date",
+      "expires_at": "Expiry date",
+      "headline": "Professional headline",
+      "summary": "Summary",
+      "city": "City",
+      "availability": "Availability",
+      "available_from": "Available from",
+      "desired_contract_types": "Contract types you are looking for",
+      "desired_work_modes": "Work modes",
+      "willing_to_relocate": "Willing to move to another city"
+    },
+    "enums": {
+      "educationLevel": {
+        "blank": "Not specified",
+        "none": "No qualification",
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "baccalaureate": "Baccalaureate",
+        "vocational": "Vocational training",
+        "bac_plus_2": "Bac +2",
+        "bac_plus_3": "Bac +3",
+        "bac_plus_5": "Bac +5",
+        "doctorate": "Doctorate"
+      },
+      "skillLevel": {
+        "unspecified": "Level not specified",
+        "basic": "Basic",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "expert": "Expert"
+      },
+      "languageLevel": {
+        "unspecified": "Level not specified",
+        "A1": "Beginner (A1)",
+        "A2": "Beginner (A2)",
+        "B1": "Intermediate (B1)",
+        "B2": "Good (B2)",
+        "C1": "Advanced (C1)",
+        "C2": "Advanced (C2)",
+        "native": "Native"
+      },
+      "certificationKind": {
+        "certificate": "Certificate",
+        "license": "Licence"
+      },
+      "availability": {
+        "immediate": "Available now",
+        "from_date": "Available from a date",
+        "not_looking": "Not looking right now",
+        "unspecified": "Availability not specified"
+      }
+    },
+    "form": {
+      "chooseLanguage": "Choose a language",
+      "required": "This field is required.",
+      "saved": "Changes saved.",
+      "added": "Added.",
+      "verifiedWarning": "This information is verified. Editing it removes the verification: it becomes your own statement again.",
+      "identityLocked": "To change this field, delete the item and add a new one.",
+      "cancel": "Cancel",
+      "saving": "Saving…",
+      "saveAndUnverify": "Save and remove verification",
+      "save": "Save",
+      "chosenSkill": "Chosen skill:",
+      "skillSearch": "Search in English, French or Arabic…",
+      "searching": "Searching…",
+      "noSkillFound": "Nothing in the list. Try another word.",
+      "counter": "{count} of {max} characters",
+      "notSpecified": "Not specified"
+    },
+    "conflict": {
+      "title": "Changed on another device",
+      "body": "Your edit was not saved so the other one is not lost. Choose which version to keep.",
+      "theirs": "Saved:",
+      "yours": "Yours:",
+      "keepMine": "Keep my version",
+      "useTheirs": "Use the saved version",
+      "deleteRefused": "This item changed on another device and was not deleted. Check it, then try again."
+    },
+    "languageNames": {
+      "ary": "Moroccan Darija",
+      "zgh": "Tamazight"
+    },
+    "identity": {
+      "editTitle": "Introduction, goal and availability",
+      "hint": "Shown at the top of your profile and in what you send when you apply.",
+      "headlineExample": "e.g. Junior accountant, Excel and French",
+      "summaryHint": "A few sentences on what you do well and what you are looking for. Do not include health or family information.",
+      "pauseNote": "While you are not looking, discovery is paused; it resumes when you change your availability.",
+      "noHeadline": "Add a professional headline",
+      "relocate": "Willing to relocate",
+      "noCity": "City not specified",
+      "updated": "Last updated: {date}"
+    },
+    "item": {
+      "present": "present",
+      "years": "{years, plural, one {# year} other {# years}}",
+      "expires": "expires {date}",
+      "expired": "Expired",
+      "deleted": "Deleted.",
+      "deleteFailed": "Could not delete. Try again.",
+      "confirmDelete": "Confirm delete",
+      "editLabel": "Edit {name}",
+      "edit": "Edit",
+      "deleteLabel": "Delete {name}",
+      "add": "Add"
+    },
+    "visibility": {
+      "private": {
+        "short": "Private profile",
+        "line": "Nobody sees it. You choose when to send it.",
+        "long": "It appears nowhere. Only organizations you apply to see it, limited to what the preview shows."
+      },
+      "applications_only": {
+        "short": "My applications only",
+        "line": "Only organizations you applied to can see it.",
+        "long": "Visible only to organizations you applied to, as shown in each application preview. No discovery."
+      },
+      "discoverable": {
+        "short": "Discoverable",
+        "line": "The Geniura team sees a card without your name.",
+        "long": "Geniura's recruitment team sees a card with no name or email: your city and the skills relevant to an opportunity. If they see a match, you get a sharing request and you decide."
+      },
+      "paused": "Discovery is paused because you chose \"Not looking right now\".",
+      "manage": "Manage"
+    },
+    "next": {
+      "title": "{count, plural, =0 {Your profile is ready to apply} one {One step to a clearer profile} other {# steps to a clearer profile}}",
+      "hint": "All optional. An incomplete profile does not stop you from applying.",
+      "steps": {
+        "headline": "Add a professional headline",
+        "city": "Set your city",
+        "skills": "Add your skills",
+        "languages": "Add your languages",
+        "experience": "Add experience or an internship, if any",
+        "resume": "Upload your CV"
+      },
+      "optional": "Optional",
+      "resumeChecking": "Your CV is being checked. You can attach it once it passes."
+    },
+    "links": {
+      "resumes": "My CVs",
+      "resumesLine": "Upload a version, review what was read",
+      "accessLog": "Access history",
+      "accessLogLine": "Who received your data, and when",
+      "jobs": "Explore jobs",
+      "jobsLine": "And see how your profile matches each one"
+    },
+    "privacy": {
+      "expired": "This request has expired.",
+      "visibilityTitle": "Profile visibility",
+      "visibilityHint": "One setting for your whole profile. It does not change what you already sent.",
+      "visibilitySaved": "Visibility saved.",
+      "independence": "Making your profile private does not cancel a past application, and withdrawing one consent does not change your profile's visibility.",
+      "requestsTitle": "Requests waiting for you",
+      "noRequests": "No sharing requests right now.",
+      "expiresOn": "Expires {date}",
+      "requestExplain": "If you accept, the Geniura team and this organization see your profile for this request only. You can withdraw later.",
+      "accept": "Accept sharing",
+      "accepted": "Sharing accepted.",
+      "decline": "Decline",
+      "declined": "Request declined.",
+      "answered": "{count, plural, one {# past request} other {# past requests}}",
+      "status": {
+        "pending": "Waiting",
+        "accepted": "Accepted",
+        "declined": "Declined",
+        "cancelled": "Cancelled",
+        "expired": "Expired"
+      },
+      "consentsTitle": "Active sharing consents",
+      "consentsHint": "Each consent covers one organization and one recruitment.",
+      "noConsents": "No active consents.",
+      "grantedOn": "Since {date}",
+      "revoke": "Withdraw consent",
+      "revoked": "Consent withdrawn.",
+      "revokeLimit": "Withdrawing blocks future access; it cannot recall a copy already downloaded."
+    },
+    "accessLog": {
+      "summary": {
+        "organizations_with_access": "Organizations that received your data",
+        "resume_downloads": "CV downloads",
+        "share_requests_pending": "Requests waiting for you"
+      },
+      "orgActivityHidden": "Organizations opening your applications or downloading your CV are not shown yet; here you see what you sent or accepted and what Geniura verified.",
+      "emptyTitle": "Nothing yet",
+      "emptyLine": "Your applications and accepted requests will appear here.",
+      "kinds": {
+        "application_submitted": "Application sent to {organization}",
+        "application_withdrawn": "Application withdrawn from {organization}",
+        "application_viewed": "{organization} opened your application",
+        "resume_downloaded": "{organization} downloaded your CV",
+        "share_requested": "Geniura asked to share your profile with {organization}",
+        "share_accepted": "You accepted sharing with {organization}",
+        "share_declined": "You declined sharing with {organization}",
+        "share_expired": "Sharing request for {organization} expired",
+        "share_revoked": "You withdrew sharing consent for {organization}",
+        "item_verified": "Geniura verified information in your profile"
+      },
+      "anOrganization": "an organization",
+      "footnote": "We show the organization and the date, never individual employees or their notes."
+    },
+    "resumes": {
+      "stage": {
+        "scan": "Checking the file",
+        "read": "Reading the information",
+        "review": "Information to review",
+        "done": "Reviewed",
+        "failed": "Could not read",
+        "rejected": "File not accepted"
+      },
+      "wrongType": "Choose a PDF or Word (DOCX) file.",
+      "tooLarge": "5 MB maximum.",
+      "chooseFile": "Choose a file first.",
+      "uploaded": "File received. Checking it now.",
+      "uploadTitle": "Upload a new version",
+      "uploadHint": "We read education, skills and languages from it; then you decide. Earlier versions stay as they are.",
+      "dropHere": "Drop the file here or choose it",
+      "limits": "PDF or DOCX · up to 5 MB",
+      "displayName": "Version name",
+      "displayNameHint": "A name you will recognize, such as \"CV in French\".",
+      "scanNote": "Scanned documents may not be readable. If so, the file can still be attached and you enter the information yourself.",
+      "uploading": "Uploading…",
+      "upload": "Upload CV",
+      "actionFailed": "That did not work. Try again.",
+      "primary": "Primary",
+      "meta": "Version {version} · {date}",
+      "failedExplain": "The file is safe and can be attached to applications, but its content could not be read. Try again or enter the information yourself.",
+      "rejectedExplain": "The file did not pass the safety check, so it cannot be downloaded or sent. Upload another file.",
+      "review": "Review information",
+      "retry": "Read again",
+      "primarySet": "Set as primary.",
+      "makePrimary": "Make primary",
+      "downloadLabel": "Download {name}",
+      "confirmDelete": "Confirm delete",
+      "deleted": "Version deleted.",
+      "cancel": "Cancel",
+      "deleteLabel": "Delete {name}",
+      "deleteNote": "Applications you already sent keep what was sent at the time.",
+      "versionsTitle": "Your versions",
+      "emptyTitle": "No CV yet",
+      "emptyLine": "A CV is optional: you can apply with your profile.",
+      "leaveNote": "You can leave this page; we will let you know when the information is ready to review."
+    },
+    "review": {
+      "kinds": {
+        "skill": "Skill",
+        "language": "Language",
+        "experience": "Experience",
+        "education": "Education",
+        "certification": "Certificate or licence",
+        "occupation": "Target occupation",
+        "headline": "Headline"
+      },
+      "alreadyInProfile": "Already in your profile",
+      "reviewed": {
+        "pending": "",
+        "confirmed": "Already accepted",
+        "corrected": "Already corrected",
+        "dismissed": "Already ignored"
+      },
+      "decided": {
+        "confirm": "Will be added as is",
+        "correct": "Will be added as corrected",
+        "correctCorrected": "Will be added as corrected",
+        "dismiss": "Will be ignored",
+        "update_existing": "Will update the existing item",
+        "update_existingCorrected": "Will update the existing item as corrected"
+      },
+      "undo": "Undo",
+      "keepCorrection": "Use correction",
+      "cancel": "Cancel",
+      "updateExisting": "Update existing",
+      "correct": "Correct",
+      "keepMine": "Keep my profile",
+      "confirm": "Accept",
+      "dismiss": "Ignore",
+      "saved": "{count, plural, =0 {Decisions saved} one {# item added to your profile} other {# items added to your profile}}",
+      "intro": "This is what we read in your CV. Accept what is right, correct or ignore the rest. Accepting something does not make it \"verified\".",
+      "progressLabel": "Review progress",
+      "progress": "{done} of {total}",
+      "nothing": "We found nothing to suggest in this file.",
+      "partialNote": "You can save part of it and come back later.",
+      "later": "Later",
+      "saving": "Saving…",
+      "save": "{count, plural, =0 {Decide for each item} one {Save # decision} other {Save # decisions}}"
+    },
+    "match": {
+      "requirement": "Requirement",
+      "status": {
+        "met": "Met according to your profile",
+        "not_met": "Not met according to current data",
+        "unknown": "Information needed"
+      },
+      "expired": "expired",
+      "title": "Your profile meets {met} of {total} requirements",
+      "disclaimer": "A reading of your current data, not an assessment of you or a forecast of the decision. Missing information does not mean you lack it.",
+      "complete": "Complete the missing information",
+      "unavailable": "Matching is unavailable right now. You can still apply."
+    },
+    "apply": {
+      "signInToApply": "Sign in to apply",
+      "noFee": "Applying through Geniura is free. Never pay anyone to apply.",
+      "apply": "Apply for this job",
+      "sentTitle": "Application sent",
+      "sentLine": "A dated copy of what was sent is kept. You can withdraw at any time.",
+      "seeLog": "Access history",
+      "previewTitle": "Before you send",
+      "previewLine": "This is exactly what the organization will receive, as prepared by the server.",
+      "resume": "Attached CV",
+      "noResume": "No CV",
+      "primary": "primary",
+      "resumeNote": "The CV is the file as uploaded: it may include a photo or details your profile does not.",
+      "theyWillSee": "What they will see",
+      "counts": {
+        "skills": "{count, plural, =0 {no skills} one {# skill} other {# skills}}",
+        "languages": "{count, plural, =0 {no languages} one {# language} other {# languages}}",
+        "experiences": "{count, plural, =0 {no experience} one {# experience} other {# experiences}}",
+        "educations": "{count, plural, =0 {no education} one {# education entry} other {# education entries}}",
+        "certifications": "{count, plural, =0 {no certificates} one {# certificate} other {# certificates}}"
+      },
+      "withResume": "With the chosen CV",
+      "withoutResume": "No CV attached",
+      "notShared": "They will not see your preferences, your other CVs, or your applications elsewhere.",
+      "cover": "Cover message (optional)",
+      "snapshotNote": "A dated copy of what you send is kept. Updating your profile later does not change this application.",
+      "verifyEmail": "Confirm your email address from My account first, then try again.",
+      "duplicate": "You already applied for this job.",
+      "cancel": "Cancel",
+      "sending": "Sending…",
+      "confirm": "Send my application"
+    }
   }
 }

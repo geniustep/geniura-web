@@ -4,11 +4,14 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@4d8472c33a92b387f21e7107f714c325a4fbe2f8.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
 
+/**
+ * Returns a weak ETag (profile_updated_at). Send it back in If-Match on PATCH.
+ */
 export const candidatesMeRetrieveResponseHeadlineMax = 160;
 
 export const candidatesMeRetrieveResponseSummaryMax = 3000;
@@ -59,12 +62,21 @@ export const CandidatesMeRetrieveResponse = zod
         "* `private` - Private\n* `applications_only` - Applications Only\n* `discoverable` - Discoverable",
       ),
     profile_updated_at: zod.iso.datetime({ offset: true }),
-    completeness: zod
-      .record(zod.string(), zod.unknown())
-      .describe("Informational checklist only; never a gate for applying."),
+    completeness: zod.object({
+      has_headline: zod.boolean(),
+      has_city: zod.boolean(),
+      has_skills: zod.boolean(),
+      has_experience: zod.boolean(),
+      has_languages: zod.boolean(),
+      has_resume: zod.boolean(),
+      has_shareable_resume: zod.boolean(),
+    }),
   })
   .describe("Rejects unknown input keys (protection against mass assignment and silent typos).");
 
+/**
+ * Optional If-Match (ETag or profile_updated_at): 412 precondition_failed when the profile changed since it was read; nothing is saved.
+ */
 export const candidatesMePartialUpdateBodyHeadlineMax = 160;
 
 export const candidatesMePartialUpdateBodySummaryMax = 3000;
@@ -161,11 +173,62 @@ export const CandidatesMePartialUpdateResponse = zod
         "* `private` - Private\n* `applications_only` - Applications Only\n* `discoverable` - Discoverable",
       ),
     profile_updated_at: zod.iso.datetime({ offset: true }),
-    completeness: zod
-      .record(zod.string(), zod.unknown())
-      .describe("Informational checklist only; never a gate for applying."),
+    completeness: zod.object({
+      has_headline: zod.boolean(),
+      has_city: zod.boolean(),
+      has_skills: zod.boolean(),
+      has_experience: zod.boolean(),
+      has_languages: zod.boolean(),
+      has_resume: zod.boolean(),
+      has_shareable_resume: zod.boolean(),
+    }),
   })
   .describe("Rejects unknown input keys (protection against mass assignment and silent typos).");
+
+/**
+ * Who received or opened the caller's data and when: organizations only, never individual employees or their notes.
+ */
+export const CandidatesMeAccessLogRetrieveResponse = zod.object({
+  organization_activity_visible: zod
+    .boolean()
+    .describe(
+      "False while organization openings and downloads are not shared with candidates (feature flag).",
+    ),
+  summary: zod.object({
+    organizations_with_access: zod.int(),
+    resume_downloads: zod.int(),
+    share_requests_pending: zod.int(),
+  }),
+  events: zod.array(
+    zod.object({
+      kind: zod
+        .enum([
+          "application_submitted",
+          "application_withdrawn",
+          "application_viewed",
+          "resume_downloaded",
+          "share_requested",
+          "share_accepted",
+          "share_declined",
+          "share_expired",
+          "share_revoked",
+          "item_verified",
+        ])
+        .describe(
+          "* `application_submitted` - application_submitted\n* `application_withdrawn` - application_withdrawn\n* `application_viewed` - application_viewed\n* `resume_downloaded` - resume_downloaded\n* `share_requested` - share_requested\n* `share_accepted` - share_accepted\n* `share_declined` - share_declined\n* `share_expired` - share_expired\n* `share_revoked` - share_revoked\n* `item_verified` - item_verified",
+        ),
+      occurred_at: zod.iso.datetime({ offset: true }),
+      organization_name: zod.string(),
+      job_title: zod.string(),
+      application_id: zod.uuid().nullable(),
+      resume_id: zod.uuid().nullable(),
+      share_request_id: zod.uuid().nullable(),
+      consent_id: zod.uuid().nullable(),
+      item_type: zod.string().nullable(),
+      item_id: zod.uuid().nullable(),
+    }),
+  ),
+});
 
 export const CandidatesMeAssessmentsListResponseItem = zod
   .object({
@@ -383,6 +446,7 @@ export const CandidatesMeConsentsListResponseItem = zod.object({
       "* `discovery` - Discovery\n* `share_with_organization` - Share With Organization\n* `external_ai_processing` - External Ai Processing",
     ),
   organization: zod.uuid().nullable(),
+  organization_name: zod.string().nullable(),
   context_type: zod.string(),
   context_id: zod.uuid().nullable(),
   text_version: zod.string(),
@@ -411,6 +475,7 @@ export const CandidatesMeConsentsCreateResponse = zod.object({
       "* `discovery` - Discovery\n* `share_with_organization` - Share With Organization\n* `external_ai_processing` - External Ai Processing",
     ),
   organization: zod.uuid().nullable(),
+  organization_name: zod.string().nullable(),
   context_type: zod.string(),
   context_id: zod.uuid().nullable(),
   text_version: zod.string(),
@@ -431,6 +496,7 @@ export const CandidatesMeConsentsRevokeCreateResponse = zod.object({
       "* `discovery` - Discovery\n* `share_with_organization` - Share With Organization\n* `external_ai_processing` - External Ai Processing",
     ),
   organization: zod.uuid().nullable(),
+  organization_name: zod.string().nullable(),
   context_type: zod.string(),
   context_id: zod.uuid().nullable(),
   text_version: zod.string(),
@@ -1109,12 +1175,13 @@ export const CandidatesMeShareRequestsListResponseItem = zod.object({
   order_title: zod.string(),
   message: zod.string(),
   status: zod
-    .enum(["pending", "accepted", "declined", "cancelled"])
+    .enum(["pending", "accepted", "declined", "cancelled", "expired"])
     .describe(
-      "* `pending` - Pending\n* `accepted` - Accepted\n* `declined` - Declined\n* `cancelled` - Cancelled",
+      "* `pending` - Pending\n* `accepted` - Accepted\n* `declined` - Declined\n* `cancelled` - Cancelled\n* `expired` - Expired",
     ),
   created_at: zod.iso.datetime({ offset: true }),
   responded_at: zod.iso.datetime({ offset: true }).nullable(),
+  expires_at: zod.iso.datetime({ offset: true }).nullable(),
 });
 export const CandidatesMeShareRequestsListResponse = zod.array(
   CandidatesMeShareRequestsListResponseItem,
@@ -1136,12 +1203,13 @@ export const CandidatesMeShareRequestsRespondCreateResponse = zod.object({
   order_title: zod.string(),
   message: zod.string(),
   status: zod
-    .enum(["pending", "accepted", "declined", "cancelled"])
+    .enum(["pending", "accepted", "declined", "cancelled", "expired"])
     .describe(
-      "* `pending` - Pending\n* `accepted` - Accepted\n* `declined` - Declined\n* `cancelled` - Cancelled",
+      "* `pending` - Pending\n* `accepted` - Accepted\n* `declined` - Declined\n* `cancelled` - Cancelled\n* `expired` - Expired",
     ),
   created_at: zod.iso.datetime({ offset: true }),
   responded_at: zod.iso.datetime({ offset: true }).nullable(),
+  expires_at: zod.iso.datetime({ offset: true }).nullable(),
 });
 
 /**

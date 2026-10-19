@@ -12,7 +12,7 @@ import type { ReactNode } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ApplyPanel } from "@/features/profile/apply-panel";
 import type { JobRequirement, PublicJob } from "@/lib/api/generated/model";
 import { getDirection } from "@/lib/i18n/config";
 import { Link } from "@/lib/i18n/navigation";
@@ -46,17 +46,16 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-function RequirementItem({
-  requirement,
-  vocabulary,
-}: {
-  requirement: JobRequirement;
-  vocabulary: Vocabulary;
-}) {
-  const t = useTranslations("Jobs");
-  const locale = useLocale();
-  const languageNames = new Intl.DisplayNames([locale], { type: "language" });
+type JobsT = ReturnType<typeof useTranslations<"Jobs">>;
 
+/** The requirement in words, in the interface language (shared by the list and the match card). */
+function requirementSubject(
+  requirement: JobRequirement,
+  vocabulary: Vocabulary,
+  t: JobsT,
+  locale: string,
+): string | undefined {
+  const languageNames = new Intl.DisplayNames([locale], { type: "language" });
   let subject: string | undefined;
   switch (requirement.kind) {
     case "skill":
@@ -88,6 +87,19 @@ function RequirementItem({
       subject = requirement.certification_name || undefined;
       break;
   }
+  return subject;
+}
+
+function RequirementItem({
+  requirement,
+  vocabulary,
+}: {
+  requirement: JobRequirement;
+  vocabulary: Vocabulary;
+}) {
+  const t = useTranslations("Jobs");
+  const locale = useLocale();
+  const subject = requirementSubject(requirement, vocabulary, t, locale);
 
   return (
     <li className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t py-3 first:border-t-0">
@@ -332,12 +344,16 @@ export function JobDetail({ job, vocabulary }: { job: PublicJob; vocabulary: Voc
                 </span>
               </p>
             ) : null}
-            <Button variant="action" size="lg" disabled aria-describedby="apply-soon">
-              {t("detail.apply")}
-            </Button>
-            <p id="apply-soon" className="text-center text-sm text-muted-foreground">
-              {t("detail.applySoon")}
-            </p>
+            <ApplyPanel
+              jobId={job.id}
+              requirementLabels={Object.fromEntries(
+                job.requirements.map((requirement) => [
+                  requirement.id,
+                  requirementSubject(requirement, vocabulary, t, locale) ??
+                    t(`requirementKind.${requirement.kind}`),
+                ]),
+              )}
+            />
           </section>
           <ReportJobDialog jobId={job.id} />
         </aside>

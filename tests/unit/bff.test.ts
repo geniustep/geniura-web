@@ -6,7 +6,7 @@ import { parse } from "yaml";
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { GET, POST } from "@/app/api/bff/[...path]/route";
+import { GET, PATCH, POST } from "@/app/api/bff/[...path]/route";
 import { allowedBackendPath, publicApiRoutes } from "@/lib/api/bff-routes";
 
 const base = "https://geniura.com/api/bff";
@@ -44,8 +44,8 @@ describe("BFF route, cookie and CSRF isolation", () => {
   });
 
   it("permits only declared public paths and HTTP methods", () => {
-    expect(Object.keys(publicApiRoutes)).toHaveLength(113);
-    expect(Object.values(publicApiRoutes).flat()).toHaveLength(149);
+    expect(Object.keys(publicApiRoutes)).toHaveLength(114);
+    expect(Object.values(publicApiRoutes).flat()).toHaveLength(150);
     expect(allowedBackendPath("/api/v1/staff/metrics", "GET")).toBeNull();
     expect(allowedBackendPath("/api/v1/files/verification-documents/token", "GET")).toBeNull();
     expect(allowedBackendPath("/api/v1/organizations", "POST")).toBe("/api/v1/organizations/");
@@ -126,6 +126,31 @@ describe("BFF route, cookie and CSRF isolation", () => {
     expect(h.get("Origin")).toBe("https://api-geniura.geniura.com");
     expect(h.get("X-CSRFToken")).toBe("masked");
     expect(h.get("Cookie")).toBe("geniura_csrftoken=abc");
+  });
+
+  it("relays If-Match to Django and the ETag back (optimistic concurrency)", async () => {
+    fetchMock.mockResolvedValueOnce(
+      new Response('{"code":"precondition_failed"}', {
+        status: 412,
+        headers: { "Content-Type": "application/json", ETag: 'W/"2026-10-19T10:00:00+00:00"' },
+      }),
+    );
+    const path = "api/v1/candidates/me";
+    const response = await PATCH(
+      serverHeaders(
+        new Request(`${base}/${path}`, {
+          method: "PATCH",
+          headers: { "If-Match": '"2026-10-19T09:00:00Z"', "Content-Type": "application/json" },
+          body: '{"headline":"x"}',
+        }),
+        { origin: "https://geniura.com" },
+      ),
+      ctx(path),
+    );
+    expect(response.status).toBe(412);
+    expect(response.headers.get("ETag")).toBe('W/"2026-10-19T10:00:00+00:00"');
+    const h = new Headers(fetchMock.mock.calls[0]![1]?.headers);
+    expect(h.get("If-Match")).toBe('"2026-10-19T09:00:00Z"');
   });
 
   it("does not relay a spoofed prelaunch key from the browser", async () => {

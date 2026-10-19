@@ -13,6 +13,7 @@ export const publicApiRoutes: Readonly<Record<string, readonly string[]>> = {
   "/api/v1/auth/password/reset-request": ["POST"],
   "/api/v1/auth/register": ["POST"],
   "/api/v1/candidates/me": ["GET", "PATCH"],
+  "/api/v1/candidates/me/access-log": ["GET"],
   "/api/v1/candidates/me/applications": ["GET"],
   "/api/v1/candidates/me/applications/{application_id}": ["GET"],
   "/api/v1/candidates/me/applications/{application_id}/messages": ["GET", "POST"],

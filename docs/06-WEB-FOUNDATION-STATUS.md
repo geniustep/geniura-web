@@ -32,6 +32,14 @@
 | تخزين عام فقط (`'use cache'`، دقائق/ساعات) دون أي بيانات جلسة | IMPLEMENTED | ADR 0003 |
 | التسميات من أول 50 قيمة في القاموس | مؤقت | بانتظار تسميات مضمّنة (البند 7) |
 | slug، webhook الإبطال، البحث المحفوظ، facets | بانتظار Backend | `docs/07-BACKEND-COORDINATION.md` |
+| **الملف المهني v1.1** — صفحة «ملفي المهني»: التعريف والهدف والتوفر، الأقسام الخمسة مع شارة المصدر، خطوات الاستكمال (بلا نسبة مئوية) | IMPLEMENTED · TESTED | `features/profile`، `/account/profile`؛ unit + smoke كامل ضد geniura-api محلي (2026-10-19) |
+| التزامن التفاؤلي في الواجهة: `If-Match` على كل حفظ، وشاشة اختيار النسخة عند 412 | IMPLEMENTED · TESTED | `tests/unit/profile.test.ts`، `tests/unit/bff.test.ts`؛ smoke: 200 ثم 412 عبر الـBFF |
+| «من يستطيع الاطلاع؟»: محورا الظهور والأذونات، طلبات المشاركة ومهلتها، سحب الموافقات | IMPLEMENTED | `/account/profile/privacy` |
+| سجل الاطلاع (جهات لا أفراد؛ فتح الترشيح والتنزيل خلف `SHARE_VIEWED_EVENT_WITH_CANDIDATE`) | IMPLEMENTED · TESTED | `/account/profile/access-log`؛ smoke 200 |
+| السير الذاتية: رفع (نية ← محتوى ← إكمال)، حالات الفحص والقراءة، النسخة الأساسية، التنزيل الموقّع، الحذف | IMPLEMENTED · TESTED | `/account/profile/resumes`؛ smoke: رفع PDF عبر الـBFF ← `review_required` |
+| مراجعة الاستخراج: اعتماد/تصحيح/تجاهل، ووسم «موجود في ملفك» مع `update_existing` | IMPLEMENTED | `/account/profile/resumes/{id}/review` |
+| صفحة الوظيفة: التوافق بثلاث حالات لكل متطلب، معاينة الخادم لما سيُرسل، اختيار السيرة صراحة، الإرسال | IMPLEMENTED | `features/profile/apply-panel.tsx` (يحل محل زر «قريبًا») |
+| اختبارات E2E بالمتصفح لرحلات الملف المهني | DEFERRED | لم يتوفر متصفح Playwright في بيئة التنفيذ؛ تُشغّل محليًا قبل الدمج |
 | النشر والإنتاج | خارج النطاق | لا نشر دون موافقة صريحة |
 
 ## التحقق المحلي
