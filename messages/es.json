@@ -255,6 +255,59 @@
       "revoke": "Cerrar la sesión",
       "revoked": "Sesión cerrada.",
       "empty": "No hay otras sesiones."
+    },
+    "emailReadOnly": "La dirección de correo es de solo lectura y no se puede cambiar aquí.",
+    "settings": {
+      "title": "Datos y preferencias",
+      "description": "Actualiza tu nombre, idioma preferido y zona horaria de la cuenta.",
+      "fullName": "Nombre completo",
+      "language": "Idioma preferido",
+      "languageHint": "Después de guardar, la página se abrirá en el idioma elegido.",
+      "timeZone": "Zona horaria",
+      "timeZoneHint": "Introduce una zona horaria válida, como Africa/Casablanca.",
+      "save": "Guardar cambios",
+      "saving": "Guardando…",
+      "saved": "Se guardaron los datos y preferencias."
+    },
+    "security": {
+      "title": "Cambiar contraseña",
+      "description": "Protege tu cuenta con una contraseña segura y única.",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Contraseña nueva",
+      "confirmPassword": "Confirmar contraseña nueva",
+      "passwordHint": "Utiliza al menos 12 caracteres.",
+      "sessionsHint": "Cambiar la contraseña cierra las sesiones de otros dispositivos, pero mantiene la sesión actual.",
+      "save": "Cambiar contraseña",
+      "saving": "Actualizando…",
+      "changed": "Contraseña modificada. Se cerraron las otras sesiones."
+    },
+    "notifications": {
+      "title": "Preferencias de notificaciones",
+      "description": "Elige qué notificaciones recibir por los canales disponibles.",
+      "save": "Guardar preferencias",
+      "saving": "Guardando…",
+      "saved": "Preferencias de notificaciones guardadas.",
+      "retry": "Reintentar",
+      "unavailable": "no disponible",
+      "mandatory": "obligatorio",
+      "mandatoryHint": "Las notificaciones de seguridad en la plataforma son obligatorias. WhatsApp no está activado.",
+      "channels": {
+        "in_app": "En la plataforma",
+        "email": "Correo electrónico",
+        "whatsapp": "WhatsApp"
+      },
+      "categories": {
+        "security": "Seguridad de la cuenta",
+        "applications": "Candidaturas",
+        "interviews": "Entrevistas",
+        "organization": "Organizaciones",
+        "recruitment": "Selección",
+        "assessments": "Evaluaciones",
+        "training": "Formación",
+        "messages": "Mensajes",
+        "trust": "Confianza",
+        "privacy": "Privacidad"
+      }
     }
   },
   "UserMenu": {
@@ -284,7 +337,8 @@
     "invalid_format": "Formato no válido.",
     "too_small": "Valor demasiado corto.",
     "too_big": "Valor demasiado largo.",
-    "invalid": "Valor no válido."
+    "invalid": "Valor no válido.",
+    "mismatch": "Las contraseñas no coinciden."
   },
   "Jobs": {
     "metaTitle": "Ofertas de empleo",
