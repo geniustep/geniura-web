@@ -646,6 +646,16 @@
     "partnersBody": "We are selecting assessment and training partners linked to labour-market needs. No partner will have access to the candidate database."
   },
   "Profile": {
+    "partialDate": {
+      "precision": "Date precision",
+      "unknown": "Not specified",
+      "year": "Year only",
+      "month": "Month and year",
+      "day": "Day, month and year",
+      "notProvided": "Date not provided",
+      "invalid": "Enter a valid date at the selected precision.",
+      "rangeInvalid": "The end date precedes the start date."
+    },
     "pages": {
       "eyebrow": "Job seeker space",
       "profile": {
