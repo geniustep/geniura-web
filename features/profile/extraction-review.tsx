@@ -21,7 +21,7 @@ import type { Vocabulary } from "@/lib/jobs/labels";
 
 import { useRefreshProfile } from "./api";
 import { PartialDateField } from "./partial-date-field";
-import { formatProfessionalDate, toApiPartialDate, validPartialDate, validProfessionalRange } from "./partial-date";
+import { canPreserveSelectedDay, datePrecision, formatProfessionalDate, toApiPartialDate, validPartialDate, validProfessionalRange, type PartialDatePrecision } from "./partial-date";
 import { useLanguageName, useVocabularyLabel } from "./labels";
 
 type Decision = { action: ActionEnum; corrected?: Record<string, string> };
@@ -94,6 +94,7 @@ function ItemCard({
   const text = usePayloadText(vocabulary);
   const [editing, setEditing] = useState(false);
   const [dateError, setDateError] = useState<string | null>(null);
+  const [chosenPrecision, setChosenPrecision] = useState<Record<string, PartialDatePrecision>>({});
   const fields = CORRECTABLE[item.kind] ?? [];
   const payload = item.payload as Record<string, unknown>;
   const [draft, setDraft] = useState<Record<string, string>>(() =>
@@ -151,6 +152,13 @@ function ItemCard({
               setDateError(tDate("invalid"));
               return;
             }
+            const unsupportedFirstDay = fields.some((field) => field.endsWith("_date") &&
+              !canPreserveSelectedDay(draft[field] ?? "", chosenPrecision[field] ??
+                datePrecision(draft[field], payload[field + "_precision"])));
+            if (unsupportedFirstDay) {
+              setDateError(tDate("firstDayUnsupported"));
+              return;
+            }
             if (!validProfessionalRange(draft.start_date ?? "", draft.end_date ?? "")) {
               setDateError(tDate("rangeInvalid"));
               return;
@@ -171,6 +179,7 @@ function ItemCard({
                   id={item.id + "-" + field}
                   value={draft[field] ?? ""}
                   precision={payload[field + "_precision"]}
+                  onPrecisionChange={(next) => setChosenPrecision((old) => ({ ...old, [field]: next }))}
                   disabled={false}
                   invalid={Boolean(dateError)}
                   onChange={(value) => { setDateError(null); setDraft((d) => ({ ...d, [field]: value })); }}
