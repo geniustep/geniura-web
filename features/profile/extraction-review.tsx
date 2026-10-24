@@ -21,7 +21,7 @@ import type { Vocabulary } from "@/lib/jobs/labels";
 
 import { useRefreshProfile } from "./api";
 import { PartialDateField } from "./partial-date-field";
-import { canPreserveSelectedDay, datePrecision, formatProfessionalDate, toApiPartialDate, validPartialDate, validProfessionalRange, type PartialDatePrecision } from "./partial-date";
+import { canPreserveSelectedDay, datePrecision, formatProfessionalDate, toApiPartialDate, validDateForPrecision, validProfessionalRange, type PartialDatePrecision } from "./partial-date";
 import { useLanguageName, useVocabularyLabel } from "./labels";
 
 type Decision = { action: ActionEnum; corrected?: Record<string, string> };
@@ -147,14 +147,20 @@ function ItemCard({
           className="grid gap-3 sm:grid-cols-2"
           onSubmit={(e) => {
             e.preventDefault();
-            const bad = fields.filter((field) => field.endsWith("_date") && !validPartialDate(draft[field] ?? ""));
+            const bad = fields.filter((field) => field.endsWith("_date") &&
+              !validDateForPrecision(draft[field] ?? "",
+                chosenPrecision[field] ?? datePrecision(draft[field], payload[field + "_precision"])));
             if (bad.length) {
               setDateError(tDate("invalid"));
               return;
             }
-            const unsupportedFirstDay = fields.some((field) => field.endsWith("_date") &&
-              !canPreserveSelectedDay(draft[field] ?? "", chosenPrecision[field] ??
-                datePrecision(draft[field], payload[field + "_precision"])));
+            const unsupportedFirstDay = fields.some((field) => {
+              if (!field.endsWith("_date")) return false;
+              const precision = chosenPrecision[field] ?? datePrecision(draft[field], payload[field + "_precision"]);
+              const unchanged = String(payload[field] ?? "") === (draft[field] ?? "") &&
+                (chosenPrecision[field] === undefined || chosenPrecision[field] === payload[field + "_precision"]);
+              return !unchanged && !canPreserveSelectedDay(draft[field] ?? "", precision);
+            });
             if (unsupportedFirstDay) {
               setDateError(tDate("firstDayUnsupported"));
               return;
@@ -164,9 +170,13 @@ function ItemCard({
               return;
             }
             setDateError(null);
-            const corrected = Object.fromEntries(Object.entries(draft).map(([field, value]) =>
-              [field, field.endsWith("_date") ? toApiPartialDate(value) ?? "" : value],
-            ));
+            // Only transmit user edits: an unchanged date must retain its original precision.
+            const corrected = Object.fromEntries(Object.entries(draft)
+              .filter(([field, value]) => String(payload[field] ?? "") !== value ||
+                (chosenPrecision[field] !== undefined && chosenPrecision[field] !== payload[field + "_precision"]))
+              .map(([field, value]) =>
+                [field, field.endsWith("_date") ? toApiPartialDate(value) ?? "" : value],
+              ));
             onDecide({ action: repeated ? "update_existing" : "correct", corrected });
             setEditing(false);
           }}
@@ -179,6 +189,7 @@ function ItemCard({
                   id={item.id + "-" + field}
                   value={draft[field] ?? ""}
                   precision={payload[field + "_precision"]}
+                  selectedPrecision={chosenPrecision[field]}
                   onPrecisionChange={(next) => setChosenPrecision((old) => ({ ...old, [field]: next }))}
                   disabled={false}
                   invalid={Boolean(dateError)}
