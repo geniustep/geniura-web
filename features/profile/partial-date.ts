@@ -72,3 +72,10 @@ export function validProfessionalRange(start: string, end: string): boolean {
   };
   return min(start) <= max(end);
 }
+
+/** The current API serialises YYYY-MM-01 at month precision, so an asserted exact first
+ * day cannot survive a round-trip. Refuse that assertion until the API supports writes
+ * carrying an explicit writable precision. */
+export function canPreserveSelectedDay(value: string, precision: PartialDatePrecision): boolean {
+  return precision !== "day" || !/^\d{4}-\d{2}-01$/.test(value);
+}
