@@ -183,7 +183,8 @@ function ItemCard({
                   value={draft[field] ?? ""}
                   onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
                 />
-              )}            </div>
+              )}
+            </div>
           ))}
           {dateError ? <p role="alert" className="text-sm text-destructive sm:col-span-2">{dateError}</p> : null}
           <div className="flex gap-2 sm:col-span-2">
