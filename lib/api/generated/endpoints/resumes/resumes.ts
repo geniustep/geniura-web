@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@d626e1012e164d8ff71249d25ecdd875d12a6256.
  * OpenAPI spec version: 1.0.0-dev
  */
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -24,6 +24,7 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  CandidatesMeResumesCompleteCreateBody,
   CandidatesMeResumesContentCreateBody,
   ErrorResponse,
   Extraction,
@@ -390,11 +391,33 @@ export const getCandidatesMeResumesCompleteCreateUrl = (resumeId: string) => {
 
 export const candidatesMeResumesCompleteCreate = async (
   resumeId: string,
+  candidatesMeResumesCompleteCreateBody?: CandidatesMeResumesCompleteCreateBody,
   options?: Parameters<typeof apiFetch>[1],
 ): Promise<Resume> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit["headers"]>,
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(
+          h as Iterable<Iterable<string>>,
+          (entry) => Array.from(entry) as [string, string],
+        ),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
   return apiFetch<Resume>(getCandidatesMeResumesCompleteCreateUrl(resumeId), {
     ...options,
     method: "POST",
+    headers: { "Content-Type": "application/json", ...getHeaders(options?.headers) },
+    body: JSON.stringify(candidatesMeResumesCompleteCreateBody),
   });
 };
 
@@ -429,9 +452,9 @@ export const getCandidatesMeResumesCompleteCreateMutationOptions = <
     Awaited<ReturnType<typeof candidatesMeResumesCompleteCreate>>,
     CandidatesMeResumesCompleteCreateMutationVariables
   > = (props) => {
-    const { resumeId } = props ?? {};
+    const { resumeId, data } = props ?? {};
 
-    return candidatesMeResumesCompleteCreate(resumeId, requestOptions);
+    return candidatesMeResumesCompleteCreate(resumeId, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -440,9 +463,13 @@ export const getCandidatesMeResumesCompleteCreateMutationOptions = <
 export type CandidatesMeResumesCompleteCreateMutationResult = NonNullable<
   Awaited<ReturnType<typeof candidatesMeResumesCompleteCreate>>
 >;
-
+export type CandidatesMeResumesCompleteCreateMutationBody =
+  CandidatesMeResumesCompleteCreateBody | undefined;
 export type CandidatesMeResumesCompleteCreateMutationError = ErrorResponse;
-export type CandidatesMeResumesCompleteCreateMutationVariables = { resumeId: string };
+export type CandidatesMeResumesCompleteCreateMutationVariables = {
+  resumeId: string;
+  data?: CandidatesMeResumesCompleteCreateBody;
+};
 
 export const useCandidatesMeResumesCompleteCreate = <TError = ErrorResponse, TContext = unknown>(
   options?: {
