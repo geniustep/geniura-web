@@ -23,12 +23,12 @@ User seeding (WSL, local Django settings only):
 
 ```bash
 GENIURA_INTEGRATION_SEED=allow GENIURA_USER_PREFIX=cv-int-run \
-  python tests/integration/seed-local-users.py --clear-throttle --count 16
+  python tests/integration/seed-local-users.py --count 16
 ```
 
-Global setup performs the same seed when `pnpm test:integration` runs on a machine with WSL + the API worktree. Set `GENIURA_SKIP_SEED=1` to skip seeding (not recommended for a full pass).
+Global setup performs the same seed when `pnpm test:integration` runs on Windows with WSL + the API worktree. Set `GENIURA_SKIP_SEED=1` to skip seeding (not recommended for a full pass). The seed script requires `GENIURA_INTEGRATION_SEED=allow`, Django `config.settings.local` with `DEBUG=True`, a locally hosted database, and a safe synthetic-account prefix.
 
-Login throttling on the API is **10/min per IP** (`THROTTLE_LOGIN`). The suite reuses Playwright storage state between selected serial tests and seeds users up front so UI login stays under that limit without changing production throttle settings. Optional `--clear-throttle` in the seed script clears Django cache when Redis is shared with the running API process.
+Login throttling on the API is **10/min per IP** (`THROTTLE_LOGIN`). The suite reuses Playwright storage state between selected serial tests and seeds users up front to reduce authentication requests. **The seed script never resets Django cache or throttle keys.** If throttled (429), use a dedicated test-only cache and isolated local backend, wait for the rate window, or configure a test-only login rate **before launching the local Django process**. Never flush a shared Redis/cache or modify production rate limits to make tests pass.
 
 ## Known precision limitation
 
@@ -41,4 +41,4 @@ The backend maps some `YYYY-MM-01` inputs to **month** precision. The UI blocks 
 - Backend PR for partial dates merged or deployed to the target API before enabling the web forms in shared environments.
 - No real applicant CVs in fixtures or logs.
 
-**Status:** integration gate defined; merge when CI and local full-stack pass on the PR branch.
+**Status:** Windows agent previously recorded 13/13 live integration PASS with local cache resets. Since the security review removed blanket cache resets, that exact full-stack test run must be repeated on a dedicated local test stack before considering the modified test harness revalidated. GitHub quality/e2e CI may still pass, but it does not execute these full-stack tests. Do not merge until security review and the local repeat are complete.
