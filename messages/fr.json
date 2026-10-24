@@ -654,7 +654,8 @@
       "day": "Jour, mois et année",
       "notProvided": "Date non précisée",
       "invalid": "Saisissez une date valide à la précision choisie.",
-      "rangeInvalid": "La date de fin précède la date de début."
+      "rangeInvalid": "La date de fin précède la date de début.",
+      "firstDayUnsupported": "Le premier jour du mois ne peut pas encore être conservé comme jour exact. Choisissez une précision au mois ou corrigez la date."
     },
     "pages": {
       "eyebrow": "Espace candidat",
