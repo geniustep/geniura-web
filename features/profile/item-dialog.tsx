@@ -16,6 +16,8 @@ import { fieldErrors, isApiError } from "@/lib/api/errors";
 import { type Vocabulary } from "@/lib/jobs/labels";
 
 import { cleanPayload, ifMatch, isConflict, useRefreshProfile } from "./api";
+import { PartialDateField } from "./partial-date-field";
+import { toApiPartialDate, validPartialDate, validProfessionalRange } from "./partial-date";
 import { useLanguageName } from "./labels";
 import {
   formValues,
@@ -38,6 +40,7 @@ function FieldControl({
   invalid,
   describedBy,
   vocabulary,
+  datePrecision,
 }: {
   field: FieldDef;
   id: string;
@@ -47,6 +50,7 @@ function FieldControl({
   invalid: boolean;
   describedBy?: string;
   vocabulary: Vocabulary;
+  datePrecision?: unknown;
 }) {
   const t = useTranslations("Profile");
   const languageName = useLanguageName();
@@ -65,6 +69,18 @@ function FieldControl({
           maxLength={field.maxLength}
           value={String(value)}
           onChange={(e) => onChange(e.target.value)}
+        />
+      );
+    case "partial-date":
+      return (
+        <PartialDateField
+          id={id}
+          value={String(value)}
+          precision={datePrecision}
+          onChange={onChange}
+          disabled={disabled}
+          invalid={invalid}
+          describedBy={describedBy}
         />
       );
     case "date":
@@ -190,10 +206,31 @@ export function ItemDialog({
       setPending(false);
       return;
     }
+    const partialFields = section.fields.filter((field) => field.kind === "partial-date");
+    const invalidDates = partialFields.filter((field) => !validPartialDate(String(values[field.name] ?? "")));
+    if (invalidDates.length) {
+      setErrors(Object.fromEntries(invalidDates.map((field) => [field.name, t("partialDate.invalid")])));
+      setPending(false);
+      return;
+    }
+    const start = String(values.start_date ?? "");
+    const end = String(values.end_date ?? "");
+    if (partialFields.length && !(kind === "experiences" && values.is_current) && !validProfessionalRange(start, end)) {
+      setErrors({ end_date: t("partialDate.rangeInvalid") });
+      setPending(false);
+      return;
+    }
     const editable = Object.fromEntries(
-      Object.entries(values).filter(
-        ([name]) => !(item && section.fields.find((f) => f.name === name)?.createOnly),
-      ),
+      Object.entries(values)
+        .filter(([name]) => !(item && section.fields.find((field) => field.name === name)?.createOnly))
+        .map(([name, value]) => {
+          const field = section.fields.find((entry) => entry.name === name);
+          if (field?.kind === "partial-date") {
+            return [name, kind === "experiences" && name === "end_date" && values.is_current
+              ? null : toApiPartialDate(String(value))];
+          }
+          return [name, value];
+        }),
     );
     const body = cleanPayload(editable, section.nullable) as never;
     try {
@@ -315,6 +352,7 @@ export function ItemDialog({
                   invalid={Boolean(errorId)}
                   describedBy={errorId}
                   vocabulary={vocabulary}
+                  datePrecision={item?.[field.name + "_precision"]}
                 />
               );
               return (
