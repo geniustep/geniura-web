@@ -2,9 +2,12 @@
 export type PartialDatePrecision = "unknown" | "year" | "month" | "day";
 
 export function datePrecision(value: unknown, declared?: unknown): PartialDatePrecision {
-  if (declared === "year" || declared === "month" || declared === "day") return declared;
-  if (declared === "unknown" && typeof value === "string" && value.length > 0) return "unknown";
   if (typeof value !== "string" || !value) return "unknown";
+  // A corrected year must not inherit the precision of the previous full date.
+  if (declared === "year" && /^\d{4}/.test(value)) return "year";
+  if (declared === "month" && /^\d{4}-\d{2}/.test(value)) return "month";
+  if (declared === "day" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return "day";
+  if (declared === "unknown" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return "unknown";
   if (/^\d{4}$/.test(value)) return "year";
   if (/^\d{4}-\d{2}$/.test(value)) return "month";
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return "day";
