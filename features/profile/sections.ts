@@ -30,7 +30,15 @@ import {
 export type SectionKind = "educations" | "experiences" | "skills" | "languages" | "certifications";
 
 export type FieldKind =
-  "text" | "textarea" | "date" | "partial-date" | "select" | "checkbox" | "skill" | "language" | "years";
+  | "text"
+  | "textarea"
+  | "date"
+  | "partial-date"
+  | "select"
+  | "checkbox"
+  | "skill"
+  | "language"
+  | "years";
 
 export type FieldDef = {
   name: string;
