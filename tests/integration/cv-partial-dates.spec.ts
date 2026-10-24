@@ -3,7 +3,6 @@ import path from "node:path";
 
 import { expect, test, type Browser, type Locator, type Page } from "@playwright/test";
 
-import { clearLocalThrottleCache } from "./integration-wsl";
 import {
   CV_FULL_RANGE,
   cvMonthPresent,
@@ -17,7 +16,6 @@ const api = process.env.GENIURA_API_URL ?? "http://127.0.0.1:8000";
 const password = process.env.INTEGRATION_CV_PASSWORD ?? "Integration-CV-Pass-2026!";
 const carriedSessionPath = path.join(__dirname, ".cv-integration-session.json");
 let userSlot = 0;
-let loginAttempts = 0;
 
 function integrationUserPrefix() {
   const fromEnv = process.env.GENIURA_USER_PREFIX;
@@ -65,41 +63,33 @@ async function pageWithCarriedSession(browser: Browser, locale: UiLocale) {
 }
 
 async function loginAsCandidate(page: Page, locale: UiLocale, email: string) {
-  if (loginAttempts >= 9 || (loginAttempts > 0 && loginAttempts % 6 === 0)) {
-    clearLocalThrottleCache();
-  }
-  loginAttempts += 1;
   const L = UI[locale];
-  const profileUrl = new RegExp(`\\/${locale}\\/account\\/profile\\/resumes`);
-  const throttled = () =>
-    page
-      .getByRole("main")
-      .getByRole("alert")
-      .filter({ hasText: /Too many attempts|trop de tentatives|محاولات/i });
+  const profileUrl = new RegExp(`\\\\/${locale}\\\\/account\\\\/profile\\\\/resumes`);
 
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    if (attempt > 0) {
-      clearLocalThrottleCache();
-    }
-    await page.context().clearCookies();
-    await page.goto(`/${locale}/login?next=%2Faccount%2Fprofile%2Fresumes`);
-    await page.getByLabel(L.email).fill(email);
-    await page.getByLabel(L.password, { exact: true }).fill(password);
-    await page.getByRole("button", { name: L.login, exact: true }).click();
-    const landed = await page
-      .waitForURL(profileUrl, { timeout: 10_000 })
-      .then(() => true)
-      .catch(() => false);
-    if (landed) {
-      return;
-    }
-    if (
-      !(await throttled()
-        .isVisible()
-        .catch(() => false))
-    ) {
-      break;
-    }
+  await page.context().clearCookies();
+  await page.goto(`/${locale}/login?next=%2Faccount%2Fprofile%2Fresumes`);
+  await page.getByLabel(L.email).fill(email);
+  await page.getByLabel(L.password, { exact: true }).fill(password);
+  await page.getByRole("button", { name: L.login, exact: true }).click();
+
+  const landed = await page
+    .waitForURL(profileUrl, { timeout: 10_000 })
+    .then(() => true)
+    .catch(() => false);
+  if (landed) return;
+
+  const throttled = await page
+    .getByRole("main")
+    .getByRole("alert")
+    .filter({ hasText: /Too many attempts|trop de tentatives|محاولات/i })
+    .isVisible()
+    .catch(() => false);
+
+  if (throttled) {
+    throw new Error(
+      "Local Django login throttle reached (429). Run with an isolated test-only cache " +
+        "or wait for the rate window; do not flush a potentially shared Django cache.",
+    );
   }
   await expect(page).toHaveURL(profileUrl);
 }
@@ -361,7 +351,6 @@ test("412 conflict when editing stale experience version", async ({ page }) => {
 });
 
 test("user isolation: second account cannot read first experiences", async ({ browser }) => {
-  clearLocalThrottleCache();
   const prefix = integrationUserPrefix();
   const emailA = `${prefix}-14@example.test`;
   const emailB = `${prefix}-15@example.test`;
@@ -376,7 +365,6 @@ test("user isolation: second account cannot read first experiences", async ({ br
   await dialog.getByLabel(UI.en.jobTitle).fill("Secret role");
   await dialog.getByRole("button", { name: UI.en.save }).click();
 
-  clearLocalThrottleCache();
   await loginAsCandidate(pageB, "en", emailB);
   const countB = await pageB.evaluate(async () => {
     const list = await fetch("/api/bff/api/v1/candidates/me/experiences?page_size=50", {
