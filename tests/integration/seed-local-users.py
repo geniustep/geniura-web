@@ -1,14 +1,13 @@
-"""Seed synthetic candidates for local Playwright integration tests only.
+"""Seed synthetic candidates for local integration tests only.
 
-Refuses production-like settings or databases. Run from WSL against geniura-api local settings:
-
-  GENIURA_INTEGRATION_SEED=allow GENIURA_USER_PREFIX=cv-int-run python seed-local-users.py
-  GENIURA_INTEGRATION_SEED=allow python seed-local-users.py --clear-throttle
+Requires explicit acknowledgement and a local-only Django settings module/database.
+Does not clear shared caches, throttle keys, sessions, or production data.
 """
 from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 
 ROOT = os.environ.get("GENIURA_API_ROOT", "/home/geniura/work/geniura-partial-dates-impl")
@@ -25,36 +24,37 @@ from apps.accounts.models import User
 
 DEFAULT_PASSWORD = "Integration-CV-Pass-2026!"
 FORBIDDEN_DB_MARKERS = ("prod", "production", "staging", "live")
+SAFE_PREFIX_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9-]{0,48}$")
 
 
 def assert_local_integration_environment() -> None:
     if os.environ.get("GENIURA_INTEGRATION_SEED") != "allow":
-        sys.exit("Refusing: set GENIURA_INTEGRATION_SEED=allow for local synthetic seeding only.")
+        sys.exit("Refusing: GENIURA_INTEGRATION_SEED=allow is required.")
 
     module = os.environ.get("DJANGO_SETTINGS_MODULE", "")
-    if any(marker in module for marker in ("production", "staging")):
-        sys.exit(f"Refusing: DJANGO_SETTINGS_MODULE looks non-local ({module}).")
+    if module != "config.settings.local":
+        sys.exit(f"Refusing: Django settings must be config.settings.local (got {module!r}).")
 
     if not settings.DEBUG:
-        sys.exit("Refusing: DEBUG must be True (local/test only).")
+        sys.exit("Refusing: DEBUG must be True (local only).")
 
     db = settings.DATABASES.get("default", {})
     name = str(db.get("NAME", "")).lower()
     host = str(db.get("HOST", "")).lower()
-    if any(marker in name for marker in FORBIDDEN_DB_MARKERS):
-        sys.exit(f"Refusing: database NAME looks non-local ({name!r}).")
-    if host and host not in ("", "localhost", "127.0.0.1"):
+    if not name or any(marker in name for marker in FORBIDDEN_DB_MARKERS):
+        sys.exit(f"Refusing: database NAME does not look safe ({name!r}).")
+    if host not in ("", "localhost", "127.0.0.1", "::1"):
         sys.exit(f"Refusing: database HOST must be local, got {host!r}.")
 
-
-def clear_throttle_cache() -> None:
-    from django.core.cache import cache
-
-    cache.clear()
-    print("throttle cache cleared")
+    # No cache operations. A localhost database alone does not make a Redis
+    # instance safe to flush: Redis may be shared with other applications.
 
 
 def seed_users(prefix: str, count: int, password: str) -> None:
+    if not SAFE_PREFIX_RE.fullmatch(prefix):
+        sys.exit("Refusing: GENIURA_USER_PREFIX must contain only letters, digits, hyphens (max 49).")
+    if count > 20 or count < 0:
+        sys.exit("Refusing: --count must be between 0 and 20.")
     for slot in range(count):
         email = f"{prefix}-{slot}@example.test"
         if User.objects.filter(email__iexact=email).exists():
@@ -71,15 +71,10 @@ def seed_users(prefix: str, count: int, password: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--clear-throttle", action="store_true")
     parser.add_argument("--count", type=int, default=16)
     args = parser.parse_args()
 
     assert_local_integration_environment()
-
-    if args.clear_throttle:
-        clear_throttle_cache()
-
     if args.count <= 0:
         return
 
