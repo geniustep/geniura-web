@@ -20,8 +20,8 @@ describe("professional dates with explicit precision", () => {
 
   it("reads a known month without presenting day one as confirmed", () => {
     expect(dateInputValue("2019-03-01", "month")).toBe("2019-03");
-    expect(datePrecision("2019-03-01")).toBe("month");
-    expect(formatProfessionalDate("2019-03-01", undefined, "en")).toBe("March 2019");
+    expect(datePrecision("2019-03-01")).toBe("unknown");
+    expect(formatProfessionalDate("2019-03-01", undefined, "en")).toBe("2019-03-01");
     expect(toApiPartialDate("2019-03")).toBe("2019-03");
     expect(formatProfessionalDate("2019-03-01", "month", "en")).toBe("March 2019");
     expect(formatProfessionalDate("2019-03-01", "month", "fr")).toMatch(/mars 2019/);
@@ -31,6 +31,7 @@ describe("professional dates with explicit precision", () => {
     expect(formatProfessionalDate("2019-03-15", "day", "en")).toBe("March 15, 2019");
     expect(formatProfessionalDate("2019-03-15", "unknown", "en")).toBe("2019-03-15");
     expect(datePrecision("2016", "month")).toBe("year");
+    expect(datePrecision("2019-03-01", "day")).toBe("day");
   });
 
   it("does not claim first-day precision before backend round-trip support", () => {
