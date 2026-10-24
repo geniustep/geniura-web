@@ -31,7 +31,8 @@ export function PartialDateField({
 }) {
   const t = useTranslations("Profile.partialDate");
   const selected = selectedPrecision ?? datePrecision(value, precision);
-  const shown = selected === "month" ? value.slice(0, 7) : selected === "year" ? value.slice(0, 4) : value;
+  const shown =
+    selected === "month" ? value.slice(0, 7) : selected === "year" ? value.slice(0, 4) : value;
   const placeholder =
     selected === "year" ? "YYYY" : selected === "month" ? "YYYY-MM" : "YYYY-MM-DD";
 
@@ -42,9 +43,15 @@ export function PartialDateField({
     if (next === "month") {
       return onChange(value.length >= 7 ? value.slice(0, 7) : value ? value.slice(0, 4) + "-" : "");
     }
-    return onChange(selected === "day" && value.length === 10
-      ? value
-      : value.length >= 7 ? value.slice(0, 7) + "-" : value ? value.slice(0, 4) + "-" : "");
+    return onChange(
+      selected === "day" && value.length === 10
+        ? value
+        : value.length >= 7
+          ? value.slice(0, 7) + "-"
+          : value
+            ? value.slice(0, 4) + "-"
+            : "",
+    );
   }
 
   return (
@@ -56,7 +63,9 @@ export function PartialDateField({
         disabled={disabled}
       >
         {(["unknown", "year", "month", "day"] as const).map((option) => (
-          <option key={option} value={option}>{t(option)}</option>
+          <option key={option} value={option}>
+            {t(option)}
+          </option>
         ))}
       </NativeSelect>
       {selected !== "unknown" ? (
