@@ -35,6 +35,15 @@ export function validPartialDate(value: string): boolean {
   return day <= maxDay;
 }
 
+/** Preserve the declared granularity. Month placeholders from the server may include day 01. */
+export function validDateForPrecision(value: string, precision: PartialDatePrecision): boolean {
+  if (precision === "unknown") return value === "" || validPartialDate(value);
+  if (!validPartialDate(value) || !value) return false;
+  if (precision === "year") return /^\d{4}$/.test(value);
+  if (precision === "month") return /^\d{4}-\d{2}$/.test(value) || /^\d{4}-\d{2}-01$/.test(value);
+  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
 export function toApiPartialDate(value: string): string | null {
   if (!value) return null;
   if (!validPartialDate(value)) throw new Error("Invalid professional date");
