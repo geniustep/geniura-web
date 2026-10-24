@@ -5,7 +5,7 @@ This isolated web branch adds precision-aware editing and review for professiona
 ## Behaviour
 
 - `YYYY` remains a year. No month or day is invented.
-- `YYYY-MM` is sent as `YYYY-MM-01` for the current backend month-precision contract and displayed as a month, not an asserted day.
+- `YYYY-MM` is sent exactly as `YYYY-MM` (no fabricated day). The backend must accept this partial-date input under its documented parser contract. If the API rejects it, hold release and correct the API rather than manufacturing day 01.
 - `YYYY-MM-DD` may represent an exact day when the backend preserves day precision.
 - Existing `unknown` legacy dates are displayed as their original ISO string. Unchanged legacy dates are omitted from unrelated PATCHes to avoid silently reclassifying them.
 - Invalid dates and impossible intervals are rejected before save. Candidates must confirm CV suggestions; no profile fact is accepted automatically.
