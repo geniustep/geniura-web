@@ -654,7 +654,8 @@
       "day": "Day, month and year",
       "notProvided": "Date not provided",
       "invalid": "Enter a valid date at the selected precision.",
-      "rangeInvalid": "The end date precedes the start date."
+      "rangeInvalid": "The end date precedes the start date.",
+      "firstDayUnsupported": "The first day of a month cannot yet be saved as an exact day. Choose month precision or correct the date."
     },
     "pages": {
       "eyebrow": "Job seeker space",
