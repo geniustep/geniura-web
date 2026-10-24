@@ -16,6 +16,7 @@ export function PartialDateField({
   value,
   precision,
   onChange,
+  onPrecisionChange,
   disabled,
   invalid,
   describedBy,
@@ -24,6 +25,7 @@ export function PartialDateField({
   value: string;
   precision?: unknown;
   onChange: (value: string) => void;
+  onPrecisionChange?: (value: PartialDatePrecision) => void;
   disabled: boolean;
   invalid: boolean;
   describedBy?: string;
@@ -34,6 +36,7 @@ export function PartialDateField({
   const placeholder = selected === "year" ? "YYYY" : selected === "month" ? "YYYY-MM" : "YYYY-MM-DD";
   function choose(next: PartialDatePrecision) {
     setSelected(next);
+    onPrecisionChange?.(next);
     if (next === "unknown") {
       onChange("");
       return;
