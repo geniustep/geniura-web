@@ -647,6 +647,7 @@
   },
   "Profile": {
     "partialDate": {
+      "value": "Date value",
       "precision": "Date precision",
       "unknown": "Not specified",
       "year": "Year only",
