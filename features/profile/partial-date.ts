@@ -5,11 +5,13 @@ export function datePrecision(value: unknown, declared?: unknown): PartialDatePr
   if (typeof value !== "string" || !value) return "unknown";
   // A corrected year must not inherit the precision of the previous full date.
   if (declared === "year" && /^\d{4}/.test(value)) return "year";
+  if (declared === "month" && /^\d{4}-\d{2}-\d{2}$/.test(value) && value.slice(8, 10) !== "01") return "day";
   if (declared === "month" && /^\d{4}-\d{2}/.test(value)) return "month";
   if (declared === "day" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return "day";
   if (declared === "unknown" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return "unknown";
   if (/^\d{4}$/.test(value)) return "year";
   if (/^\d{4}-\d{2}$/.test(value)) return "month";
+  if (/^\d{4}-\d{2}-01$/.test(value)) return "month"; // Safe when the parser supplied month precision using day 01.
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return "day";
   return "unknown";
 }
