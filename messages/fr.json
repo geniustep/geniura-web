@@ -646,6 +646,16 @@
     "partnersBody": "Nous sélectionnons des partenaires d’évaluation et de formation liés aux besoins du marché. Aucun partenaire n’accède à la base des candidats."
   },
   "Profile": {
+    "partialDate": {
+      "precision": "Précision de la date",
+      "unknown": "Non précisée",
+      "year": "Année uniquement",
+      "month": "Mois et année",
+      "day": "Jour, mois et année",
+      "notProvided": "Date non précisée",
+      "invalid": "Saisissez une date valide à la précision choisie.",
+      "rangeInvalid": "La date de fin précède la date de début."
+    },
     "pages": {
       "eyebrow": "Espace candidat",
       "profile": {
