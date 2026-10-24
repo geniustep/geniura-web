@@ -65,37 +65,31 @@ async function pageWithCarriedSession(browser: Browser, locale: UiLocale) {
 async function loginAsCandidate(page: Page, locale: UiLocale, email: string) {
   const L = UI[locale];
   const profileUrl = new RegExp(`/${locale}/account/profile/resumes`);
-  const throttled = () =>
-    page
-      .getByRole("main")
-      .getByRole("alert")
-      .filter({ hasText: /Too many attempts|trop de tentatives|محاولات/i });
 
-  for (let attempt = 0; attempt < 5; attempt += 1) {
-    if (attempt > 0) {
-      clearLocalThrottleCache();
-    }
-    await page.context().clearCookies();
-    await page.goto(`/${locale}/login?next=%2Faccount%2Fprofile%2Fresumes`);
-    await page.getByLabel(L.email).fill(email);
-    await page.getByLabel(L.password, { exact: true }).fill(password);
-    await page.getByRole("button", { name: L.login, exact: true }).click();
-    const landed = await page
-      .waitForURL(profileUrl, { timeout: 10_000 })
-      .then(() => true)
-      .catch(() => false);
-    if (landed) {
-      return;
-    }
-    if (
-      await throttled()
-        .isVisible()
-        .catch(() => false)
-    ) {
-      clearLocalThrottleCache();
-      continue;
-    }
-    break;
+  await page.context().clearCookies();
+  await page.goto(`/${locale}/login?next=%2Faccount%2Fprofile%2Fresumes`);
+  await page.getByLabel(L.email).fill(email);
+  await page.getByLabel(L.password, { exact: true }).fill(password);
+  await page.getByRole("button", { name: L.login, exact: true }).click();
+
+  const landed = await page
+    .waitForURL(profileUrl, { timeout: 10_000 })
+    .then(() => true)
+    .catch(() => false);
+  if (landed) return;
+
+  const throttled = await page
+    .getByRole("main")
+    .getByRole("alert")
+    .filter({ hasText: /Too many attempts|trop de tentatives|محاولات/i })
+    .isVisible()
+    .catch(() => false);
+
+  if (throttled) {
+    throw new Error(
+      "Local Django login throttle reached (429). Run with an isolated test-only cache " +
+        "or wait for the rate window; do not flush a potentially shared Django cache.",
+    );
   }
   await expect(page).toHaveURL(profileUrl);
 }
