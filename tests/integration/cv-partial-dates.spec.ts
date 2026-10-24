@@ -93,7 +93,11 @@ async function loginAsCandidate(page: Page, locale: UiLocale, email: string) {
     if (landed) {
       return;
     }
-    if (!(await throttled().isVisible().catch(() => false))) {
+    if (
+      !(await throttled()
+        .isVisible()
+        .catch(() => false))
+    ) {
       break;
     }
   }
@@ -218,14 +222,14 @@ test("manual profile edit preserves YYYY and YYYY-MM after reload", async ({ pag
 test("YYYY-MM-DD legacy-style date displays without forcing day precision", async ({ browser }) => {
   const { page, context } = await pageWithCarriedSession(browser, "en");
   try {
-  await page.goto("/en/account/profile");
-  await openAddExperience(page, "en");
-  const dialog = page.getByRole("dialog");
-  await dialog.getByLabel(UI.en.jobTitle).fill("Engineer");
-  await setPartialDate(dialog, UI.en, UI.en.from, "day", "2020-07-15");
-  await dialog.getByRole("button", { name: UI.en.save }).click();
-  await page.reload();
-  await expect(page.getByText(/2020-07-15|2020/)).toBeVisible();
+    await page.goto("/en/account/profile");
+    await openAddExperience(page, "en");
+    const dialog = page.getByRole("dialog");
+    await dialog.getByLabel(UI.en.jobTitle).fill("Engineer");
+    await setPartialDate(dialog, UI.en, UI.en.from, "day", "2020-07-15");
+    await dialog.getByRole("button", { name: UI.en.save }).click();
+    await page.reload();
+    await expect(page.getByText(/2020-07-15|2020/)).toBeVisible();
   } finally {
     await context.close();
   }
@@ -243,11 +247,11 @@ test("legacy slash-month and year ranges from CV extract", async ({ page }) => {
 test("is_current job via CV extract (month + present)", async ({ browser }) => {
   const { page, context } = await pageWithCarriedSession(browser, "en");
   try {
-  const email = `${integrationUserPrefix()}-4@example.test`;
-  await uploadCv(page, cvMonthPresent(email), "en");
-  await acceptFirstExperience(page, "en");
-  await page.goto("/en/account/profile");
-  await expect(page.getByText(/present|Present|aujourd|حاض/i)).toBeVisible({ timeout: 30_000 });
+    const email = `${integrationUserPrefix()}-4@example.test`;
+    await uploadCv(page, cvMonthPresent(email), "en");
+    await acceptFirstExperience(page, "en");
+    await page.goto("/en/account/profile");
+    await expect(page.getByText(/present|Present|aujourd|حاض/i)).toBeVisible({ timeout: 30_000 });
   } finally {
     await context.close();
   }
