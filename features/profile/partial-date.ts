@@ -38,7 +38,7 @@ export function validPartialDate(value: string): boolean {
 export function toApiPartialDate(value: string): string | null {
   if (!value) return null;
   if (!validPartialDate(value)) throw new Error("Invalid professional date");
-  if (/^\d{4}-\d{2}$/.test(value)) return value + "-01";
+  // Send month precision explicitly, rather than inventing an indistinguishable day 01.
   return value;
 }
 
