@@ -17,7 +17,14 @@ import { type Vocabulary } from "@/lib/jobs/labels";
 
 import { cleanPayload, ifMatch, isConflict, useRefreshProfile } from "./api";
 import { PartialDateField } from "./partial-date-field";
-import { canPreserveSelectedDay, datePrecision, toApiPartialDate, validDateForPrecision, validProfessionalRange, type PartialDatePrecision } from "./partial-date";
+import {
+  canPreserveSelectedDay,
+  datePrecision,
+  toApiPartialDate,
+  validDateForPrecision,
+  validProfessionalRange,
+  type PartialDatePrecision,
+} from "./partial-date";
 import { useLanguageName } from "./labels";
 import {
   formValues,
@@ -217,32 +224,45 @@ export function ItemDialog({
     const invalidDates = partialFields.filter((field) => {
       if (kind === "experiences" && field.name === "end_date" && values.is_current) return false;
       const value = String(values[field.name] ?? "");
-      const precision = chosenPrecision[field.name] ??
-        datePrecision(value, item?.[field.name + "_precision"]);
+      const precision =
+        chosenPrecision[field.name] ?? datePrecision(value, item?.[field.name + "_precision"]);
       return !validDateForPrecision(value, precision);
     });
     if (invalidDates.length) {
-      setErrors(Object.fromEntries(invalidDates.map((field) => [field.name, t("partialDate.invalid")])));
+      setErrors(
+        Object.fromEntries(invalidDates.map((field) => [field.name, t("partialDate.invalid")])),
+      );
       setPending(false);
       return;
     }
     const unsupportedFirstDays = partialFields.filter((field) => {
       if (kind === "experiences" && field.name === "end_date" && values.is_current) return false;
       const value = String(values[field.name] ?? "");
-      const precision = chosenPrecision[field.name] ?? datePrecision(value, item?.[field.name + "_precision"]);
-      const unchanged = item && String(item[field.name] ?? "") === value &&
-        (chosenPrecision[field.name] === undefined || chosenPrecision[field.name] === item[field.name + "_precision"]);
+      const precision =
+        chosenPrecision[field.name] ?? datePrecision(value, item?.[field.name + "_precision"]);
+      const unchanged =
+        item &&
+        String(item[field.name] ?? "") === value &&
+        (chosenPrecision[field.name] === undefined ||
+          chosenPrecision[field.name] === item[field.name + "_precision"]);
       return !unchanged && !canPreserveSelectedDay(value, precision);
     });
     if (unsupportedFirstDays.length) {
-      setErrors(Object.fromEntries(unsupportedFirstDays.map((field) =>
-        [field.name, t("partialDate.firstDayUnsupported")])));
+      setErrors(
+        Object.fromEntries(
+          unsupportedFirstDays.map((field) => [field.name, t("partialDate.firstDayUnsupported")]),
+        ),
+      );
       setPending(false);
       return;
     }
     const start = String(values.start_date ?? "");
     const end = String(values.end_date ?? "");
-    if (partialFields.length && !(kind === "experiences" && values.is_current) && !validProfessionalRange(start, end)) {
+    if (
+      partialFields.length &&
+      !(kind === "experiences" && values.is_current) &&
+      !validProfessionalRange(start, end)
+    ) {
       setErrors({ end_date: t("partialDate.rangeInvalid") });
       setPending(false);
       return;
@@ -252,18 +272,30 @@ export function ItemDialog({
         .filter(([name, value]) => {
           const field = section.fields.find((entry) => entry.name === name);
           if (item && field?.createOnly) return false;
-          if (item && field?.kind === "partial-date" && String(item[name] ?? "") === String(value ?? "")) {
+          if (
+            item &&
+            field?.kind === "partial-date" &&
+            String(item[name] ?? "") === String(value ?? "")
+          ) {
             // Never re-interpret an unchanged legacy date when editing an unrelated field.
-            return name === "end_date" && kind === "experiences" &&
-              Boolean(values.is_current) && !Boolean(item.is_current);
+            return (
+              name === "end_date" &&
+              kind === "experiences" &&
+              Boolean(values.is_current) &&
+              !Boolean(item.is_current)
+            );
           }
           return true;
         })
         .map(([name, value]) => {
           const field = section.fields.find((entry) => entry.name === name);
           if (field?.kind === "partial-date") {
-            return [name, kind === "experiences" && name === "end_date" && values.is_current
-              ? null : toApiPartialDate(String(value))];
+            return [
+              name,
+              kind === "experiences" && name === "end_date" && values.is_current
+                ? null
+                : toApiPartialDate(String(value)),
+            ];
           }
           return [name, value];
         }),
@@ -391,7 +423,9 @@ export function ItemDialog({
                   vocabulary={vocabulary}
                   datePrecision={item?.[field.name + "_precision"]}
                   selectedPrecision={chosenPrecision[field.name]}
-                  onPrecisionChange={(precision) => setChosenPrecision((old) => ({ ...old, [field.name]: precision }))}
+                  onPrecisionChange={(precision) =>
+                    setChosenPrecision((old) => ({ ...old, [field.name]: precision }))
+                  }
                 />
               );
               return (
