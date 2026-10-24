@@ -222,7 +222,16 @@ export function ItemDialog({
     }
     const editable = Object.fromEntries(
       Object.entries(values)
-        .filter(([name]) => !(item && section.fields.find((field) => field.name === name)?.createOnly))
+        .filter(([name, value]) => {
+          const field = section.fields.find((entry) => entry.name === name);
+          if (item && field?.createOnly) return false;
+          if (item && field?.kind === "partial-date" && String(item[name] ?? "") === String(value ?? "")) {
+            // Never re-interpret an unchanged legacy date when editing an unrelated field.
+            return name === "end_date" && kind === "experiences" &&
+              Boolean(values.is_current) && !Boolean(item.is_current);
+          }
+          return true;
+        })
         .map(([name, value]) => {
           const field = section.fields.find((entry) => entry.name === name);
           if (field?.kind === "partial-date") {
