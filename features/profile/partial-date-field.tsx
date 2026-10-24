@@ -55,7 +55,7 @@ export function PartialDateField({
           <option key={option} value={option}>{t(option)}</option>
         ))}
       </NativeSelect>
-      {selected !== "unknown" || shown ? (
+      {selected !== "unknown" ? (
         <Input
           id={id}
           inputMode="numeric"
@@ -69,7 +69,7 @@ export function PartialDateField({
           onChange={(event) => onChange(event.target.value.trim())}
         />
       ) : (
-        <span id={id} className="text-sm text-muted-foreground">{t("notProvided")}</span>
+        <span id={id} className="text-sm text-muted-foreground">{shown || t("notProvided")}</span>
       )}
     </div>
   );
