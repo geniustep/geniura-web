@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckIcon, CopyIcon, PencilIcon, Undo2Icon, XIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -20,6 +20,8 @@ import { Link, useRouter } from "@/lib/i18n/navigation";
 import type { Vocabulary } from "@/lib/jobs/labels";
 
 import { useRefreshProfile } from "./api";
+import { PartialDateField } from "./partial-date-field";
+import { formatProfessionalDate, toApiPartialDate, validPartialDate, validProfessionalRange } from "./partial-date";
 import { useLanguageName, useVocabularyLabel } from "./labels";
 
 type Decision = { action: ActionEnum; corrected?: Record<string, string> };
@@ -34,11 +36,13 @@ const CORRECTABLE: Record<string, string[]> = {
 
 function usePayloadText(vocabulary: Vocabulary) {
   const t = useTranslations("Profile");
+  const locale = useLocale();
   const label = useVocabularyLabel(vocabulary);
   const languageName = useLanguageName();
   return (item: ExtractedItem, override?: Record<string, string>) => {
     const p = { ...(item.payload as Record<string, unknown>), ...override };
     const s = (k: string) => (p[k] ? String(p[k]) : "");
+    const date = (k: string) => formatProfessionalDate(p[k], p[k + "_precision"], locale) ?? "";
     switch (item.kind) {
       case "skill":
         return label("skills", s("skill_id")) ?? s("label") ?? s("code");
@@ -57,14 +61,14 @@ function usePayloadText(vocabulary: Vocabulary) {
         return [
           s("title"),
           s("employer_name"),
-          [s("start_date"), s("is_current") === "true" ? t("item.present") : s("end_date")]
+          [date("start_date"), s("is_current") === "true" ? t("item.present") : date("end_date")]
             .filter(Boolean)
             .join(" – "),
         ]
           .filter(Boolean)
           .join(" · ");
       case "education":
-        return [s("degree"), s("institution"), s("end_date")].filter(Boolean).join(" · ");
+        return [s("degree"), s("institution"), date("end_date")].filter(Boolean).join(" · ");
       case "certification":
         return [s("name"), s("issuer")].filter(Boolean).join(" · ");
       default:
@@ -86,8 +90,10 @@ function ItemCard({
 }) {
   const t = useTranslations("Profile.review");
   const tFields = useTranslations("Profile.fields");
+  const tDate = useTranslations("Profile.partialDate");
   const text = usePayloadText(vocabulary);
   const [editing, setEditing] = useState(false);
+  const [dateError, setDateError] = useState<string | null>(null);
   const fields = CORRECTABLE[item.kind] ?? [];
   const payload = item.payload as Record<string, unknown>;
   const [draft, setDraft] = useState<Record<string, string>>(() =>
@@ -140,22 +146,46 @@ function ItemCard({
           className="grid gap-3 sm:grid-cols-2"
           onSubmit={(e) => {
             e.preventDefault();
-            onDecide({ action: repeated ? "update_existing" : "correct", corrected: draft });
+            const bad = fields.filter((field) => field.endsWith("_date") && !validPartialDate(draft[field] ?? ""));
+            if (bad.length) {
+              setDateError(tDate("invalid"));
+              return;
+            }
+            if (!validProfessionalRange(draft.start_date ?? "", draft.end_date ?? "")) {
+              setDateError(tDate("rangeInvalid"));
+              return;
+            }
+            setDateError(null);
+            const corrected = Object.fromEntries(Object.entries(draft).map(([field, value]) =>
+              [field, field.endsWith("_date") ? toApiPartialDate(value) ?? "" : value],
+            ));
+            onDecide({ action: repeated ? "update_existing" : "correct", corrected });
             setEditing(false);
           }}
         >
           {fields.map((field) => (
             <div key={field} className="grid gap-1.5">
               <Label htmlFor={`${item.id}-${field}`}>{tFields(field as "title")}</Label>
-              <Input
-                id={`${item.id}-${field}`}
-                dir={field.endsWith("_date") || field.endsWith("_at") ? "ltr" : "auto"}
-                type={field.endsWith("_date") || field.endsWith("_at") ? "date" : "text"}
-                value={draft[field] ?? ""}
-                onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
-              />
-            </div>
+              {field.endsWith("_date") && (item.kind === "experience" || item.kind === "education") ? (
+                <PartialDateField
+                  id={item.id + "-" + field}
+                  value={draft[field] ?? ""}
+                  precision={payload[field + "_precision"]}
+                  disabled={false}
+                  invalid={Boolean(dateError)}
+                  onChange={(value) => { setDateError(null); setDraft((d) => ({ ...d, [field]: value })); }}
+                />
+              ) : (
+                <Input
+                  id={item.id + "-" + field}
+                  dir={field.endsWith("_date") || field.endsWith("_at") ? "ltr" : "auto"}
+                  type={field.endsWith("_date") || field.endsWith("_at") ? "date" : "text"}
+                  value={draft[field] ?? ""}
+                  onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
+                />
+              )}            </div>
           ))}
+          {dateError ? <p role="alert" className="text-sm text-destructive sm:col-span-2">{dateError}</p> : null}
           <div className="flex gap-2 sm:col-span-2">
             <Button type="submit" size="sm">
               {t("keepCorrection")}
