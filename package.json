@@ -13,7 +13,7 @@
     "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --write features/profile/extraction-review.tsx features/profile/item-dialog.tsx features/profile/partial-date-field.tsx features/profile/partial-date.ts features/profile/sections.ts tests/unit/partial-date.test.ts && node -e 'const fs=require(\"node:fs\");for(const p of [\"features/profile/extraction-review.tsx\",\"features/profile/item-dialog.tsx\",\"features/profile/partial-date-field.tsx\",\"features/profile/partial-date.ts\",\"features/profile/sections.ts\",\"tests/unit/partial-date.test.ts\"]) console.log(\"FORMATTED_FILE \"+p+\" \"+fs.readFileSync(p).toString(\"base64\"));' && prettier --check .",
+    "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "check:css": "node scripts/check-logical-css.mjs",
     "check:messages": "node scripts/check-messages.mjs",
