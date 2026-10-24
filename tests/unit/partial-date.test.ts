@@ -22,7 +22,7 @@ describe("professional dates with explicit precision", () => {
     expect(dateInputValue("2019-03-01", "month")).toBe("2019-03");
     expect(datePrecision("2019-03-01")).toBe("month");
     expect(formatProfessionalDate("2019-03-01", undefined, "en")).toBe("March 2019");
-    expect(toApiPartialDate("2019-03")).toBe("2019-03-01");
+    expect(toApiPartialDate("2019-03")).toBe("2019-03");
     expect(formatProfessionalDate("2019-03-01", "month", "en")).toBe("March 2019");
     expect(formatProfessionalDate("2019-03-01", "month", "fr")).toMatch(/mars 2019/);
   });
