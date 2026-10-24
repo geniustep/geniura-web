@@ -647,6 +647,7 @@
   },
   "Profile": {
     "partialDate": {
+      "value": "قيمة التاريخ",
       "precision": "دقة التاريخ",
       "unknown": "غير محدد",
       "year": "السنة فقط",
