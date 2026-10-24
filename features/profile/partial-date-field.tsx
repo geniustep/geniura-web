@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 
 import {
-  dateInputValue,
   datePrecision,
   type PartialDatePrecision,
 } from "./partial-date";
@@ -40,8 +39,9 @@ export function PartialDateField({
       return;
     }
     if (next === "year") onChange(value ? value.slice(0, 4) : "");
-    else if (next === "month") onChange(value.length >= 7 ? value.slice(0, 7) : "");
-    else onChange(value.length === 10 ? value : "");
+    else if (next === "month") onChange(value.length >= 7 ? value.slice(0, 7) : value ? value.slice(0, 4) + "-" : "");
+    else onChange(selected === "day" && value.length === 10
+      ? value : value.length >= 7 ? value.slice(0, 7) + "-" : value ? value.slice(0, 4) + "-" : "");
   }
   return (
     <div className="grid gap-2">
