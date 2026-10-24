@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@d626e1012e164d8ff71249d25ecdd875d12a6256.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
@@ -549,8 +549,10 @@ export const CandidatesMeEducationsListResponse = zod.object({
           .string()
           .max(candidatesMeEducationsListResponseResultsItemFieldOfStudyMax)
           .optional(),
-        start_date: zod.iso.date().nullish(),
-        end_date: zod.iso.date().nullish(),
+        start_date: zod.string().nullish(),
+        end_date: zod.string().nullish(),
+        start_date_precision: zod.string(),
+        end_date_precision: zod.string(),
         source: zod
           .enum(["asserted", "extracted", "verified"])
           .describe("* `asserted` - Asserted\n* `extracted` - Extracted\n* `verified` - Verified"),
@@ -595,8 +597,8 @@ export const CandidatesMeEducationsCreateBody = zod
         "* `none` - None\n* `primary` - Primary\n* `secondary` - Secondary\n* `baccalaureate` - Baccalaureate\n* `vocational` - Vocational\n* `bac_plus_2` - Bac Plus 2\n* `bac_plus_3` - Bac Plus 3\n* `bac_plus_5` - Bac Plus 5\n* `doctorate` - Doctorate",
       ),
     field_of_study: zod.string().max(candidatesMeEducationsCreateBodyFieldOfStudyMax).optional(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
   })
   .describe("Rejects unknown input keys (protection against mass assignment and silent typos).");
 
@@ -631,8 +633,10 @@ export const CandidatesMeEducationsCreateResponse = zod
       .string()
       .max(candidatesMeEducationsCreateResponseFieldOfStudyMax)
       .optional(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
+    start_date_precision: zod.string(),
+    end_date_precision: zod.string(),
     source: zod
       .enum(["asserted", "extracted", "verified"])
       .describe("* `asserted` - Asserted\n* `extracted` - Extracted\n* `verified` - Verified"),
@@ -681,8 +685,10 @@ export const CandidatesMeEducationsRetrieveResponse = zod
       .string()
       .max(candidatesMeEducationsRetrieveResponseFieldOfStudyMax)
       .optional(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
+    start_date_precision: zod.string(),
+    end_date_precision: zod.string(),
     source: zod
       .enum(["asserted", "extracted", "verified"])
       .describe("* `asserted` - Asserted\n* `extracted` - Extracted\n* `verified` - Verified"),
@@ -734,8 +740,8 @@ export const CandidatesMeEducationsPartialUpdateBody = zod
       .string()
       .max(candidatesMeEducationsPartialUpdateBodyFieldOfStudyMax)
       .optional(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
   })
   .describe("Rejects unknown input keys (protection against mass assignment and silent typos).");
 
@@ -770,8 +776,10 @@ export const CandidatesMeEducationsPartialUpdateResponse = zod
       .string()
       .max(candidatesMeEducationsPartialUpdateResponseFieldOfStudyMax)
       .optional(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
+    start_date_precision: zod.string(),
+    end_date_precision: zod.string(),
     source: zod
       .enum(["asserted", "extracted", "verified"])
       .describe("* `asserted` - Asserted\n* `extracted` - Extracted\n* `verified` - Verified"),
@@ -820,8 +828,10 @@ export const CandidatesMeExperiencesListResponse = zod.object({
           .optional(),
         occupation: zod.uuid().nullish(),
         city: zod.uuid().nullish(),
-        start_date: zod.iso.date().nullish(),
-        end_date: zod.iso.date().nullish(),
+        start_date: zod.string().nullish(),
+        end_date: zod.string().nullish(),
+        start_date_precision: zod.string(),
+        end_date_precision: zod.string(),
         is_current: zod.boolean().optional(),
         description: zod
           .string()
@@ -856,8 +866,8 @@ export const CandidatesMeExperiencesCreateBody = zod
     employer_name: zod.string().max(candidatesMeExperiencesCreateBodyEmployerNameMax).optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
     is_current: zod.boolean().optional(),
     description: zod.string().max(candidatesMeExperiencesCreateBodyDescriptionMax).optional(),
   })
@@ -879,8 +889,10 @@ export const CandidatesMeExperiencesCreateResponse = zod
       .optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
+    start_date_precision: zod.string(),
+    end_date_precision: zod.string(),
     is_current: zod.boolean().optional(),
     description: zod.string().max(candidatesMeExperiencesCreateResponseDescriptionMax).optional(),
     source: zod
@@ -916,8 +928,10 @@ export const CandidatesMeExperiencesRetrieveResponse = zod
       .optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
+    start_date_precision: zod.string(),
+    end_date_precision: zod.string(),
     is_current: zod.boolean().optional(),
     description: zod.string().max(candidatesMeExperiencesRetrieveResponseDescriptionMax).optional(),
     source: zod
@@ -952,8 +966,8 @@ export const CandidatesMeExperiencesPartialUpdateBody = zod
       .optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
     is_current: zod.boolean().optional(),
     description: zod
       .string()
@@ -978,8 +992,10 @@ export const CandidatesMeExperiencesPartialUpdateResponse = zod
       .optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
-    start_date: zod.iso.date().nullish(),
-    end_date: zod.iso.date().nullish(),
+    start_date: zod.string().nullish(),
+    end_date: zod.string().nullish(),
+    start_date_precision: zod.string(),
+    end_date_precision: zod.string(),
     is_current: zod.boolean().optional(),
     description: zod
       .string()

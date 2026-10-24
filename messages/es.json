@@ -646,6 +646,18 @@
     "partnersBody": "Estamos seleccionando socios de evaluación y formación ligados a las necesidades del mercado laboral. Ningún socio tendrá acceso a la base de candidatos."
   },
   "Profile": {
+    "partialDate": {
+      "value": "Valor de la fecha",
+      "precision": "Precisión de la fecha",
+      "unknown": "Sin especificar",
+      "year": "Solo año",
+      "month": "Mes y año",
+      "day": "Día, mes y año",
+      "notProvided": "Fecha no indicada",
+      "invalid": "Introduce una fecha válida con la precisión seleccionada.",
+      "rangeInvalid": "La fecha de fin es anterior a la de inicio.",
+      "firstDayUnsupported": "Todavía no es posible guardar el primer día del mes como día exacto. Elige la precisión de mes o corrige la fecha."
+    },
     "pages": {
       "eyebrow": "Espacio del candidato",
       "profile": {
