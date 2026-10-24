@@ -6,6 +6,7 @@ import {
   datePrecision,
   formatProfessionalDate,
   toApiPartialDate,
+  validDateForPrecision,
   validPartialDate,
   validProfessionalRange,
 } from "@/features/profile/partial-date";
@@ -38,6 +39,18 @@ describe("professional dates with explicit precision", () => {
     expect(canPreserveSelectedDay("2019-03-01", "day")).toBe(false);
     expect(canPreserveSelectedDay("2019-03-15", "day")).toBe(true);
     expect(canPreserveSelectedDay("2019-03-01", "month")).toBe(true);
+  });
+
+  it("requires the entered shape to match the chosen precision", () => {
+    expect(validDateForPrecision("2020", "year")).toBe(true);
+    expect(validDateForPrecision("2020-02", "year")).toBe(false);
+    expect(validDateForPrecision("2020-02", "month")).toBe(true);
+    expect(validDateForPrecision("2020-02-01", "month")).toBe(true);
+    expect(validDateForPrecision("2020-02-15", "month")).toBe(false);
+    expect(validDateForPrecision("2020-02-15", "day")).toBe(true);
+    expect(validDateForPrecision("2020-02", "day")).toBe(false);
+    expect(validDateForPrecision("2019-02-29", "day")).toBe(false);
+    expect(validDateForPrecision("2019-02-01", "unknown")).toBe(true);
   });
 
   it("validates true calendar days including leap years", () => {
