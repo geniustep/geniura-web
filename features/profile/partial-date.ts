@@ -5,7 +5,8 @@ export function datePrecision(value: unknown, declared?: unknown): PartialDatePr
   if (typeof value !== "string" || !value) return "unknown";
   // A corrected year must not inherit the precision of the previous full date.
   if (declared === "year" && /^\d{4}$/.test(value)) return "year";
-  if (declared === "month" && /^\d{4}-\d{2}-\d{2}$/.test(value) && value.slice(8, 10) !== "01") return "day";
+  if (declared === "month" && /^\d{4}-\d{2}-\d{2}$/.test(value) && value.slice(8, 10) !== "01")
+    return "day";
   if (declared === "month" && /^\d{4}-\d{2}/.test(value)) return "month";
   if (declared === "day" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return "day";
   if (declared === "unknown" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return "unknown";
@@ -52,7 +53,11 @@ export function toApiPartialDate(value: string): string | null {
   return value;
 }
 
-export function formatProfessionalDate(value: unknown, precision: unknown, locale: string): string | null {
+export function formatProfessionalDate(
+  value: unknown,
+  precision: unknown,
+  locale: string,
+): string | null {
   if (typeof value !== "string" || !value) return null;
   if (!validPartialDate(value)) return value;
   const declared = datePrecision(value, precision);
@@ -73,7 +78,12 @@ export function formatProfessionalDate(value: unknown, precision: unknown, local
 /** Reject only impossible ranges; partial years/months may overlap. */
 export function validProfessionalRange(start: string, end: string): boolean {
   if (!start || !end || !validPartialDate(start) || !validPartialDate(end)) return true;
-  const min = (v: string) => Number(v.slice(0, 4) + (v.length >= 7 ? v.slice(5, 7) : "01") + (v.length === 10 ? v.slice(8, 10) : "01"));
+  const min = (v: string) =>
+    Number(
+      v.slice(0, 4) +
+        (v.length >= 7 ? v.slice(5, 7) : "01") +
+        (v.length === 10 ? v.slice(8, 10) : "01"),
+    );
   const max = (v: string) => {
     const y = Number(v.slice(0, 4));
     const m = v.length >= 7 ? Number(v.slice(5, 7)) : 12;
