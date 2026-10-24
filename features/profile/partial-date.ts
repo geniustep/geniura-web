@@ -1,0 +1,69 @@
+/** Calendar dates with explicit precision: never infer a missing month or day. */
+export type PartialDatePrecision = "unknown" | "year" | "month" | "day";
+
+export function datePrecision(value: unknown, declared?: unknown): PartialDatePrecision {
+  if (declared === "year" || declared === "month" || declared === "day") return declared;
+  if (declared === "unknown" && typeof value === "string" && value.length > 0) return "unknown";
+  if (typeof value !== "string" || !value) return "unknown";
+  if (/^\d{4}$/.test(value)) return "year";
+  if (/^\d{4}-\d{2}$/.test(value)) return "month";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return "day";
+  return "unknown";
+}
+
+export function dateInputValue(value: unknown, declared?: unknown): string {
+  if (typeof value !== "string" || !value) return "";
+  if (datePrecision(value, declared) === "month") return value.slice(0, 7);
+  if (datePrecision(value, declared) === "year") return value.slice(0, 4);
+  return value;
+}
+
+export function validPartialDate(value: string): boolean {
+  if (!value) return true;
+  const match = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(value);
+  if (!match) return false;
+  const year = Number(match[1]);
+  const month = match[2] ? Number(match[2]) : 1;
+  const day = match[3] ? Number(match[3]) : 1;
+  if (year < 1000 || year > 9999 || month < 1 || month > 12 || day < 1) return false;
+  const maxDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  return day <= maxDay;
+}
+
+export function toApiPartialDate(value: string): string | null {
+  if (!value) return null;
+  if (!validPartialDate(value)) throw new Error("Invalid professional date");
+  if (/^\d{4}-\d{2}$/.test(value)) return value + "-01";
+  return value;
+}
+
+export function formatProfessionalDate(value: unknown, precision: unknown, locale: string): string | null {
+  if (typeof value !== "string" || !value) return null;
+  if (!validPartialDate(value)) return value;
+  const declared = datePrecision(value, precision);
+  const year = Number(value.slice(0, 4));
+  if (declared === "year") return value.slice(0, 4);
+  if (declared === "unknown") return value; // Legacy full ISO, with unverified precision.
+  const month = Number(value.slice(5, 7));
+  const day = declared === "day" ? Number(value.slice(8, 10)) : 1;
+  const d = new Date(Date.UTC(year, month - 1, day));
+  return new Intl.DateTimeFormat(locale, {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "long",
+    ...(declared === "day" ? { day: "numeric" } : {}),
+  }).format(d);
+}
+
+/** Reject only impossible ranges; partial years/months may overlap. */
+export function validProfessionalRange(start: string, end: string): boolean {
+  if (!start || !end || !validPartialDate(start) || !validPartialDate(end)) return true;
+  const min = (v: string) => Number(v.slice(0, 4) + (v.length >= 7 ? v.slice(5, 7) : "01") + (v.length === 10 ? v.slice(8, 10) : "01"));
+  const max = (v: string) => {
+    const y = Number(v.slice(0, 4));
+    const m = v.length >= 7 ? Number(v.slice(5, 7)) : 12;
+    const d = v.length === 10 ? Number(v.slice(8, 10)) : new Date(Date.UTC(y, m, 0)).getUTCDate();
+    return y * 10000 + m * 100 + d;
+  };
+  return min(start) <= max(end);
+}
