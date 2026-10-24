@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  canPreserveSelectedDay,
   dateInputValue,
   datePrecision,
   formatProfessionalDate,
@@ -30,6 +31,12 @@ describe("professional dates with explicit precision", () => {
     expect(formatProfessionalDate("2019-03-15", "day", "en")).toBe("March 15, 2019");
     expect(formatProfessionalDate("2019-03-15", "unknown", "en")).toBe("2019-03-15");
     expect(datePrecision("2016", "month")).toBe("year");
+  });
+
+  it("does not claim first-day precision before backend round-trip support", () => {
+    expect(canPreserveSelectedDay("2019-03-01", "day")).toBe(false);
+    expect(canPreserveSelectedDay("2019-03-15", "day")).toBe(true);
+    expect(canPreserveSelectedDay("2019-03-01", "month")).toBe(true);
   });
 
   it("validates true calendar days including leap years", () => {
