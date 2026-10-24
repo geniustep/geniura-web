@@ -33,8 +33,8 @@ export default async function globalSetup() {
   fs.writeFileSync(RUN_ENV_FILE, JSON.stringify({ prefix }), "utf8");
   process.env.GENIURA_USER_PREFIX = prefix;
   if (process.env.GENIURA_SKIP_SEED === "1") {
-    console.warn("GENIURA_SKIP_SEED=1: skipping synthetic user seed (cache not cleared).");
+    console.warn("GENIURA_SKIP_SEED=1: skipping synthetic user seed.");
     return;
   }
-  runSeedScript("--clear-throttle --count 16", "inherit");
+  runSeedScript(16, "inherit");
 }
