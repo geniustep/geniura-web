@@ -64,7 +64,7 @@ async function pageWithCarriedSession(browser: Browser, locale: UiLocale) {
 
 async function loginAsCandidate(page: Page, locale: UiLocale, email: string) {
   const L = UI[locale];
-  const profileUrl = new RegExp(`\\\\/${locale}\\\\/account\\\\/profile\\\\/resumes`);
+  const profileUrl = new RegExp(`/${locale}/account/profile/resumes`);
 
   await page.context().clearCookies();
   await page.goto(`/${locale}/login?next=%2Faccount%2Fprofile%2Fresumes`);
