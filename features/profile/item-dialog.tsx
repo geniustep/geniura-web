@@ -17,7 +17,7 @@ import { type Vocabulary } from "@/lib/jobs/labels";
 
 import { cleanPayload, ifMatch, isConflict, useRefreshProfile } from "./api";
 import { PartialDateField } from "./partial-date-field";
-import { canPreserveSelectedDay, datePrecision, toApiPartialDate, validPartialDate, validProfessionalRange, type PartialDatePrecision } from "./partial-date";
+import { canPreserveSelectedDay, datePrecision, toApiPartialDate, validDateForPrecision, validProfessionalRange, type PartialDatePrecision } from "./partial-date";
 import { useLanguageName } from "./labels";
 import {
   formValues,
@@ -41,6 +41,7 @@ function FieldControl({
   describedBy,
   vocabulary,
   datePrecision,
+  selectedPrecision,
   onPrecisionChange,
 }: {
   field: FieldDef;
@@ -52,6 +53,7 @@ function FieldControl({
   describedBy?: string;
   vocabulary: Vocabulary;
   datePrecision?: unknown;
+  selectedPrecision?: PartialDatePrecision;
   onPrecisionChange?: (precision: PartialDatePrecision) => void;
 }) {
   const t = useTranslations("Profile");
@@ -79,7 +81,8 @@ function FieldControl({
           id={id}
           value={String(value)}
           precision={datePrecision}
-          onPrecisionChange={onPrecisionChange}
+          selectedPrecision={selectedPrecision}
+          onPrecisionChange={(value) => onPrecisionChange?.(value)}
           onChange={onChange}
           disabled={disabled}
           invalid={invalid}
@@ -211,16 +214,25 @@ export function ItemDialog({
       return;
     }
     const partialFields = section.fields.filter((field) => field.kind === "partial-date");
-    const invalidDates = partialFields.filter((field) => !validPartialDate(String(values[field.name] ?? "")));
+    const invalidDates = partialFields.filter((field) => {
+      if (kind === "experiences" && field.name === "end_date" && values.is_current) return false;
+      const value = String(values[field.name] ?? "");
+      const precision = chosenPrecision[field.name] ??
+        datePrecision(value, item?.[field.name + "_precision"]);
+      return !validDateForPrecision(value, precision);
+    });
     if (invalidDates.length) {
       setErrors(Object.fromEntries(invalidDates.map((field) => [field.name, t("partialDate.invalid")])));
       setPending(false);
       return;
     }
     const unsupportedFirstDays = partialFields.filter((field) => {
+      if (kind === "experiences" && field.name === "end_date" && values.is_current) return false;
       const value = String(values[field.name] ?? "");
       const precision = chosenPrecision[field.name] ?? datePrecision(value, item?.[field.name + "_precision"]);
-      return !canPreserveSelectedDay(value, precision);
+      const unchanged = item && String(item[field.name] ?? "") === value &&
+        (chosenPrecision[field.name] === undefined || chosenPrecision[field.name] === item[field.name + "_precision"]);
+      return !unchanged && !canPreserveSelectedDay(value, precision);
     });
     if (unsupportedFirstDays.length) {
       setErrors(Object.fromEntries(unsupportedFirstDays.map((field) =>
@@ -340,6 +352,7 @@ export function ItemDialog({
                 variant="outline"
                 onClick={() => {
                   setValues(formValues(kind, latest));
+                  setChosenPrecision({});
                   setLatest(null);
                 }}
               >
@@ -377,6 +390,7 @@ export function ItemDialog({
                   describedBy={errorId}
                   vocabulary={vocabulary}
                   datePrecision={item?.[field.name + "_precision"]}
+                  selectedPrecision={chosenPrecision[field.name]}
                   onPrecisionChange={(precision) => setChosenPrecision((old) => ({ ...old, [field.name]: precision }))}
                 />
               );
