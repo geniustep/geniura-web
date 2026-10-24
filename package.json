@@ -23,7 +23,7 @@
     "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm check:css && pnpm check:messages && pnpm test",
     "api:contract": "node scripts/contract/build-web-contract.mjs",
     "api:generate": "orval --config orval.config.ts",
-    "test:integration": "playwright test --config playwright.integration.config.ts"
+    "test:integration": "playwright test --config playwright.integration.config.ts tests/integration/cv-partial-dates.spec.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",
