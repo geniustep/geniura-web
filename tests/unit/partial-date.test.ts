@@ -73,9 +73,14 @@ describe("professional dates with explicit precision", () => {
   it("supports nullable dates and only targets professional fields", () => {
     expect(toApiPartialDate("")).toBe(null);
     for (const kind of ["experiences", "educations"] as const) {
-      expect(SECTIONS[kind].fields.filter((field) => field.name.endsWith("_date"))
-        .every((field) => field.kind === "partial-date")).toBe(true);
+      expect(
+        SECTIONS[kind].fields
+          .filter((field) => field.name.endsWith("_date"))
+          .every((field) => field.kind === "partial-date"),
+      ).toBe(true);
     }
-    expect(SECTIONS.certifications.fields.find((field) => field.name === "issued_at")?.kind).toBe("date");
+    expect(SECTIONS.certifications.fields.find((field) => field.name === "issued_at")?.kind).toBe(
+      "date",
+    );
   });
 });
