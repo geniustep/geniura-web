@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckIcon, CopyIcon, PencilIcon, Undo2Icon, XIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -20,6 +20,17 @@ import { Link, useRouter } from "@/lib/i18n/navigation";
 import type { Vocabulary } from "@/lib/jobs/labels";
 
 import { useRefreshProfile } from "./api";
+import { groupExtractionItems, type ReviewFilter } from "./extraction-review-groups";
+import { PartialDateField } from "./partial-date-field";
+import {
+  canPreserveSelectedDay,
+  datePrecision,
+  formatProfessionalDate,
+  toApiPartialDate,
+  validDateForPrecision,
+  validProfessionalRange,
+  type PartialDatePrecision,
+} from "./partial-date";
 import { useLanguageName, useVocabularyLabel } from "./labels";
 
 type Decision = { action: ActionEnum; corrected?: Record<string, string> };
@@ -34,11 +45,13 @@ const CORRECTABLE: Record<string, string[]> = {
 
 function usePayloadText(vocabulary: Vocabulary) {
   const t = useTranslations("Profile");
+  const locale = useLocale();
   const label = useVocabularyLabel(vocabulary);
   const languageName = useLanguageName();
   return (item: ExtractedItem, override?: Record<string, string>) => {
     const p = { ...(item.payload as Record<string, unknown>), ...override };
     const s = (k: string) => (p[k] ? String(p[k]) : "");
+    const date = (k: string) => formatProfessionalDate(p[k], p[k + "_precision"], locale) ?? "";
     switch (item.kind) {
       case "skill":
         return label("skills", s("skill_id")) ?? s("label") ?? s("code");
@@ -57,14 +70,14 @@ function usePayloadText(vocabulary: Vocabulary) {
         return [
           s("title"),
           s("employer_name"),
-          [s("start_date"), s("is_current") === "true" ? t("item.present") : s("end_date")]
+          [date("start_date"), s("is_current") === "true" ? t("item.present") : date("end_date")]
             .filter(Boolean)
             .join(" – "),
         ]
           .filter(Boolean)
           .join(" · ");
       case "education":
-        return [s("degree"), s("institution"), s("end_date")].filter(Boolean).join(" · ");
+        return [s("degree"), s("institution"), date("end_date")].filter(Boolean).join(" · ");
       case "certification":
         return [s("name"), s("issuer")].filter(Boolean).join(" · ");
       default:
@@ -86,8 +99,11 @@ function ItemCard({
 }) {
   const t = useTranslations("Profile.review");
   const tFields = useTranslations("Profile.fields");
+  const tDate = useTranslations("Profile.partialDate");
   const text = usePayloadText(vocabulary);
   const [editing, setEditing] = useState(false);
+  const [dateError, setDateError] = useState<string | null>(null);
+  const [chosenPrecision, setChosenPrecision] = useState<Record<string, PartialDatePrecision>>({});
   const fields = CORRECTABLE[item.kind] ?? [];
   const payload = item.payload as Record<string, unknown>;
   const [draft, setDraft] = useState<Record<string, string>>(() =>
@@ -97,34 +113,44 @@ function ItemCard({
   const reviewed = item.review_status !== "pending";
 
   return (
-    <li className={`grid gap-3 rounded-2xl border bg-card p-4 ${decision ? "opacity-90" : ""}`}>
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-xs font-semibold text-muted-foreground">
-          {t(`kinds.${item.kind}`)}
-        </span>
-        {repeated ? (
-          <Badge variant="warning">
-            <CopyIcon aria-hidden="true" />
-            {t("alreadyInProfile")}
-          </Badge>
-        ) : null}
+    <li
+      className={`grid gap-3 border-b border-border/60 bg-card p-4 last:border-b-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.35fr)_minmax(0,1.5fr)] lg:items-start ${decision ? "bg-muted/30" : ""}`}
+    >
+      <div className="grid min-w-0 gap-2">
+        <p className="font-semibold break-words">
+          <bdi dir="auto">{text(item, decision?.corrected)}</bdi>
+        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          {repeated ? (
+            <Badge variant="warning">
+              <CopyIcon aria-hidden="true" />
+              {t("alreadyInProfile")}
+            </Badge>
+          ) : null}
+          {Number(item.confidence) < 0.6 ? (
+            <Badge variant="warning">{t("table.lowConfidence")}</Badge>
+          ) : null}
+        </div>
       </div>
-      <p className="font-semibold">
-        <bdi dir="auto">{text(item, decision?.corrected)}</bdi>
-      </p>
-      {item.evidence_snippet ? (
-        <blockquote
-          className="rounded-xl bg-muted px-3 py-2 text-sm text-subtle-foreground"
-          dir="auto"
-        >
-          «{item.evidence_snippet}»
-        </blockquote>
-      ) : null}
+      <div className="min-w-0">
+        {item.evidence_snippet ? (
+          <blockquote
+            className="rounded-xl bg-muted px-3 py-2 text-sm break-words text-subtle-foreground"
+            dir="auto"
+          >
+            «{item.evidence_snippet}»
+          </blockquote>
+        ) : (
+          <span className="text-sm text-muted-foreground">—</span>
+        )}
+      </div>
 
       {reviewed ? (
-        <p className="text-sm text-muted-foreground">{t(`reviewed.${item.review_status}`)}</p>
+        <p className="text-sm text-muted-foreground lg:text-end">
+          {t(`reviewed.${item.review_status}`)}
+        </p>
       ) : decision ? (
-        <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2 lg:justify-end">
           <span className="text-sm font-medium text-success">
             {t(
               `decided.${decision.action}${decision.corrected ? "Corrected" : ""}` as "decided.confirm",
@@ -137,25 +163,96 @@ function ItemCard({
         </div>
       ) : editing ? (
         <form
-          className="grid gap-3 sm:grid-cols-2"
+          className="grid gap-3 rounded-xl bg-muted/40 p-4 sm:grid-cols-2 lg:col-span-3"
           onSubmit={(e) => {
             e.preventDefault();
-            onDecide({ action: repeated ? "update_existing" : "correct", corrected: draft });
+            const bad = fields.filter(
+              (field) =>
+                field.endsWith("_date") &&
+                !validDateForPrecision(
+                  draft[field] ?? "",
+                  chosenPrecision[field] ??
+                    datePrecision(draft[field], payload[field + "_precision"]),
+                ),
+            );
+            if (bad.length) {
+              setDateError(tDate("invalid"));
+              return;
+            }
+            const unsupportedFirstDay = fields.some((field) => {
+              if (!field.endsWith("_date")) return false;
+              const precision =
+                chosenPrecision[field] ??
+                datePrecision(draft[field], payload[field + "_precision"]);
+              const unchanged =
+                String(payload[field] ?? "") === (draft[field] ?? "") &&
+                (chosenPrecision[field] === undefined ||
+                  chosenPrecision[field] === payload[field + "_precision"]);
+              return !unchanged && !canPreserveSelectedDay(draft[field] ?? "", precision);
+            });
+            if (unsupportedFirstDay) {
+              setDateError(tDate("firstDayUnsupported"));
+              return;
+            }
+            if (!validProfessionalRange(draft.start_date ?? "", draft.end_date ?? "")) {
+              setDateError(tDate("rangeInvalid"));
+              return;
+            }
+            setDateError(null);
+            // Only transmit user edits: an unchanged date must retain its original precision.
+            const corrected = Object.fromEntries(
+              Object.entries(draft)
+                .filter(
+                  ([field, value]) =>
+                    String(payload[field] ?? "") !== value ||
+                    (chosenPrecision[field] !== undefined &&
+                      chosenPrecision[field] !== payload[field + "_precision"]),
+                )
+                .map(([field, value]) => [
+                  field,
+                  field.endsWith("_date") ? (toApiPartialDate(value) ?? "") : value,
+                ]),
+            );
+            onDecide({ action: repeated ? "update_existing" : "correct", corrected });
             setEditing(false);
           }}
         >
           {fields.map((field) => (
             <div key={field} className="grid gap-1.5">
               <Label htmlFor={`${item.id}-${field}`}>{tFields(field as "title")}</Label>
-              <Input
-                id={`${item.id}-${field}`}
-                dir={field.endsWith("_date") || field.endsWith("_at") ? "ltr" : "auto"}
-                type={field.endsWith("_date") || field.endsWith("_at") ? "date" : "text"}
-                value={draft[field] ?? ""}
-                onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
-              />
+              {field.endsWith("_date") &&
+              (item.kind === "experience" || item.kind === "education") ? (
+                <PartialDateField
+                  id={item.id + "-" + field}
+                  value={draft[field] ?? ""}
+                  precision={payload[field + "_precision"]}
+                  selectedPrecision={chosenPrecision[field]}
+                  onPrecisionChange={(next) =>
+                    setChosenPrecision((old) => ({ ...old, [field]: next }))
+                  }
+                  disabled={false}
+                  invalid={Boolean(dateError)}
+                  onChange={(value) => {
+                    setDateError(null);
+                    setDraft((d) => ({ ...d, [field]: value }));
+                  }}
+                />
+              ) : (
+                <Input
+                  id={item.id + "-" + field}
+                  dir={field.endsWith("_date") || field.endsWith("_at") ? "ltr" : "auto"}
+                  type={field.endsWith("_date") || field.endsWith("_at") ? "date" : "text"}
+                  value={draft[field] ?? ""}
+                  onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
+                />
+              )}
             </div>
           ))}
+          {dateError ? (
+            <p role="alert" className="text-sm text-destructive sm:col-span-2">
+              {dateError}
+            </p>
+          ) : null}
           <div className="flex gap-2 sm:col-span-2">
             <Button type="submit" size="sm">
               {t("keepCorrection")}
@@ -166,7 +263,7 @@ function ItemCard({
           </div>
         </form>
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 lg:justify-end">
           {repeated ? (
             <>
               <Button
@@ -225,8 +322,13 @@ export function ExtractionReview({
   const [decisions, setDecisions] = useState<Record<string, Decision>>({});
   const [failure, setFailure] = useState<unknown>(null);
   const [pending, setPending] = useState(false);
+  const [filter, setFilter] = useState<ReviewFilter>("all");
 
   const items = useMemo(() => extraction.data?.items ?? [], [extraction.data]);
+  const groups = useMemo(
+    () => groupExtractionItems(items, new Set(Object.keys(decisions)), filter),
+    [items, decisions, filter],
+  );
   const open = items.filter((i) => i.review_status === "pending");
   const decided = Object.keys(decisions).length;
 
@@ -281,24 +383,66 @@ export function ExtractionReview({
       {items.length === 0 ? (
         <p className="rounded-2xl bg-card p-6 text-muted-foreground shadow-card">{t("nothing")}</p>
       ) : null}
-      <ul className="grid gap-3">
-        {items.map((item) => (
-          <ItemCard
-            key={item.id}
-            item={item}
-            decision={decisions[item.id]}
-            vocabulary={vocabulary}
-            onDecide={(decision) =>
-              setDecisions((current) => {
-                const next = { ...current };
-                if (decision) next[item.id] = decision;
-                else delete next[item.id];
-                return next;
-              })
-            }
-          />
-        ))}
-      </ul>
+      {items.length ? (
+        <div className="grid gap-4">
+          <div className="flex flex-wrap gap-2" role="group" aria-label={t("table.filter")}>
+            {(["all", "needsReview", "selected", "reviewed"] as const).map((option) => (
+              <Button
+                key={option}
+                type="button"
+                size="sm"
+                variant={filter === option ? "secondary" : "outline"}
+                aria-pressed={filter === option}
+                onClick={() => setFilter(option)}
+              >
+                {t(`table.filters.${option}`)}
+              </Button>
+            ))}
+          </div>
+          {groups.length === 0 ? (
+            <p className="rounded-xl bg-card p-5 text-sm text-muted-foreground">
+              {t("table.emptyFilter")}
+            </p>
+          ) : null}
+          {groups.map((group) => (
+            <section
+              key={group.kind}
+              aria-labelledby={`cv-review-group-${group.kind}`}
+              className="overflow-hidden rounded-2xl border bg-card shadow-card"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-muted/40 px-4 py-3">
+                <h2 id={`cv-review-group-${group.kind}`} className="font-semibold">
+                  {t(`kinds.${group.kind}`)}
+                </h2>
+                <Badge variant="neutral">{t("table.count", { count: group.items.length })}</Badge>
+              </div>
+              <div className="hidden grid-cols-[minmax(0,2fr)_minmax(0,1.35fr)_minmax(0,1.5fr)] border-b border-border/60 px-4 py-2 text-xs font-medium text-muted-foreground lg:grid">
+                <span>{t("table.value")}</span>
+                <span>{t("table.evidence")}</span>
+                <span className="text-end">{t("table.actions")}</span>
+              </div>
+              <ul>
+                {group.items.map((item) => (
+                  <ItemCard
+                    key={item.id}
+                    item={item}
+                    decision={decisions[item.id]}
+                    vocabulary={vocabulary}
+                    onDecide={(decision) =>
+                      setDecisions((current) => {
+                        const next = { ...current };
+                        if (decision) next[item.id] = decision;
+                        else delete next[item.id];
+                        return next;
+                      })
+                    }
+                  />
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      ) : null}
       <FormAlert error={failure} />
       <div className="sticky bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-primary p-4 text-primary-foreground shadow-float">
         <span className="text-sm">{t("partialNote")}</span>

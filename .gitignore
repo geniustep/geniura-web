@@ -11,6 +11,8 @@ coverage/
 playwright-report/
 test-results/
 blob-report/
+tests/integration/cv-run-env.json
+tests/integration/.cv-integration-session.json
 
 # env (never commit secrets — this repository is public)
 .env

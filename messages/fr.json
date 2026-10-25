@@ -330,6 +330,8 @@
       "rate_limited": "Trop de tentatives. Patientez avant de réessayer.",
       "validation_error": "Vérifiez les champs signalés.",
       "network_error": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "feature_disabled": "Cette fonctionnalité est actuellement indisponible.",
+      "service_unavailable": "Le service est temporairement indisponible. Réessayez plus tard.",
       "unknown_error": "Une erreur inattendue s’est produite. Réessayez.",
       "precondition_failed": "Modifié depuis un autre appareil. Revoyez la dernière version puis enregistrez.",
       "share_request_expired": "Le délai de cette demande est écoulé.",
@@ -646,6 +648,18 @@
     "partnersBody": "Nous sélectionnons des partenaires d’évaluation et de formation liés aux besoins du marché. Aucun partenaire n’accède à la base des candidats."
   },
   "Profile": {
+    "partialDate": {
+      "value": "Valeur de la date",
+      "precision": "Précision de la date",
+      "unknown": "Non précisée",
+      "year": "Année uniquement",
+      "month": "Mois et année",
+      "day": "Jour, mois et année",
+      "notProvided": "Date non précisée",
+      "invalid": "Saisissez une date valide à la précision choisie.",
+      "rangeInvalid": "La date de fin précède la date de début.",
+      "firstDayUnsupported": "Le premier jour du mois ne peut pas encore être conservé comme jour exact. Choisissez une précision au mois ou corrigez la date."
+    },
     "pages": {
       "eyebrow": "Espace candidat",
       "profile": {
@@ -972,9 +986,24 @@
       "versionsTitle": "Vos versions",
       "emptyTitle": "Pas encore de CV",
       "emptyLine": "Le CV est facultatif : vous pouvez candidater avec votre profil.",
-      "leaveNote": "Vous pouvez quitter la page ; nous vous préviendrons quand les informations seront prêtes."
+      "leaveNote": "Traitement de votre CV en cours. La page de révision s’ouvrira automatiquement à la fin de l’extraction si vous restez ici."
     },
     "review": {
+      "table": {
+        "filter": "Filtrer les informations extraites",
+        "filters": {
+          "all": "Toutes les informations",
+          "needsReview": "À examiner",
+          "selected": "Décisions non enregistrées",
+          "reviewed": "Déjà examinées"
+        },
+        "value": "Informations extraites",
+        "evidence": "Extrait du CV",
+        "actions": "Votre décision",
+        "lowConfidence": "À vérifier",
+        "emptyFilter": "Aucune information dans cette catégorie.",
+        "count": "{count} élément(s)"
+      },
       "kinds": {
         "skill": "Compétence",
         "language": "Langue",

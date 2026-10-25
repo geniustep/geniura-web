@@ -330,6 +330,8 @@
       "rate_limited": "Too many attempts. Please wait before trying again.",
       "validation_error": "Please check the highlighted fields.",
       "network_error": "Cannot reach the server. Check your connection and try again.",
+      "feature_disabled": "This feature is not available right now.",
+      "service_unavailable": "The service is temporarily unavailable. Please try again later.",
       "unknown_error": "Something went wrong. Please try again.",
       "precondition_failed": "Changed on another device. Review the latest version, then save.",
       "share_request_expired": "This request has expired.",
@@ -646,6 +648,18 @@
     "partnersBody": "We are selecting assessment and training partners linked to labour-market needs. No partner will have access to the candidate database."
   },
   "Profile": {
+    "partialDate": {
+      "value": "Date value",
+      "precision": "Date precision",
+      "unknown": "Not specified",
+      "year": "Year only",
+      "month": "Month and year",
+      "day": "Day, month and year",
+      "notProvided": "Date not provided",
+      "invalid": "Enter a valid date at the selected precision.",
+      "rangeInvalid": "The end date precedes the start date.",
+      "firstDayUnsupported": "The first day of a month cannot yet be saved as an exact day. Choose month precision or correct the date."
+    },
     "pages": {
       "eyebrow": "Job seeker space",
       "profile": {
@@ -972,9 +986,24 @@
       "versionsTitle": "Your versions",
       "emptyTitle": "No CV yet",
       "emptyLine": "A CV is optional: you can apply with your profile.",
-      "leaveNote": "You can leave this page; we will let you know when the information is ready to review."
+      "leaveNote": "Your CV is being processed. The review page will open automatically when extraction finishes if you stay here."
     },
     "review": {
+      "table": {
+        "filter": "Filter extracted information",
+        "filters": {
+          "all": "All information",
+          "needsReview": "Needs review",
+          "selected": "Unsaved decisions",
+          "reviewed": "Already reviewed"
+        },
+        "value": "Extracted information",
+        "evidence": "Supporting CV excerpt",
+        "actions": "Your decision",
+        "lowConfidence": "Needs verification",
+        "emptyFilter": "No information in this filter.",
+        "count": "{count} items"
+      },
       "kinds": {
         "skill": "Skill",
         "language": "Language",

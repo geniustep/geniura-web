@@ -30,7 +30,15 @@ import {
 export type SectionKind = "educations" | "experiences" | "skills" | "languages" | "certifications";
 
 export type FieldKind =
-  "text" | "textarea" | "date" | "select" | "checkbox" | "skill" | "language" | "years";
+  | "text"
+  | "textarea"
+  | "date"
+  | "partial-date"
+  | "select"
+  | "checkbox"
+  | "skill"
+  | "language"
+  | "years";
 
 export type FieldDef = {
   name: string;
@@ -75,8 +83,8 @@ export const SECTIONS: Record<SectionKind, { fields: FieldDef[]; nullable: strin
         enumKey: "educationLevel",
       },
       { name: "field_of_study", kind: "text", maxLength: 160 },
-      { name: "start_date", kind: "date" },
-      { name: "end_date", kind: "date" },
+      { name: "start_date", kind: "partial-date" },
+      { name: "end_date", kind: "partial-date" },
     ],
     nullable: ["start_date", "end_date"],
     api: {
@@ -90,8 +98,8 @@ export const SECTIONS: Record<SectionKind, { fields: FieldDef[]; nullable: strin
     fields: [
       { name: "title", kind: "text", required: true, maxLength: 160 },
       { name: "employer_name", kind: "text", maxLength: 160 },
-      { name: "start_date", kind: "date" },
-      { name: "end_date", kind: "date" },
+      { name: "start_date", kind: "partial-date" },
+      { name: "end_date", kind: "partial-date" },
       { name: "is_current", kind: "checkbox" },
       { name: "description", kind: "textarea", maxLength: 3000 },
     ],

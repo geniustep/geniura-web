@@ -42,6 +42,7 @@ import { Link } from "@/lib/i18n/navigation";
 import type { Vocabulary } from "@/lib/jobs/labels";
 
 import { ifMatch, isConflict, useRefreshProfile } from "./api";
+import { formatProfessionalDate } from "./partial-date";
 import { IdentityDialog } from "./identity-dialog";
 import { ItemDialog } from "./item-dialog";
 import { useLanguageName, useVocabularyLabel } from "./labels";
@@ -74,6 +75,7 @@ function useItemText(vocabulary: Vocabulary) {
   const t = useTranslations("Profile");
   const tJobs = useTranslations("Jobs");
   const format = useFormatter();
+  const locale = useLocale();
   const languageName = useLanguageName();
   const label = useVocabularyLabel(vocabulary);
 
@@ -81,9 +83,11 @@ function useItemText(vocabulary: Vocabulary) {
     typeof value === "string" && value
       ? format.dateTime(new Date(value), { year: "numeric", month: "short" })
       : null;
-  const period = (start: unknown, end: unknown, current?: boolean) => {
-    const from = year(start);
-    const to = current ? t("item.present") : year(end);
+  const period = (item: SectionItem, current?: boolean) => {
+    const from = formatProfessionalDate(item.start_date, item.start_date_precision, locale);
+    const to = current
+      ? t("item.present")
+      : formatProfessionalDate(item.end_date, item.end_date_precision, locale);
     return from || to ? [from ?? "…", to ?? "…"].join(" – ") : null;
   };
 
@@ -98,7 +102,7 @@ function useItemText(vocabulary: Vocabulary) {
           meta: [
             item.degree ? String(item.institution) : null,
             item.level ? tJobs(`educationLevel.${item.level}` as "educationLevel.none") : null,
-            period(item.start_date, item.end_date),
+            period(item),
           ],
         };
       case "experiences":
@@ -106,7 +110,7 @@ function useItemText(vocabulary: Vocabulary) {
           title: String(item.title),
           meta: [
             item.employer_name ? String(item.employer_name) : null,
-            period(item.start_date, item.end_date, Boolean(item.is_current)),
+            period(item, Boolean(item.is_current)),
           ],
         };
       case "skills":

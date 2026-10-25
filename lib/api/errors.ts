@@ -72,6 +72,8 @@ export const knownErrorCodes = [
   "rate_limited",
   "validation_error",
   "network_error",
+  "feature_disabled",
+  "service_unavailable",
   "precondition_failed",
   "share_request_expired",
   "duplicate_application",
@@ -85,7 +87,9 @@ export type KnownErrorCode = (typeof knownErrorCodes)[number];
 
 export function errorMessageKey(error: unknown): KnownErrorCode | "unknown_error" {
   if (!isApiError(error)) return "unknown_error";
-  return (knownErrorCodes as readonly string[]).includes(error.code)
-    ? (error.code as KnownErrorCode)
-    : "unknown_error";
+  if ((knownErrorCodes as readonly string[]).includes(error.code)) {
+    return error.code as KnownErrorCode;
+  }
+  // Nginx may replace Django's feature_disabled JSON with a generic 503 envelope.
+  return error.status === 503 ? "service_unavailable" : "unknown_error";
 }
