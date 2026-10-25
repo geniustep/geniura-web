@@ -414,7 +414,7 @@ export function ExtractionReview({
                 <h2 id={`cv-review-group-${group.kind}`} className="font-semibold">
                   {t(`kinds.${group.kind}`)}
                 </h2>
-                <Badge variant="secondary">{t("table.count", { count: group.items.length })}</Badge>
+                <Badge variant="neutral">{t("table.count", { count: group.items.length })}</Badge>
               </div>
               <div className="hidden grid-cols-[minmax(0,2fr)_minmax(0,1.35fr)_minmax(0,1.5fr)] border-b border-border/60 px-4 py-2 text-xs font-medium text-muted-foreground lg:grid">
                 <span>{t("table.value")}</span>
