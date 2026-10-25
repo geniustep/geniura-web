@@ -114,9 +114,7 @@ function ItemCard({
 
   return (
     <li
-      className={
-        `grid gap-3 border-b border-border/60 bg-card p-4 last:border-b-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.35fr)_minmax(0,1.5fr)] lg:items-start ${decision ? "bg-muted/30" : ""}`
-      }
+      className={`grid gap-3 border-b border-border/60 bg-card p-4 last:border-b-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.35fr)_minmax(0,1.5fr)] lg:items-start ${decision ? "bg-muted/30" : ""}`}
     >
       <div className="grid min-w-0 gap-2">
         <p className="font-semibold break-words">
@@ -137,7 +135,7 @@ function ItemCard({
       <div className="min-w-0">
         {item.evidence_snippet ? (
           <blockquote
-            className="break-words rounded-xl bg-muted px-3 py-2 text-sm text-subtle-foreground"
+            className="rounded-xl bg-muted px-3 py-2 text-sm break-words text-subtle-foreground"
             dir="auto"
           >
             «{item.evidence_snippet}»
