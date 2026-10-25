@@ -330,6 +330,8 @@
       "rate_limited": "Trop de tentatives. Patientez avant de réessayer.",
       "validation_error": "Vérifiez les champs signalés.",
       "network_error": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "feature_disabled": "Cette fonctionnalité est actuellement indisponible.",
+      "service_unavailable": "Le service est temporairement indisponible. Réessayez plus tard.",
       "unknown_error": "Une erreur inattendue s’est produite. Réessayez.",
       "precondition_failed": "Modifié depuis un autre appareil. Revoyez la dernière version puis enregistrez.",
       "share_request_expired": "Le délai de cette demande est écoulé.",

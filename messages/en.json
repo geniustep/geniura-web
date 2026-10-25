@@ -330,6 +330,8 @@
       "rate_limited": "Too many attempts. Please wait before trying again.",
       "validation_error": "Please check the highlighted fields.",
       "network_error": "Cannot reach the server. Check your connection and try again.",
+      "feature_disabled": "This feature is not available right now.",
+      "service_unavailable": "The service is temporarily unavailable. Please try again later.",
       "unknown_error": "Something went wrong. Please try again.",
       "precondition_failed": "Changed on another device. Review the latest version, then save.",
       "share_request_expired": "This request has expired.",

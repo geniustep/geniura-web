@@ -330,6 +330,8 @@
       "rate_limited": "Demasiados intentos. Espera antes de volver a intentarlo.",
       "validation_error": "Revisa los campos señalados.",
       "network_error": "No se puede conectar con el servidor. Comprueba tu conexión y vuelve a intentarlo.",
+      "feature_disabled": "Esta función no está disponible en este momento.",
+      "service_unavailable": "El servicio no está disponible temporalmente. Inténtalo de nuevo más tarde.",
       "unknown_error": "Se produjo un error inesperado. Vuelve a intentarlo.",
       "precondition_failed": "Modificado desde otro dispositivo. Revisa la versión más reciente y guarda.",
       "share_request_expired": "Esta solicitud ha caducado.",
