@@ -987,6 +987,21 @@
       "leaveNote": "Puedes salir de esta página; te avisaremos cuando la información esté lista."
     },
     "review": {
+      "table": {
+        "filter": "Filtrar datos extraídos",
+        "filters": {
+          "all": "Todos los datos",
+          "needsReview": "Pendientes de revisión",
+          "selected": "Decisiones sin guardar",
+          "reviewed": "Ya revisados"
+        },
+        "value": "Información extraída",
+        "evidence": "Extracto del CV",
+        "actions": "Tu decisión",
+        "lowConfidence": "Requiere verificación",
+        "emptyFilter": "No hay información en este filtro.",
+        "count": "{count} elementos"
+      },
       "kinds": {
         "skill": "Competencia",
         "language": "Idioma",

@@ -987,6 +987,21 @@
       "leaveNote": "Vous pouvez quitter la page ; nous vous préviendrons quand les informations seront prêtes."
     },
     "review": {
+      "table": {
+        "filter": "Filtrer les informations extraites",
+        "filters": {
+          "all": "Toutes les informations",
+          "needsReview": "À examiner",
+          "selected": "Décisions non enregistrées",
+          "reviewed": "Déjà examinées"
+        },
+        "value": "Informations extraites",
+        "evidence": "Extrait du CV",
+        "actions": "Votre décision",
+        "lowConfidence": "À vérifier",
+        "emptyFilter": "Aucune information dans cette catégorie.",
+        "count": "{count} élément(s)"
+      },
       "kinds": {
         "skill": "Compétence",
         "language": "Langue",

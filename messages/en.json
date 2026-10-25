@@ -987,6 +987,21 @@
       "leaveNote": "You can leave this page; we will let you know when the information is ready to review."
     },
     "review": {
+      "table": {
+        "filter": "Filter extracted information",
+        "filters": {
+          "all": "All information",
+          "needsReview": "Needs review",
+          "selected": "Unsaved decisions",
+          "reviewed": "Already reviewed"
+        },
+        "value": "Extracted information",
+        "evidence": "Supporting CV excerpt",
+        "actions": "Your decision",
+        "lowConfidence": "Needs verification",
+        "emptyFilter": "No information in this filter.",
+        "count": "{count} items"
+      },
       "kinds": {
         "skill": "Skill",
         "language": "Language",
