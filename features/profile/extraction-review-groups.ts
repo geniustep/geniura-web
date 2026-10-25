@@ -38,9 +38,11 @@ export function groupExtractionItems(
     .map(([kind, group]) => ({
       kind,
       items: [...group].sort((a, b) => {
-        const reviewOrder = Number(a.review_status !== "pending") - Number(b.review_status !== "pending");
+        const reviewOrder =
+          Number(a.review_status !== "pending") - Number(b.review_status !== "pending");
         if (reviewOrder) return reviewOrder;
-        const duplicateOrder = Number(Boolean(b.existing_object)) - Number(Boolean(a.existing_object));
+        const duplicateOrder =
+          Number(Boolean(b.existing_object)) - Number(Boolean(a.existing_object));
         if (duplicateOrder) return duplicateOrder;
         return Number(a.confidence) - Number(b.confidence);
       }),
