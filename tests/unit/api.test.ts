@@ -132,6 +132,19 @@ describe("API errors", () => {
     expect(errorMessageKey(new Error("boom"))).toBe("unknown_error");
   });
 
+  it("explains a disabled CV feature and masked upstream 503 without leaking server text", () => {
+    expect(errorMessageKey(new ApiError(503, { code: "feature_disabled" }))).toBe(
+      "feature_disabled",
+    );
+    expect(errorMessageKey(new ApiError(503, { code: "unknown_error" }))).toBe(
+      "service_unavailable",
+    );
+    expect(errorMessageKey(new ApiError(503, undefined))).toBe("service_unavailable");
+    expect(errorMessageKey(new ApiError(503, { code: "not_authenticated" }))).toBe(
+      "not_authenticated",
+    );
+  });
+
   it("reads both shapes of Django field errors", () => {
     const byField = new ApiError(400, {
       code: "validation_error",
