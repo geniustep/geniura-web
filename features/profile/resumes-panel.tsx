@@ -12,7 +12,7 @@ import {
   UploadIcon,
 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
 import { EmptyState } from "@/components/patterns/empty-state";
@@ -33,9 +33,10 @@ import {
   useCandidatesMeResumesList,
 } from "@/lib/api/generated/endpoints/resumes/resumes";
 import type { Resume } from "@/lib/api/generated/model";
-import { Link } from "@/lib/i18n/navigation";
+import { Link, useRouter } from "@/lib/i18n/navigation";
 
 import { useRefreshProfile } from "./api";
+import { freshlyUploadedReviewState } from "./resumes-navigation";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const WORKING = new Set(["pending_upload", "quarantined", "scanning", "ready", "processing"]);
@@ -87,7 +88,7 @@ function StatusLine({ resume }: { resume: Resume }) {
   }
 }
 
-function UploadForm({ onUploaded }: { onUploaded: () => Promise<unknown> }) {
+function UploadForm({ onUploaded }: { onUploaded: (resumeId: string) => Promise<unknown> }) {
   const t = useTranslations("Profile.resumes");
   const id = useId();
   const input = useRef<HTMLInputElement>(null);
@@ -130,7 +131,7 @@ function UploadForm({ onUploaded }: { onUploaded: () => Promise<unknown> }) {
       setFile(null);
       setName("");
       if (input.current) input.current.value = "";
-      await onUploaded();
+      await onUploaded(intent.resume.id);
     } catch (error) {
       setFailure(error);
     } finally {
@@ -349,6 +350,9 @@ function ResumeRow({ resume, refresh }: { resume: Resume; refresh: () => Promise
 export function ResumesPanel() {
   const t = useTranslations("Profile.resumes");
   const refreshAll = useRefreshProfile();
+  const router = useRouter();
+  // Automatic navigation only applies to the CV uploaded during this page visit.
+  const justUploaded = useRef<string | null>(null);
   const resumes = useCandidatesMeResumesList({
     query: {
       // Keep checking while a file is being scanned or read; stop as soon as nothing is in progress.
@@ -358,9 +362,25 @@ export function ResumesPanel() {
   });
   const rows = (resumes.data ?? []).filter((r) => r.status !== "deleted");
 
+  useEffect(() => {
+    const id = justUploaded.current;
+    const state = freshlyUploadedReviewState(resumes.data, id);
+    if (state === "review" && id) {
+      justUploaded.current = null;
+      router.push(`/account/profile/resumes/${id}/review`);
+    } else if (state === "terminal") {
+      justUploaded.current = null;
+    }
+  }, [resumes.data, router]);
+
   return (
     <div className="grid gap-6">
-      <UploadForm onUploaded={refreshAll} />
+      <UploadForm
+        onUploaded={(resumeId) => {
+          justUploaded.current = resumeId;
+          return refreshAll();
+        }}
+      />
       <section
         aria-labelledby="versions"
         className="grid gap-2 rounded-2xl bg-card p-6 shadow-card"

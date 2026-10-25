@@ -984,7 +984,7 @@
       "versionsTitle": "Vos versions",
       "emptyTitle": "Pas encore de CV",
       "emptyLine": "Le CV est facultatif : vous pouvez candidater avec votre profil.",
-      "leaveNote": "Vous pouvez quitter la page ; nous vous préviendrons quand les informations seront prêtes."
+      "leaveNote": "Traitement de votre CV en cours. La page de révision s’ouvrira automatiquement à la fin de l’extraction si vous restez ici."
     },
     "review": {
       "table": {

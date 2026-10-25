@@ -984,7 +984,7 @@
       "versionsTitle": "Tus versiones",
       "emptyTitle": "Aún sin CV",
       "emptyLine": "El CV es opcional: puedes postularte con tu perfil.",
-      "leaveNote": "Puedes salir de esta página; te avisaremos cuando la información esté lista."
+      "leaveNote": "Tu CV se está procesando. La página de revisión se abrirá automáticamente al terminar la extracción si sigues aquí."
     },
     "review": {
       "table": {

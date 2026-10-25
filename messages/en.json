@@ -984,7 +984,7 @@
       "versionsTitle": "Your versions",
       "emptyTitle": "No CV yet",
       "emptyLine": "A CV is optional: you can apply with your profile.",
-      "leaveNote": "You can leave this page; we will let you know when the information is ready to review."
+      "leaveNote": "Your CV is being processed. The review page will open automatically when extraction finishes if you stay here."
     },
     "review": {
       "table": {
