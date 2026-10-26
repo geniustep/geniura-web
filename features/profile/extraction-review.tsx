@@ -22,9 +22,13 @@ import type { Vocabulary } from "@/lib/jobs/labels";
 
 import { useRefreshProfile } from "./api";
 import { useLanguageName, useVocabularyLabel } from "./labels";
-import { displayReviewPeriod, STRUCTURED_PERIODS_ENABLED } from "./periods";
+import {
+  displayReviewPeriod,
+  prepareStructuredPeriodPayload,
+  STRUCTURED_PERIODS_ENABLED,
+} from "./periods";
 
-type Decision = { action: ActionEnum; corrected?: Record<string, string | boolean> };
+type Decision = { action: ActionEnum; corrected?: Record<string, string | boolean | null> };
 
 /** Text fields a person may correct per kind (identity fields such as a skill id are not free text). */
 const CORRECTABLE: Record<string, string[]> = {
@@ -46,7 +50,7 @@ function usePayloadText(vocabulary: Vocabulary) {
   const locale = useLocale();
   const label = useVocabularyLabel(vocabulary);
   const languageName = useLanguageName();
-  return (item: ExtractedItem, override?: Record<string, string | boolean>) => {
+  return (item: ExtractedItem, override?: Record<string, string | boolean | null>) => {
     const p = { ...(item.payload as Record<string, unknown>), ...override };
     const s = (k: string) => (p[k] ? String(p[k]) : "");
     switch (item.kind) {
@@ -160,7 +164,13 @@ function ItemCard({
           className="grid gap-3 sm:grid-cols-2"
           onSubmit={(e) => {
             e.preventDefault();
-            onDecide({ action: repeated ? "update_existing" : "correct", corrected: draft });
+            onDecide({
+              action: repeated ? "update_existing" : "correct",
+              corrected: (STRUCTURED_PERIODS_ENABLED &&
+                (item.kind === "experience" || item.kind === "education")
+                  ? prepareStructuredPeriodPayload(draft)
+                  : draft) as Record<string, string | boolean | null>,
+            });
             setEditing(false);
           }}
         >
