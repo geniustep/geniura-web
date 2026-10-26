@@ -97,7 +97,7 @@ export function prepareStructuredPeriodPayload(
   // year and month, not stringified values (including on corrected CV proposals).
   for (const key of ["start_year", "start_month", "end_year", "end_month"] as const) {
     const value = next[key];
-    if (typeof value === "string" && /^\\d+$/.test(value)) {
+    if (typeof value === "string" && /^\d+$/.test(value)) {
       next[key] = Number(value);
     } else if (value === "") {
       next[key] = null;
