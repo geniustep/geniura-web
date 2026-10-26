@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f. Profile schemas (Experience/Education and their request variants) synchronized from geniura-api@943bac4b2f777131853fa66a1bdb84b483c26d22.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
@@ -519,6 +519,20 @@ export const candidatesMeEducationsListResponseResultsItemDegreeMax = 160;
 
 export const candidatesMeEducationsListResponseResultsItemFieldOfStudyMax = 160;
 
+export const candidatesMeEducationsListResponseResultsItemSourcePeriodMax = 160;
+
+export const candidatesMeEducationsListResponseResultsItemStartYearMin = 0;
+export const candidatesMeEducationsListResponseResultsItemStartYearMax = 32767;
+
+export const candidatesMeEducationsListResponseResultsItemStartMonthMin = 0;
+export const candidatesMeEducationsListResponseResultsItemStartMonthMax = 32767;
+
+export const candidatesMeEducationsListResponseResultsItemEndYearMin = 0;
+export const candidatesMeEducationsListResponseResultsItemEndYearMax = 32767;
+
+export const candidatesMeEducationsListResponseResultsItemEndMonthMin = 0;
+export const candidatesMeEducationsListResponseResultsItemEndMonthMax = 32767;
+
 export const CandidatesMeEducationsListResponse = zod.object({
   count: zod.int(),
   next: zod.url().nullish(),
@@ -527,7 +541,10 @@ export const CandidatesMeEducationsListResponse = zod.object({
     zod
       .object({
         id: zod.uuid(),
-        institution: zod.string().max(candidatesMeEducationsListResponseResultsItemInstitutionMax),
+        institution: zod
+          .string()
+          .max(candidatesMeEducationsListResponseResultsItemInstitutionMax)
+          .optional(),
         degree: zod.string().max(candidatesMeEducationsListResponseResultsItemDegreeMax).optional(),
         level: zod
           .enum([
@@ -549,6 +566,38 @@ export const CandidatesMeEducationsListResponse = zod.object({
           .string()
           .max(candidatesMeEducationsListResponseResultsItemFieldOfStudyMax)
           .optional(),
+        source_period: zod
+          .string()
+          .max(candidatesMeEducationsListResponseResultsItemSourcePeriodMax)
+          .optional(),
+        start_year: zod
+          .int()
+          .min(candidatesMeEducationsListResponseResultsItemStartYearMin)
+          .max(candidatesMeEducationsListResponseResultsItemStartYearMax)
+          .nullish(),
+        start_month: zod
+          .int()
+          .min(candidatesMeEducationsListResponseResultsItemStartMonthMin)
+          .max(candidatesMeEducationsListResponseResultsItemStartMonthMax)
+          .nullish(),
+        end_year: zod
+          .int()
+          .min(candidatesMeEducationsListResponseResultsItemEndYearMin)
+          .max(candidatesMeEducationsListResponseResultsItemEndYearMax)
+          .nullish(),
+        end_month: zod
+          .int()
+          .min(candidatesMeEducationsListResponseResultsItemEndMonthMin)
+          .max(candidatesMeEducationsListResponseResultsItemEndMonthMax)
+          .nullish(),
+        start_date_precision: zod
+          .enum(["unknown", "year", "month", "day"])
+          .optional()
+          .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+        end_date_precision: zod
+          .enum(["unknown", "year", "month", "day"])
+          .optional()
+          .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
         start_date: zod.iso.date().nullish(),
         end_date: zod.iso.date().nullish(),
         source: zod
@@ -574,9 +623,23 @@ export const candidatesMeEducationsCreateBodyDegreeMax = 160;
 
 export const candidatesMeEducationsCreateBodyFieldOfStudyMax = 160;
 
+export const candidatesMeEducationsCreateBodySourcePeriodMax = 160;
+
+export const candidatesMeEducationsCreateBodyStartYearMin = 0;
+export const candidatesMeEducationsCreateBodyStartYearMax = 32767;
+
+export const candidatesMeEducationsCreateBodyStartMonthMin = 0;
+export const candidatesMeEducationsCreateBodyStartMonthMax = 32767;
+
+export const candidatesMeEducationsCreateBodyEndYearMin = 0;
+export const candidatesMeEducationsCreateBodyEndYearMax = 32767;
+
+export const candidatesMeEducationsCreateBodyEndMonthMin = 0;
+export const candidatesMeEducationsCreateBodyEndMonthMax = 32767;
+
 export const CandidatesMeEducationsCreateBody = zod
   .object({
-    institution: zod.string().min(1).max(candidatesMeEducationsCreateBodyInstitutionMax),
+    institution: zod.string().max(candidatesMeEducationsCreateBodyInstitutionMax).optional(),
     degree: zod.string().max(candidatesMeEducationsCreateBodyDegreeMax).optional(),
     level: zod
       .enum([
@@ -595,6 +658,35 @@ export const CandidatesMeEducationsCreateBody = zod
         "* `none` - None\n* `primary` - Primary\n* `secondary` - Secondary\n* `baccalaureate` - Baccalaureate\n* `vocational` - Vocational\n* `bac_plus_2` - Bac Plus 2\n* `bac_plus_3` - Bac Plus 3\n* `bac_plus_5` - Bac Plus 5\n* `doctorate` - Doctorate",
       ),
     field_of_study: zod.string().max(candidatesMeEducationsCreateBodyFieldOfStudyMax).optional(),
+    source_period: zod.string().max(candidatesMeEducationsCreateBodySourcePeriodMax).optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeEducationsCreateBodyStartYearMin)
+      .max(candidatesMeEducationsCreateBodyStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeEducationsCreateBodyStartMonthMin)
+      .max(candidatesMeEducationsCreateBodyStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeEducationsCreateBodyEndYearMin)
+      .max(candidatesMeEducationsCreateBodyEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeEducationsCreateBodyEndMonthMin)
+      .max(candidatesMeEducationsCreateBodyEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
   })
@@ -606,10 +698,24 @@ export const candidatesMeEducationsCreateResponseDegreeMax = 160;
 
 export const candidatesMeEducationsCreateResponseFieldOfStudyMax = 160;
 
+export const candidatesMeEducationsCreateResponseSourcePeriodMax = 160;
+
+export const candidatesMeEducationsCreateResponseStartYearMin = 0;
+export const candidatesMeEducationsCreateResponseStartYearMax = 32767;
+
+export const candidatesMeEducationsCreateResponseStartMonthMin = 0;
+export const candidatesMeEducationsCreateResponseStartMonthMax = 32767;
+
+export const candidatesMeEducationsCreateResponseEndYearMin = 0;
+export const candidatesMeEducationsCreateResponseEndYearMax = 32767;
+
+export const candidatesMeEducationsCreateResponseEndMonthMin = 0;
+export const candidatesMeEducationsCreateResponseEndMonthMax = 32767;
+
 export const CandidatesMeEducationsCreateResponse = zod
   .object({
     id: zod.uuid(),
-    institution: zod.string().max(candidatesMeEducationsCreateResponseInstitutionMax),
+    institution: zod.string().max(candidatesMeEducationsCreateResponseInstitutionMax).optional(),
     degree: zod.string().max(candidatesMeEducationsCreateResponseDegreeMax).optional(),
     level: zod
       .enum([
@@ -631,6 +737,35 @@ export const CandidatesMeEducationsCreateResponse = zod
       .string()
       .max(candidatesMeEducationsCreateResponseFieldOfStudyMax)
       .optional(),
+    source_period: zod.string().max(candidatesMeEducationsCreateResponseSourcePeriodMax).optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeEducationsCreateResponseStartYearMin)
+      .max(candidatesMeEducationsCreateResponseStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeEducationsCreateResponseStartMonthMin)
+      .max(candidatesMeEducationsCreateResponseStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeEducationsCreateResponseEndYearMin)
+      .max(candidatesMeEducationsCreateResponseEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeEducationsCreateResponseEndMonthMin)
+      .max(candidatesMeEducationsCreateResponseEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
     source: zod
@@ -656,10 +791,24 @@ export const candidatesMeEducationsRetrieveResponseDegreeMax = 160;
 
 export const candidatesMeEducationsRetrieveResponseFieldOfStudyMax = 160;
 
+export const candidatesMeEducationsRetrieveResponseSourcePeriodMax = 160;
+
+export const candidatesMeEducationsRetrieveResponseStartYearMin = 0;
+export const candidatesMeEducationsRetrieveResponseStartYearMax = 32767;
+
+export const candidatesMeEducationsRetrieveResponseStartMonthMin = 0;
+export const candidatesMeEducationsRetrieveResponseStartMonthMax = 32767;
+
+export const candidatesMeEducationsRetrieveResponseEndYearMin = 0;
+export const candidatesMeEducationsRetrieveResponseEndYearMax = 32767;
+
+export const candidatesMeEducationsRetrieveResponseEndMonthMin = 0;
+export const candidatesMeEducationsRetrieveResponseEndMonthMax = 32767;
+
 export const CandidatesMeEducationsRetrieveResponse = zod
   .object({
     id: zod.uuid(),
-    institution: zod.string().max(candidatesMeEducationsRetrieveResponseInstitutionMax),
+    institution: zod.string().max(candidatesMeEducationsRetrieveResponseInstitutionMax).optional(),
     degree: zod.string().max(candidatesMeEducationsRetrieveResponseDegreeMax).optional(),
     level: zod
       .enum([
@@ -681,6 +830,38 @@ export const CandidatesMeEducationsRetrieveResponse = zod
       .string()
       .max(candidatesMeEducationsRetrieveResponseFieldOfStudyMax)
       .optional(),
+    source_period: zod
+      .string()
+      .max(candidatesMeEducationsRetrieveResponseSourcePeriodMax)
+      .optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeEducationsRetrieveResponseStartYearMin)
+      .max(candidatesMeEducationsRetrieveResponseStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeEducationsRetrieveResponseStartMonthMin)
+      .max(candidatesMeEducationsRetrieveResponseStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeEducationsRetrieveResponseEndYearMin)
+      .max(candidatesMeEducationsRetrieveResponseEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeEducationsRetrieveResponseEndMonthMin)
+      .max(candidatesMeEducationsRetrieveResponseEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
     source: zod
@@ -706,13 +887,23 @@ export const candidatesMeEducationsPartialUpdateBodyDegreeMax = 160;
 
 export const candidatesMeEducationsPartialUpdateBodyFieldOfStudyMax = 160;
 
+export const candidatesMeEducationsPartialUpdateBodySourcePeriodMax = 160;
+
+export const candidatesMeEducationsPartialUpdateBodyStartYearMin = 0;
+export const candidatesMeEducationsPartialUpdateBodyStartYearMax = 32767;
+
+export const candidatesMeEducationsPartialUpdateBodyStartMonthMin = 0;
+export const candidatesMeEducationsPartialUpdateBodyStartMonthMax = 32767;
+
+export const candidatesMeEducationsPartialUpdateBodyEndYearMin = 0;
+export const candidatesMeEducationsPartialUpdateBodyEndYearMax = 32767;
+
+export const candidatesMeEducationsPartialUpdateBodyEndMonthMin = 0;
+export const candidatesMeEducationsPartialUpdateBodyEndMonthMax = 32767;
+
 export const CandidatesMeEducationsPartialUpdateBody = zod
   .object({
-    institution: zod
-      .string()
-      .min(1)
-      .max(candidatesMeEducationsPartialUpdateBodyInstitutionMax)
-      .optional(),
+    institution: zod.string().max(candidatesMeEducationsPartialUpdateBodyInstitutionMax).optional(),
     degree: zod.string().max(candidatesMeEducationsPartialUpdateBodyDegreeMax).optional(),
     level: zod
       .enum([
@@ -734,6 +925,38 @@ export const CandidatesMeEducationsPartialUpdateBody = zod
       .string()
       .max(candidatesMeEducationsPartialUpdateBodyFieldOfStudyMax)
       .optional(),
+    source_period: zod
+      .string()
+      .max(candidatesMeEducationsPartialUpdateBodySourcePeriodMax)
+      .optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeEducationsPartialUpdateBodyStartYearMin)
+      .max(candidatesMeEducationsPartialUpdateBodyStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeEducationsPartialUpdateBodyStartMonthMin)
+      .max(candidatesMeEducationsPartialUpdateBodyStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeEducationsPartialUpdateBodyEndYearMin)
+      .max(candidatesMeEducationsPartialUpdateBodyEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeEducationsPartialUpdateBodyEndMonthMin)
+      .max(candidatesMeEducationsPartialUpdateBodyEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
   })
@@ -745,10 +968,27 @@ export const candidatesMeEducationsPartialUpdateResponseDegreeMax = 160;
 
 export const candidatesMeEducationsPartialUpdateResponseFieldOfStudyMax = 160;
 
+export const candidatesMeEducationsPartialUpdateResponseSourcePeriodMax = 160;
+
+export const candidatesMeEducationsPartialUpdateResponseStartYearMin = 0;
+export const candidatesMeEducationsPartialUpdateResponseStartYearMax = 32767;
+
+export const candidatesMeEducationsPartialUpdateResponseStartMonthMin = 0;
+export const candidatesMeEducationsPartialUpdateResponseStartMonthMax = 32767;
+
+export const candidatesMeEducationsPartialUpdateResponseEndYearMin = 0;
+export const candidatesMeEducationsPartialUpdateResponseEndYearMax = 32767;
+
+export const candidatesMeEducationsPartialUpdateResponseEndMonthMin = 0;
+export const candidatesMeEducationsPartialUpdateResponseEndMonthMax = 32767;
+
 export const CandidatesMeEducationsPartialUpdateResponse = zod
   .object({
     id: zod.uuid(),
-    institution: zod.string().max(candidatesMeEducationsPartialUpdateResponseInstitutionMax),
+    institution: zod
+      .string()
+      .max(candidatesMeEducationsPartialUpdateResponseInstitutionMax)
+      .optional(),
     degree: zod.string().max(candidatesMeEducationsPartialUpdateResponseDegreeMax).optional(),
     level: zod
       .enum([
@@ -770,6 +1010,38 @@ export const CandidatesMeEducationsPartialUpdateResponse = zod
       .string()
       .max(candidatesMeEducationsPartialUpdateResponseFieldOfStudyMax)
       .optional(),
+    source_period: zod
+      .string()
+      .max(candidatesMeEducationsPartialUpdateResponseSourcePeriodMax)
+      .optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeEducationsPartialUpdateResponseStartYearMin)
+      .max(candidatesMeEducationsPartialUpdateResponseStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeEducationsPartialUpdateResponseStartMonthMin)
+      .max(candidatesMeEducationsPartialUpdateResponseStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeEducationsPartialUpdateResponseEndYearMin)
+      .max(candidatesMeEducationsPartialUpdateResponseEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeEducationsPartialUpdateResponseEndMonthMin)
+      .max(candidatesMeEducationsPartialUpdateResponseEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
     source: zod
@@ -803,6 +1075,20 @@ export const candidatesMeExperiencesListResponseResultsItemTitleMax = 160;
 
 export const candidatesMeExperiencesListResponseResultsItemEmployerNameMax = 160;
 
+export const candidatesMeExperiencesListResponseResultsItemSourcePeriodMax = 160;
+
+export const candidatesMeExperiencesListResponseResultsItemStartYearMin = 0;
+export const candidatesMeExperiencesListResponseResultsItemStartYearMax = 32767;
+
+export const candidatesMeExperiencesListResponseResultsItemStartMonthMin = 0;
+export const candidatesMeExperiencesListResponseResultsItemStartMonthMax = 32767;
+
+export const candidatesMeExperiencesListResponseResultsItemEndYearMin = 0;
+export const candidatesMeExperiencesListResponseResultsItemEndYearMax = 32767;
+
+export const candidatesMeExperiencesListResponseResultsItemEndMonthMin = 0;
+export const candidatesMeExperiencesListResponseResultsItemEndMonthMax = 32767;
+
 export const candidatesMeExperiencesListResponseResultsItemDescriptionMax = 3000;
 
 export const CandidatesMeExperiencesListResponse = zod.object({
@@ -820,6 +1106,38 @@ export const CandidatesMeExperiencesListResponse = zod.object({
           .optional(),
         occupation: zod.uuid().nullish(),
         city: zod.uuid().nullish(),
+        source_period: zod
+          .string()
+          .max(candidatesMeExperiencesListResponseResultsItemSourcePeriodMax)
+          .optional(),
+        start_year: zod
+          .int()
+          .min(candidatesMeExperiencesListResponseResultsItemStartYearMin)
+          .max(candidatesMeExperiencesListResponseResultsItemStartYearMax)
+          .nullish(),
+        start_month: zod
+          .int()
+          .min(candidatesMeExperiencesListResponseResultsItemStartMonthMin)
+          .max(candidatesMeExperiencesListResponseResultsItemStartMonthMax)
+          .nullish(),
+        end_year: zod
+          .int()
+          .min(candidatesMeExperiencesListResponseResultsItemEndYearMin)
+          .max(candidatesMeExperiencesListResponseResultsItemEndYearMax)
+          .nullish(),
+        end_month: zod
+          .int()
+          .min(candidatesMeExperiencesListResponseResultsItemEndMonthMin)
+          .max(candidatesMeExperiencesListResponseResultsItemEndMonthMax)
+          .nullish(),
+        start_date_precision: zod
+          .enum(["unknown", "year", "month", "day"])
+          .optional()
+          .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+        end_date_precision: zod
+          .enum(["unknown", "year", "month", "day"])
+          .optional()
+          .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
         start_date: zod.iso.date().nullish(),
         end_date: zod.iso.date().nullish(),
         is_current: zod.boolean().optional(),
@@ -848,6 +1166,20 @@ export const candidatesMeExperiencesCreateBodyTitleMax = 160;
 
 export const candidatesMeExperiencesCreateBodyEmployerNameMax = 160;
 
+export const candidatesMeExperiencesCreateBodySourcePeriodMax = 160;
+
+export const candidatesMeExperiencesCreateBodyStartYearMin = 0;
+export const candidatesMeExperiencesCreateBodyStartYearMax = 32767;
+
+export const candidatesMeExperiencesCreateBodyStartMonthMin = 0;
+export const candidatesMeExperiencesCreateBodyStartMonthMax = 32767;
+
+export const candidatesMeExperiencesCreateBodyEndYearMin = 0;
+export const candidatesMeExperiencesCreateBodyEndYearMax = 32767;
+
+export const candidatesMeExperiencesCreateBodyEndMonthMin = 0;
+export const candidatesMeExperiencesCreateBodyEndMonthMax = 32767;
+
 export const candidatesMeExperiencesCreateBodyDescriptionMax = 3000;
 
 export const CandidatesMeExperiencesCreateBody = zod
@@ -856,6 +1188,35 @@ export const CandidatesMeExperiencesCreateBody = zod
     employer_name: zod.string().max(candidatesMeExperiencesCreateBodyEmployerNameMax).optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
+    source_period: zod.string().max(candidatesMeExperiencesCreateBodySourcePeriodMax).optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeExperiencesCreateBodyStartYearMin)
+      .max(candidatesMeExperiencesCreateBodyStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeExperiencesCreateBodyStartMonthMin)
+      .max(candidatesMeExperiencesCreateBodyStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeExperiencesCreateBodyEndYearMin)
+      .max(candidatesMeExperiencesCreateBodyEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeExperiencesCreateBodyEndMonthMin)
+      .max(candidatesMeExperiencesCreateBodyEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
     is_current: zod.boolean().optional(),
@@ -866,6 +1227,20 @@ export const CandidatesMeExperiencesCreateBody = zod
 export const candidatesMeExperiencesCreateResponseTitleMax = 160;
 
 export const candidatesMeExperiencesCreateResponseEmployerNameMax = 160;
+
+export const candidatesMeExperiencesCreateResponseSourcePeriodMax = 160;
+
+export const candidatesMeExperiencesCreateResponseStartYearMin = 0;
+export const candidatesMeExperiencesCreateResponseStartYearMax = 32767;
+
+export const candidatesMeExperiencesCreateResponseStartMonthMin = 0;
+export const candidatesMeExperiencesCreateResponseStartMonthMax = 32767;
+
+export const candidatesMeExperiencesCreateResponseEndYearMin = 0;
+export const candidatesMeExperiencesCreateResponseEndYearMax = 32767;
+
+export const candidatesMeExperiencesCreateResponseEndMonthMin = 0;
+export const candidatesMeExperiencesCreateResponseEndMonthMax = 32767;
 
 export const candidatesMeExperiencesCreateResponseDescriptionMax = 3000;
 
@@ -879,6 +1254,38 @@ export const CandidatesMeExperiencesCreateResponse = zod
       .optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
+    source_period: zod
+      .string()
+      .max(candidatesMeExperiencesCreateResponseSourcePeriodMax)
+      .optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeExperiencesCreateResponseStartYearMin)
+      .max(candidatesMeExperiencesCreateResponseStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeExperiencesCreateResponseStartMonthMin)
+      .max(candidatesMeExperiencesCreateResponseStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeExperiencesCreateResponseEndYearMin)
+      .max(candidatesMeExperiencesCreateResponseEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeExperiencesCreateResponseEndMonthMin)
+      .max(candidatesMeExperiencesCreateResponseEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
     is_current: zod.boolean().optional(),
@@ -904,6 +1311,20 @@ export const candidatesMeExperiencesRetrieveResponseTitleMax = 160;
 
 export const candidatesMeExperiencesRetrieveResponseEmployerNameMax = 160;
 
+export const candidatesMeExperiencesRetrieveResponseSourcePeriodMax = 160;
+
+export const candidatesMeExperiencesRetrieveResponseStartYearMin = 0;
+export const candidatesMeExperiencesRetrieveResponseStartYearMax = 32767;
+
+export const candidatesMeExperiencesRetrieveResponseStartMonthMin = 0;
+export const candidatesMeExperiencesRetrieveResponseStartMonthMax = 32767;
+
+export const candidatesMeExperiencesRetrieveResponseEndYearMin = 0;
+export const candidatesMeExperiencesRetrieveResponseEndYearMax = 32767;
+
+export const candidatesMeExperiencesRetrieveResponseEndMonthMin = 0;
+export const candidatesMeExperiencesRetrieveResponseEndMonthMax = 32767;
+
 export const candidatesMeExperiencesRetrieveResponseDescriptionMax = 3000;
 
 export const CandidatesMeExperiencesRetrieveResponse = zod
@@ -916,6 +1337,38 @@ export const CandidatesMeExperiencesRetrieveResponse = zod
       .optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
+    source_period: zod
+      .string()
+      .max(candidatesMeExperiencesRetrieveResponseSourcePeriodMax)
+      .optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeExperiencesRetrieveResponseStartYearMin)
+      .max(candidatesMeExperiencesRetrieveResponseStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeExperiencesRetrieveResponseStartMonthMin)
+      .max(candidatesMeExperiencesRetrieveResponseStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeExperiencesRetrieveResponseEndYearMin)
+      .max(candidatesMeExperiencesRetrieveResponseEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeExperiencesRetrieveResponseEndMonthMin)
+      .max(candidatesMeExperiencesRetrieveResponseEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
     is_current: zod.boolean().optional(),
@@ -941,6 +1394,20 @@ export const candidatesMeExperiencesPartialUpdateBodyTitleMax = 160;
 
 export const candidatesMeExperiencesPartialUpdateBodyEmployerNameMax = 160;
 
+export const candidatesMeExperiencesPartialUpdateBodySourcePeriodMax = 160;
+
+export const candidatesMeExperiencesPartialUpdateBodyStartYearMin = 0;
+export const candidatesMeExperiencesPartialUpdateBodyStartYearMax = 32767;
+
+export const candidatesMeExperiencesPartialUpdateBodyStartMonthMin = 0;
+export const candidatesMeExperiencesPartialUpdateBodyStartMonthMax = 32767;
+
+export const candidatesMeExperiencesPartialUpdateBodyEndYearMin = 0;
+export const candidatesMeExperiencesPartialUpdateBodyEndYearMax = 32767;
+
+export const candidatesMeExperiencesPartialUpdateBodyEndMonthMin = 0;
+export const candidatesMeExperiencesPartialUpdateBodyEndMonthMax = 32767;
+
 export const candidatesMeExperiencesPartialUpdateBodyDescriptionMax = 3000;
 
 export const CandidatesMeExperiencesPartialUpdateBody = zod
@@ -952,6 +1419,38 @@ export const CandidatesMeExperiencesPartialUpdateBody = zod
       .optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
+    source_period: zod
+      .string()
+      .max(candidatesMeExperiencesPartialUpdateBodySourcePeriodMax)
+      .optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeExperiencesPartialUpdateBodyStartYearMin)
+      .max(candidatesMeExperiencesPartialUpdateBodyStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeExperiencesPartialUpdateBodyStartMonthMin)
+      .max(candidatesMeExperiencesPartialUpdateBodyStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeExperiencesPartialUpdateBodyEndYearMin)
+      .max(candidatesMeExperiencesPartialUpdateBodyEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeExperiencesPartialUpdateBodyEndMonthMin)
+      .max(candidatesMeExperiencesPartialUpdateBodyEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
     is_current: zod.boolean().optional(),
@@ -966,6 +1465,20 @@ export const candidatesMeExperiencesPartialUpdateResponseTitleMax = 160;
 
 export const candidatesMeExperiencesPartialUpdateResponseEmployerNameMax = 160;
 
+export const candidatesMeExperiencesPartialUpdateResponseSourcePeriodMax = 160;
+
+export const candidatesMeExperiencesPartialUpdateResponseStartYearMin = 0;
+export const candidatesMeExperiencesPartialUpdateResponseStartYearMax = 32767;
+
+export const candidatesMeExperiencesPartialUpdateResponseStartMonthMin = 0;
+export const candidatesMeExperiencesPartialUpdateResponseStartMonthMax = 32767;
+
+export const candidatesMeExperiencesPartialUpdateResponseEndYearMin = 0;
+export const candidatesMeExperiencesPartialUpdateResponseEndYearMax = 32767;
+
+export const candidatesMeExperiencesPartialUpdateResponseEndMonthMin = 0;
+export const candidatesMeExperiencesPartialUpdateResponseEndMonthMax = 32767;
+
 export const candidatesMeExperiencesPartialUpdateResponseDescriptionMax = 3000;
 
 export const CandidatesMeExperiencesPartialUpdateResponse = zod
@@ -978,6 +1491,38 @@ export const CandidatesMeExperiencesPartialUpdateResponse = zod
       .optional(),
     occupation: zod.uuid().nullish(),
     city: zod.uuid().nullish(),
+    source_period: zod
+      .string()
+      .max(candidatesMeExperiencesPartialUpdateResponseSourcePeriodMax)
+      .optional(),
+    start_year: zod
+      .int()
+      .min(candidatesMeExperiencesPartialUpdateResponseStartYearMin)
+      .max(candidatesMeExperiencesPartialUpdateResponseStartYearMax)
+      .nullish(),
+    start_month: zod
+      .int()
+      .min(candidatesMeExperiencesPartialUpdateResponseStartMonthMin)
+      .max(candidatesMeExperiencesPartialUpdateResponseStartMonthMax)
+      .nullish(),
+    end_year: zod
+      .int()
+      .min(candidatesMeExperiencesPartialUpdateResponseEndYearMin)
+      .max(candidatesMeExperiencesPartialUpdateResponseEndYearMax)
+      .nullish(),
+    end_month: zod
+      .int()
+      .min(candidatesMeExperiencesPartialUpdateResponseEndMonthMin)
+      .max(candidatesMeExperiencesPartialUpdateResponseEndMonthMax)
+      .nullish(),
+    start_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
+    end_date_precision: zod
+      .enum(["unknown", "year", "month", "day"])
+      .optional()
+      .describe("* `unknown` - Unknown\n* `year` - Year\n* `month` - Month\n* `day` - Day"),
     start_date: zod.iso.date().nullish(),
     end_date: zod.iso.date().nullish(),
     is_current: zod.boolean().optional(),

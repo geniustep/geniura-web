@@ -4,10 +4,11 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f. Profile schemas (Experience/Education and their request variants) synchronized from geniura-api@943bac4b2f777131853fa66a1bdb84b483c26d22.
  * OpenAPI spec version: 1.0.0-dev
  */
 import type { EducationLevelEnum } from "./educationLevelEnum";
+import type { EndDatePrecisionEnum } from "./endDatePrecisionEnum";
 import type { ProvenanceSourceEnum } from "./provenanceSourceEnum";
 
 /**
@@ -16,12 +17,40 @@ import type { ProvenanceSourceEnum } from "./provenanceSourceEnum";
 export interface Education {
   readonly id: string;
   /** @maxLength 200 */
-  institution: string;
+  institution?: string;
   /** @maxLength 160 */
   degree?: string;
   level?: EducationLevelEnum;
   /** @maxLength 160 */
   field_of_study?: string;
+  /** @maxLength 160 */
+  source_period?: string;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  start_year?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  start_month?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  end_year?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  end_month?: number | null;
+  start_date_precision?: EndDatePrecisionEnum;
+  end_date_precision?: EndDatePrecisionEnum;
   /** @nullable */
   start_date?: string | null;
   /** @nullable */

@@ -3,7 +3,7 @@
   "sourceFile": "docs/openapi/openapi.yaml",
   "sourceCommit": "ec0890a5ae22a7f07bcd870add6540aa776a464f",
   "sourceSha256": "cbd3faf207dafdcbef793862487aaf44f1930964e4f6bf74cad2f722e8d5878b",
-  "outputSha256": "3e8c4676b9cec46d11ff182f483499c3221d4c77eb1e842eacbf65fe437ddcf6",
+  "outputSha256": "2d5ce6c1fdda56324d966d47b62c9c0a098538b0eadcab1067c47ea5d64e1609",
   "operations": 150,
   "paths": 114,
   "schemasKept": 230,
