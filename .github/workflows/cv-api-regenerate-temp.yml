@@ -26,6 +26,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Regenerate from the reviewed public CV schema overlay
         run: pnpm api:generate
+      - name: Format period forms and focused unit tests
+        run: pnpm exec prettier --write features/profile/periods.ts features/profile/extraction-review.tsx tests/unit/profile-periods.test.ts
       - name: Update public snapshot checksum
         run: |
           node --input-type=module -e '
@@ -42,7 +44,7 @@ jobs:
         shell: bash
         run: |
           test "$GITHUB_REF_NAME" = "feat/partial-dates-ui"
-          git add -A -- contracts/source.json lib/api/generated
+          git add -A -- contracts/source.json lib/api/generated features/profile/periods.ts features/profile/extraction-review.tsx tests/unit/profile-periods.test.ts
           if git diff --cached --quiet; then
             echo "Generated client is already synchronized."
             exit 0
