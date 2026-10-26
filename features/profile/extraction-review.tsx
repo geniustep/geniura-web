@@ -124,18 +124,35 @@ function ItemCard({
 }) {
   const t = useTranslations("Profile.review");
   const tFields = useTranslations("Profile.fields");
+  const tForm = useTranslations("Profile.form");
+  const tPrecision = useTranslations("Profile.datePrecision");
   const text = usePayloadText(vocabulary);
   const [editing, setEditing] = useState(false);
   const fields = CORRECTABLE[item.kind] ?? [];
   const payload = item.payload as Record<string, unknown>;
-  const [draft, setDraft] = useState<Record<string, string | boolean>>(() =>
-    Object.fromEntries(
+  const [draft, setDraft] = useState<Record<string, string | boolean>>(() => {
+    const values: Record<string, string | boolean> = Object.fromEntries(
       fields.map((f) => [
         f,
         f === "is_current" ? payload[f] === true : payload[f] ? String(payload[f]) : "",
       ]),
-    ),
-  );
+    );
+    if (STRUCTURED_PERIODS_ENABLED) {
+      for (const prefix of ["start", "end"] as const) {
+        const precision = `${prefix}_date_precision`;
+        if (!values[precision] || values[precision] === "unknown") {
+          values[precision] = values[`${prefix}_date`]
+            ? "day"
+            : values[`${prefix}_year`]
+              ? values[`${prefix}_month`]
+                ? "month"
+                : "year"
+              : "unknown";
+        }
+      }
+    }
+    return values;
+  });
   const repeated = Boolean(item.existing_object);
   const reviewed = item.review_status !== "pending";
 
@@ -157,7 +174,7 @@ function ItemCard({
       </p>
       {item.confidence ? (
         <p className="text-xs text-muted-foreground">
-          {t("review.confidence", { value: Math.round(Number(item.confidence) * 100) })}
+          {t("confidence", { value: Math.round(Number(item.confidence) * 100) })}
         </p>
       ) : null}
       {item.evidence_snippet ? (
@@ -232,7 +249,7 @@ function ItemCard({
                   >
                     {(["unknown", "year", "month", "day"] as const).map((precision) => (
                       <option key={precision} value={precision}>
-                        {t(`datePrecision.${precision}`)}
+                        {tPrecision(precision)}
                       </option>
                     ))}
                   </NativeSelect>
@@ -258,7 +275,7 @@ function ItemCard({
                   />
                 )}
                 {field === "source_period" ? (
-                  <p className="text-xs text-muted-foreground">{t("form.periodHint")}</p>
+                  <p className="text-xs text-muted-foreground">{tForm("periodHint")}</p>
                 ) : null}
               </div>
             );
