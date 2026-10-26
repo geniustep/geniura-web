@@ -20,6 +20,8 @@ import {
   candidatesMeSkillsPartialUpdate,
   candidatesMeSkillsRetrieve,
 } from "@/lib/api/generated/endpoints/candidates/candidates";
+import { STRUCTURED_PERIODS_ENABLED } from "./periods";
+
 import {
   CertificationKindEnum,
   EducationLevelEnum,
@@ -30,7 +32,7 @@ import {
 export type SectionKind = "educations" | "experiences" | "skills" | "languages" | "certifications";
 
 export type FieldKind =
-  "text" | "textarea" | "date" | "select" | "checkbox" | "skill" | "language" | "years";
+  "text" | "textarea" | "date" | "select" | "checkbox" | "skill" | "language" | "years" | "year" | "month" | "precision";
 
 export type FieldDef = {
   name: string;
@@ -60,13 +62,33 @@ type Api = {
   retrieve: (id: string) => Promise<unknown>;
 };
 
+const PERIOD_FIELDS: FieldDef[] = STRUCTURED_PERIODS_ENABLED
+  ? [
+      { name: "source_period", kind: "text", maxLength: 160 },
+      { name: "start_date_precision", kind: "precision" },
+      { name: "start_year", kind: "year" },
+      { name: "start_month", kind: "month" },
+      { name: "start_date", kind: "date" },
+      { name: "end_date_precision", kind: "precision" },
+      { name: "end_year", kind: "year" },
+      { name: "end_month", kind: "month" },
+      { name: "end_date", kind: "date" },
+    ]
+  : [
+      { name: "start_date", kind: "date" },
+      { name: "end_date", kind: "date" },
+    ];
+const PERIOD_NULLABLE = STRUCTURED_PERIODS_ENABLED
+  ? ["start_year", "start_month", "start_date", "end_year", "end_month", "end_date"]
+  : ["start_date", "end_date"];
+
 /** Languages offered first in Morocco (paper v1.1, decision Q1): Darija and Tamazight included. */
 export const LANGUAGE_CODES = ["ar", "ary", "zgh", "fr", "en", "es", "de", "it", "pt"] as const;
 
 export const SECTIONS: Record<SectionKind, { fields: FieldDef[]; nullable: string[]; api: Api }> = {
   educations: {
     fields: [
-      { name: "institution", kind: "text", required: true, maxLength: 200 },
+      { name: "institution", kind: "text", required: !STRUCTURED_PERIODS_ENABLED, maxLength: 200 },
       { name: "degree", kind: "text", maxLength: 160 },
       {
         name: "level",
@@ -75,10 +97,9 @@ export const SECTIONS: Record<SectionKind, { fields: FieldDef[]; nullable: strin
         enumKey: "educationLevel",
       },
       { name: "field_of_study", kind: "text", maxLength: 160 },
-      { name: "start_date", kind: "date" },
-      { name: "end_date", kind: "date" },
+      ...PERIOD_FIELDS,
     ],
-    nullable: ["start_date", "end_date"],
+    nullable: PERIOD_NULLABLE,
     api: {
       create: candidatesMeEducationsCreate as Api["create"],
       update: candidatesMeEducationsPartialUpdate as Api["update"],
@@ -90,12 +111,11 @@ export const SECTIONS: Record<SectionKind, { fields: FieldDef[]; nullable: strin
     fields: [
       { name: "title", kind: "text", required: true, maxLength: 160 },
       { name: "employer_name", kind: "text", maxLength: 160 },
-      { name: "start_date", kind: "date" },
-      { name: "end_date", kind: "date" },
+      ...PERIOD_FIELDS,
       { name: "is_current", kind: "checkbox" },
       { name: "description", kind: "textarea", maxLength: 3000 },
     ],
-    nullable: ["start_date", "end_date"],
+    nullable: PERIOD_NULLABLE,
     api: {
       create: candidatesMeExperiencesCreate as Api["create"],
       update: candidatesMeExperiencesPartialUpdate as Api["update"],
@@ -173,8 +193,17 @@ export function formValues(
     const raw = item?.[field.name];
     if (field.kind === "checkbox") values[field.name] = Boolean(raw);
     else if (raw === null || raw === undefined) {
-      values[field.name] = field.kind === "select" && field.options ? field.options[0]! : "";
+      values[field.name] = field.kind === "precision" ? "unknown" :
+        field.kind === "select" && field.options ? field.options[0]! : "";
     } else values[field.name] = String(raw);
+  }
+  if (STRUCTURED_PERIODS_ENABLED && (kind === "experiences" || kind === "educations")) {
+    for (const prefix of ["start", "end"]) {
+      const precision = `${prefix}_date_precision`;
+      if (values[precision] === "unknown" && values[`${prefix}_date`]) {
+        values[precision] = "day";
+      }
+    }
   }
   if (!item && kind === "skills") values.level = "unspecified";
   if (!item && kind === "languages") values.level = "unspecified";
