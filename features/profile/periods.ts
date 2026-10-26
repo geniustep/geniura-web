@@ -68,8 +68,8 @@ export function displayReviewPeriod(
 }
 
 /** Keep explicit empties and avoid sending stale day/month fields after precision changes. */
-export function prepareStructuredPeriodPayload(values: Fields): Fields {
-  if (!STRUCTURED_PERIODS_ENABLED) return { ...values };
+export function prepareStructuredPeriodPayload(values: Fields, enabled = STRUCTURED_PERIODS_ENABLED): Fields {
+  if (!enabled) return { ...values };
   const next = { ...values };
   for (const prefix of ["start", "end"] as const) {
     const precision = next[`${prefix}_date_precision`];
