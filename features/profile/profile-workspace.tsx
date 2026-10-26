@@ -83,8 +83,7 @@ function useItemText(vocabulary: Vocabulary) {
     typeof value === "string" && value
       ? format.dateTime(new Date(value), { year: "numeric", month: "short" })
       : null;
-  const period = (item: SectionItem) =>
-    displayProfilePeriod(item, locale, t("item.present"));
+  const period = (item: SectionItem) => displayProfilePeriod(item, locale, t("item.present"));
 
   return (
     kind: SectionKind,
@@ -103,10 +102,7 @@ function useItemText(vocabulary: Vocabulary) {
       case "experiences":
         return {
           title: String(item.title),
-          meta: [
-            item.employer_name ? String(item.employer_name) : null,
-            period(item),
-          ],
+          meta: [item.employer_name ? String(item.employer_name) : null, period(item)],
         };
       case "skills":
         return {
