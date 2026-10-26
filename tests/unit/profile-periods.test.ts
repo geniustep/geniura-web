@@ -66,7 +66,7 @@ describe("partial professional periods", () => {
         true,
       ),
     ).toMatchObject({
-      start_year: "2024",
+      start_year: 2024,
       start_month: null,
       start_date: null,
     });
@@ -88,6 +88,20 @@ describe("partial professional periods", () => {
     expect(clean.end_month).toBeNull();
     expect(
       prepareStructuredPeriodPayload({ is_current: false, end_year: "2024" }, true).end_year,
-    ).toBe("2024");
+    ).toBe(2024);
+  });
+
+  it("sends integers for month/year precision and preserves an explicit calendar day", () => {
+    const month = prepareStructuredPeriodPayload(
+      { start_date_precision: "month", start_year: "2024", start_month: "2" },
+      true,
+    );
+    expect(month).toMatchObject({ start_year: 2024, start_month: 2, start_date: null });
+    const day = prepareStructuredPeriodPayload(
+      { start_date_precision: "day", start_date: "2024-01-01", start_year: "2024" },
+      true,
+    );
+    expect(day.start_date).toBe("2024-01-01");
+    expect(day.start_year).toBeNull();
   });
 });
