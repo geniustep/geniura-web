@@ -75,8 +75,16 @@ function usePayloadText(vocabulary: Vocabulary) {
   const label = useVocabularyLabel(vocabulary);
   const languageName = useLanguageName();
   return (item: ExtractedItem, override?: Record<string, string | boolean | null>) => {
-    const p = { ...(item.payload as Record<string, unknown>), ...override };
+    const original = item.payload as Record<string, unknown>;
+    const p = { ...original, ...override };
     const s = (k: string) => (p[k] ? String(p[k]) : "");
+    // A corrected source period is authoritative; do not preview the old
+    // parsed years while the backend is re-deriving them on confirmation.
+    const previewPeriod =
+      override && Object.prototype.hasOwnProperty.call(override, "source_period") &&
+      override.source_period !== original.source_period
+        ? String(override.source_period ?? "")
+        : displayReviewPeriod(p, locale, t("item.present"));
     switch (item.kind) {
       case "skill":
         return label("skills", s("skill_id")) ?? s("label") ?? s("code");
@@ -92,14 +100,14 @@ function usePayloadText(vocabulary: Vocabulary) {
       case "occupation":
         return label("occupations", s("occupation_id")) ?? s("label");
       case "experience":
-        return [s("title"), s("employer_name"), displayReviewPeriod(p, locale, t("item.present"))]
+        return [s("title"), s("employer_name"), previewPeriod]
           .filter(Boolean)
           .join(" · ");
       case "education":
         return [
           s("degree"),
           s("institution") || (STRUCTURED_PERIODS_ENABLED ? t("form.notSpecified") : ""),
-          displayReviewPeriod(p, locale, t("item.present")),
+          previewPeriod,
         ]
           .filter(Boolean)
           .join(" · ");
