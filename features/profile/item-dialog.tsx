@@ -94,13 +94,20 @@ function FieldControl({
       );
     case "month":
       return (
-        <NativeSelect {...common} dir="ltr" value={String(value)} onChange={(e) => onChange(e.target.value)}>
+        <NativeSelect
+          {...common}
+          dir="ltr"
+          value={String(value)}
+          onChange={(e) => onChange(e.target.value)}
+        >
           <option value="">{t("form.notSpecified")}</option>
           {Array.from({ length: 12 }, (_, index) => {
             const month = index + 1;
             return (
               <option key={month} value={String(month)}>
-                {new Intl.DateTimeFormat(locale, { month: "long" }).format(new Date(Date.UTC(2024, index, 1)))}
+                {new Intl.DateTimeFormat(locale, { month: "long" }).format(
+                  new Date(Date.UTC(2024, index, 1)),
+                )}
               </option>
             );
           })}
@@ -347,17 +354,36 @@ export function ItemDialog({
               if (STRUCTURED_PERIODS_ENABLED && (kind === "experiences" || kind === "educations")) {
                 const prefix = field.name.startsWith("start_")
                   ? "start"
-                  : field.name.startsWith("end_") ? "end" : null;
-                if (prefix && (kind !== "experiences" || values.is_current !== true || prefix !== "end")) {
+                  : field.name.startsWith("end_")
+                    ? "end"
+                    : null;
+                if (
+                  prefix &&
+                  (kind !== "experiences" || values.is_current !== true || prefix !== "end")
+                ) {
                   const precision = values[`${prefix}_date_precision`];
-                  if (field.name.endsWith("_year") && !["year", "month"].includes(String(precision))) return null;
+                  if (
+                    field.name.endsWith("_year") &&
+                    !["year", "month"].includes(String(precision))
+                  )
+                    return null;
                   if (field.name.endsWith("_month") && precision !== "month") return null;
                   if (field.name.endsWith("_date") && precision !== "day") return null;
                 }
-                if (prefix === "end" && kind === "experiences" && values.is_current === true
-                    && field.name !== "end_date_precision") return null;
-                if (prefix === "end" && kind === "experiences" && values.is_current === true
-                    && field.name === "end_date_precision") return null;
+                if (
+                  prefix === "end" &&
+                  kind === "experiences" &&
+                  values.is_current === true &&
+                  field.name !== "end_date_precision"
+                )
+                  return null;
+                if (
+                  prefix === "end" &&
+                  kind === "experiences" &&
+                  values.is_current === true &&
+                  field.name === "end_date_precision"
+                )
+                  return null;
               }
               const id = `${formId}-${field.name}`;
               const errorId = errors[field.name] ? `${id}-error` : undefined;
@@ -405,7 +431,9 @@ export function ItemDialog({
                       {field.name === "source_period" ? (
                         <p className="text-xs text-muted-foreground">{t("form.periodHint")}</p>
                       ) : null}
-                      {field.name === "institution" && kind === "educations" && STRUCTURED_PERIODS_ENABLED ? (
+                      {field.name === "institution" &&
+                      kind === "educations" &&
+                      STRUCTURED_PERIODS_ENABLED ? (
                         <p className="text-xs text-muted-foreground">{t("form.institutionHint")}</p>
                       ) : null}
                     </>
