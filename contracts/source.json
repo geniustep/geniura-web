@@ -29,5 +29,21 @@
     "error envelope: ErrorResponse + default response on every operation"
   ],
   "upstreamGitBlobSha": "722617d0acd75d39d210066be7684bb0a14361bd",
-  "sourceHashScope": "sha256 of the private upstream file at sourceCommit (hash only; the file itself is not published)"
+  "sourceHashScope": "sha256 of the private upstream file at sourceCommit (hash only; the file itself is not published)",
+  "profileSchemaOverlay": {
+    "sourceRepository": "geniustep/geniura-api (private)",
+    "sourceFile": "docs/openapi/openapi.yaml",
+    "sourceCommit": "943bac4b2f777131853fa66a1bdb84b483c26d22",
+    "sourceGitBlobSha": "ffe504a4ba7a0857fcb0bfebd12b3ef39ca18055",
+    "schemas": [
+      "Education",
+      "EducationRequest",
+      "Experience",
+      "ExperienceRequest",
+      "PatchedEducationRequest",
+      "PatchedExperienceRequest",
+      "EndDatePrecisionEnum"
+    ],
+    "note": "Only public CV profile schemas synchronized; original web contract, public path filtering and verified pagination overrides retained. No private staff endpoints added."
+  }
 }
