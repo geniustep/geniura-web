@@ -33,13 +33,37 @@ type Decision = { action: ActionEnum; corrected?: Record<string, string | boolea
 /** Text fields a person may correct per kind (identity fields such as a skill id are not free text). */
 const CORRECTABLE: Record<string, string[]> = {
   experience: STRUCTURED_PERIODS_ENABLED
-    ? ["title", "employer_name", "description", "source_period", "start_date_precision",
-        "start_year", "start_month", "start_date", "end_date_precision", "end_year",
-        "end_month", "end_date", "is_current"]
+    ? [
+        "title",
+        "employer_name",
+        "description",
+        "source_period",
+        "start_date_precision",
+        "start_year",
+        "start_month",
+        "start_date",
+        "end_date_precision",
+        "end_year",
+        "end_month",
+        "end_date",
+        "is_current",
+      ]
     : ["title", "employer_name", "start_date", "end_date"],
   education: STRUCTURED_PERIODS_ENABLED
-    ? ["institution", "degree", "field_of_study", "source_period", "start_date_precision",
-        "start_year", "start_month", "start_date", "end_date_precision", "end_year", "end_month", "end_date"]
+    ? [
+        "institution",
+        "degree",
+        "field_of_study",
+        "source_period",
+        "start_date_precision",
+        "start_year",
+        "start_month",
+        "start_date",
+        "end_date_precision",
+        "end_year",
+        "end_month",
+        "end_date",
+      ]
     : ["institution", "degree", "field_of_study", "end_date"],
   certification: ["name", "issuer", "expires_at"],
   headline: ["headline"],
@@ -68,11 +92,7 @@ function usePayloadText(vocabulary: Vocabulary) {
       case "occupation":
         return label("occupations", s("occupation_id")) ?? s("label");
       case "experience":
-        return [
-          s("title"),
-          s("employer_name"),
-          displayReviewPeriod(p, locale, t("item.present")),
-        ]
+        return [s("title"), s("employer_name"), displayReviewPeriod(p, locale, t("item.present"))]
           .filter(Boolean)
           .join(" · ");
       case "education":
@@ -80,7 +100,9 @@ function usePayloadText(vocabulary: Vocabulary) {
           s("degree"),
           s("institution") || (STRUCTURED_PERIODS_ENABLED ? t("form.notSpecified") : ""),
           displayReviewPeriod(p, locale, t("item.present")),
-        ].filter(Boolean).join(" · ");
+        ]
+          .filter(Boolean)
+          .join(" · ");
       case "certification":
         return [s("name"), s("issuer")].filter(Boolean).join(" · ");
       default:
@@ -107,10 +129,12 @@ function ItemCard({
   const fields = CORRECTABLE[item.kind] ?? [];
   const payload = item.payload as Record<string, unknown>;
   const [draft, setDraft] = useState<Record<string, string | boolean>>(() =>
-    Object.fromEntries(fields.map((f) => [
-      f,
-      f === "is_current" ? payload[f] === true : payload[f] ? String(payload[f]) : "",
-    ])),
+    Object.fromEntries(
+      fields.map((f) => [
+        f,
+        f === "is_current" ? payload[f] === true : payload[f] ? String(payload[f]) : "",
+      ]),
+    ),
   );
   const repeated = Boolean(item.existing_object);
   const reviewed = item.review_status !== "pending";
@@ -167,20 +191,24 @@ function ItemCard({
             onDecide({
               action: repeated ? "update_existing" : "correct",
               corrected: (STRUCTURED_PERIODS_ENABLED &&
-                (item.kind === "experience" || item.kind === "education")
-                  ? prepareStructuredPeriodPayload(draft)
-                  : draft) as Record<string, string | boolean | null>,
+              (item.kind === "experience" || item.kind === "education")
+                ? prepareStructuredPeriodPayload(draft)
+                : draft) as Record<string, string | boolean | null>,
             });
             setEditing(false);
           }}
         >
           {fields.map((field) => {
-            const prefix = field.startsWith("start_") ? "start"
-              : field.startsWith("end_") ? "end" : null;
+            const prefix = field.startsWith("start_")
+              ? "start"
+              : field.startsWith("end_")
+                ? "end"
+                : null;
             if (STRUCTURED_PERIODS_ENABLED && prefix) {
               const precision = draft[`${prefix}_date_precision`];
               if (field.endsWith("_date") && precision !== "day") return null;
-              if (field.endsWith("_year") && !["year", "month"].includes(String(precision))) return null;
+              if (field.endsWith("_year") && !["year", "month"].includes(String(precision)))
+                return null;
               if (field.endsWith("_month") && precision !== "month") return null;
               if (prefix === "end" && draft.is_current === true) return null;
             }
@@ -211,9 +239,18 @@ function ItemCard({
                 ) : (
                   <Input
                     id={id}
-                    dir={field.endsWith("_date") || field.endsWith("_year") || field.endsWith("_month") ? "ltr" : "auto"}
-                    type={field.endsWith("_date") ? "date" :
-                      field.endsWith("_year") || field.endsWith("_month") ? "number" : "text"}
+                    dir={
+                      field.endsWith("_date") || field.endsWith("_year") || field.endsWith("_month")
+                        ? "ltr"
+                        : "auto"
+                    }
+                    type={
+                      field.endsWith("_date")
+                        ? "date"
+                        : field.endsWith("_year") || field.endsWith("_month")
+                          ? "number"
+                          : "text"
+                    }
                     min={field.endsWith("_month") ? 1 : field.endsWith("_year") ? 1900 : undefined}
                     max={field.endsWith("_month") ? 12 : field.endsWith("_year") ? 2100 : undefined}
                     value={String(draft[field] ?? "")}
