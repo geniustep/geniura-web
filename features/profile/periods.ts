@@ -93,6 +93,16 @@ export function prepareStructuredPeriodPayload(
       next[`${prefix}_month`] = null;
     }
   }
+  // Form controls return strings. OpenAPI/Django expect nullable integers for
+  // year and month, not stringified values (including on corrected CV proposals).
+  for (const key of ["start_year", "start_month", "end_year", "end_month"] as const) {
+    const value = next[key];
+    if (typeof value === "string" && /^\\d+$/.test(value)) {
+      next[key] = Number(value);
+    } else if (value === "") {
+      next[key] = null;
+    }
+  }
   if (next.is_current === true) {
     next.end_year = null;
     next.end_month = null;
