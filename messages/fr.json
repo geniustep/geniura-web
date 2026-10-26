@@ -739,7 +739,14 @@
       "available_from": "Disponible à partir du",
       "desired_contract_types": "Types de contrat recherchés",
       "desired_work_modes": "Modes de travail",
-      "willing_to_relocate": "Prêt(e) à déménager dans une autre ville"
+      "willing_to_relocate": "Prêt(e) à déménager dans une autre ville",
+      "source_period": "Période telle qu’indiquée dans le CV",
+      "start_year": "Année de début",
+      "start_month": "Mois de début",
+      "end_year": "Année de fin",
+      "end_month": "Mois de fin",
+      "start_date_precision": "Précision du début",
+      "end_date_precision": "Précision de la fin"
     },
     "enums": {
       "educationLevel": {
@@ -798,7 +805,9 @@
       "searching": "Recherche…",
       "noSkillFound": "Aucun résultat dans le référentiel. Essayez un autre mot.",
       "counter": "{count} sur {max} caractères",
-      "notSpecified": "Non précisé"
+      "notSpecified": "Non précisé",
+      "periodHint": "Conservez la période indiquée dans le CV. Ne supposez pas un jour absent.",
+      "institutionHint": "Laissez ce champ vide si l’établissement n’est pas indiqué."
     },
     "conflict": {
       "title": "Modifié depuis un autre appareil",
@@ -1015,7 +1024,8 @@
       "partialNote": "Vous pouvez enregistrer une partie et revenir plus tard.",
       "later": "Plus tard",
       "saving": "Enregistrement…",
-      "save": "{count, plural, =0 {Décidez pour chaque élément} one {Enregistrer # décision} other {Enregistrer # décisions}}"
+      "save": "{count, plural, =0 {Décidez pour chaque élément} one {Enregistrer # décision} other {Enregistrer # décisions}}",
+      "confidence": "Confiance de l’extraction : {value} %"
     },
     "match": {
       "requirement": "Exigence",
@@ -1061,6 +1071,12 @@
       "cancel": "Annuler",
       "sending": "Envoi…",
       "confirm": "Envoyer ma candidature"
+    },
+    "datePrecision": {
+      "unknown": "Non précisée",
+      "year": "Année uniquement",
+      "month": "Mois et année",
+      "day": "Jour, mois et année"
     }
   }
 }
