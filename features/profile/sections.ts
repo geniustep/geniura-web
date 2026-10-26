@@ -32,7 +32,17 @@ import {
 export type SectionKind = "educations" | "experiences" | "skills" | "languages" | "certifications";
 
 export type FieldKind =
-  "text" | "textarea" | "date" | "select" | "checkbox" | "skill" | "language" | "years" | "year" | "month" | "precision";
+  | "text"
+  | "textarea"
+  | "date"
+  | "select"
+  | "checkbox"
+  | "skill"
+  | "language"
+  | "years"
+  | "year"
+  | "month"
+  | "precision";
 
 export type FieldDef = {
   name: string;
@@ -193,8 +203,12 @@ export function formValues(
     const raw = item?.[field.name];
     if (field.kind === "checkbox") values[field.name] = Boolean(raw);
     else if (raw === null || raw === undefined) {
-      values[field.name] = field.kind === "precision" ? "unknown" :
-        field.kind === "select" && field.options ? field.options[0]! : "";
+      values[field.name] =
+        field.kind === "precision"
+          ? "unknown"
+          : field.kind === "select" && field.options
+            ? field.options[0]!
+            : "";
     } else values[field.name] = String(raw);
   }
   if (STRUCTURED_PERIODS_ENABLED && (kind === "experiences" || kind === "educations")) {
