@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckIcon, CopyIcon, PencilIcon, Undo2Icon, XIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FormAlert } from "@/features/auth/form-parts";
 import {
@@ -21,22 +22,31 @@ import type { Vocabulary } from "@/lib/jobs/labels";
 
 import { useRefreshProfile } from "./api";
 import { useLanguageName, useVocabularyLabel } from "./labels";
+import { displayReviewPeriod, STRUCTURED_PERIODS_ENABLED } from "./periods";
 
-type Decision = { action: ActionEnum; corrected?: Record<string, string> };
+type Decision = { action: ActionEnum; corrected?: Record<string, string | boolean> };
 
 /** Text fields a person may correct per kind (identity fields such as a skill id are not free text). */
 const CORRECTABLE: Record<string, string[]> = {
-  experience: ["title", "employer_name", "start_date", "end_date"],
-  education: ["institution", "degree", "field_of_study", "end_date"],
+  experience: STRUCTURED_PERIODS_ENABLED
+    ? ["title", "employer_name", "description", "source_period", "start_date_precision",
+        "start_year", "start_month", "start_date", "end_date_precision", "end_year",
+        "end_month", "end_date", "is_current"]
+    : ["title", "employer_name", "start_date", "end_date"],
+  education: STRUCTURED_PERIODS_ENABLED
+    ? ["institution", "degree", "field_of_study", "source_period", "start_date_precision",
+        "start_year", "start_month", "start_date", "end_date_precision", "end_year", "end_month", "end_date"]
+    : ["institution", "degree", "field_of_study", "end_date"],
   certification: ["name", "issuer", "expires_at"],
   headline: ["headline"],
 };
 
 function usePayloadText(vocabulary: Vocabulary) {
   const t = useTranslations("Profile");
+  const locale = useLocale();
   const label = useVocabularyLabel(vocabulary);
   const languageName = useLanguageName();
-  return (item: ExtractedItem, override?: Record<string, string>) => {
+  return (item: ExtractedItem, override?: Record<string, string | boolean>) => {
     const p = { ...(item.payload as Record<string, unknown>), ...override };
     const s = (k: string) => (p[k] ? String(p[k]) : "");
     switch (item.kind) {
@@ -57,14 +67,16 @@ function usePayloadText(vocabulary: Vocabulary) {
         return [
           s("title"),
           s("employer_name"),
-          [s("start_date"), s("is_current") === "true" ? t("item.present") : s("end_date")]
-            .filter(Boolean)
-            .join(" – "),
+          displayReviewPeriod(p, locale, t("item.present")),
         ]
           .filter(Boolean)
           .join(" · ");
       case "education":
-        return [s("degree"), s("institution"), s("end_date")].filter(Boolean).join(" · ");
+        return [
+          s("degree"),
+          s("institution") || (STRUCTURED_PERIODS_ENABLED ? t("form.notSpecified") : ""),
+          displayReviewPeriod(p, locale, t("item.present")),
+        ].filter(Boolean).join(" · ");
       case "certification":
         return [s("name"), s("issuer")].filter(Boolean).join(" · ");
       default:
@@ -90,8 +102,11 @@ function ItemCard({
   const [editing, setEditing] = useState(false);
   const fields = CORRECTABLE[item.kind] ?? [];
   const payload = item.payload as Record<string, unknown>;
-  const [draft, setDraft] = useState<Record<string, string>>(() =>
-    Object.fromEntries(fields.map((f) => [f, payload[f] ? String(payload[f]) : ""])),
+  const [draft, setDraft] = useState<Record<string, string | boolean>>(() =>
+    Object.fromEntries(fields.map((f) => [
+      f,
+      f === "is_current" ? payload[f] === true : payload[f] ? String(payload[f]) : "",
+    ])),
   );
   const repeated = Boolean(item.existing_object);
   const reviewed = item.review_status !== "pending";
@@ -112,6 +127,11 @@ function ItemCard({
       <p className="font-semibold">
         <bdi dir="auto">{text(item, decision?.corrected)}</bdi>
       </p>
+      {item.confidence ? (
+        <p className="text-xs text-muted-foreground">
+          {t("review.confidence", { value: Math.round(Number(item.confidence) * 100) })}
+        </p>
+      ) : null}
       {item.evidence_snippet ? (
         <blockquote
           className="rounded-xl bg-muted px-3 py-2 text-sm text-subtle-foreground"
@@ -144,18 +164,58 @@ function ItemCard({
             setEditing(false);
           }}
         >
-          {fields.map((field) => (
-            <div key={field} className="grid gap-1.5">
-              <Label htmlFor={`${item.id}-${field}`}>{tFields(field as "title")}</Label>
-              <Input
-                id={`${item.id}-${field}`}
-                dir={field.endsWith("_date") || field.endsWith("_at") ? "ltr" : "auto"}
-                type={field.endsWith("_date") || field.endsWith("_at") ? "date" : "text"}
-                value={draft[field] ?? ""}
-                onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
-              />
-            </div>
-          ))}
+          {fields.map((field) => {
+            const prefix = field.startsWith("start_") ? "start"
+              : field.startsWith("end_") ? "end" : null;
+            if (STRUCTURED_PERIODS_ENABLED && prefix) {
+              const precision = draft[`${prefix}_date_precision`];
+              if (field.endsWith("_date") && precision !== "day") return null;
+              if (field.endsWith("_year") && !["year", "month"].includes(String(precision))) return null;
+              if (field.endsWith("_month") && precision !== "month") return null;
+              if (prefix === "end" && draft.is_current === true) return null;
+            }
+            const id = `${item.id}-${field}`;
+            return (
+              <div key={field} className="grid gap-1.5">
+                <Label htmlFor={id}>{tFields(field as "title")}</Label>
+                {field === "is_current" ? (
+                  <input
+                    id={id}
+                    type="checkbox"
+                    className="size-5 accent-[var(--action)]"
+                    checked={draft.is_current === true}
+                    onChange={(e) => setDraft((d) => ({ ...d, is_current: e.target.checked }))}
+                  />
+                ) : field.endsWith("_date_precision") ? (
+                  <NativeSelect
+                    id={id}
+                    value={String(draft[field] || "unknown")}
+                    onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
+                  >
+                    {(["unknown", "year", "month", "day"] as const).map((precision) => (
+                      <option key={precision} value={precision}>
+                        {t(`datePrecision.${precision}`)}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                ) : (
+                  <Input
+                    id={id}
+                    dir={field.endsWith("_date") || field.endsWith("_year") || field.endsWith("_month") ? "ltr" : "auto"}
+                    type={field.endsWith("_date") ? "date" :
+                      field.endsWith("_year") || field.endsWith("_month") ? "number" : "text"}
+                    min={field.endsWith("_month") ? 1 : field.endsWith("_year") ? 1900 : undefined}
+                    max={field.endsWith("_month") ? 12 : field.endsWith("_year") ? 2100 : undefined}
+                    value={String(draft[field] ?? "")}
+                    onChange={(e) => setDraft((d) => ({ ...d, [field]: e.target.value }))}
+                  />
+                )}
+                {field === "source_period" ? (
+                  <p className="text-xs text-muted-foreground">{t("form.periodHint")}</p>
+                ) : null}
+              </div>
+            );
+          })}
           <div className="flex gap-2 sm:col-span-2">
             <Button type="submit" size="sm">
               {t("keepCorrection")}
