@@ -1,0 +1,40 @@
+name: temporary-preview-format
+
+on:
+  push:
+    branches: [feat/partial-dates-ui]
+    paths:
+      - .github/workflows/temporary-preview-format.yml
+
+permissions:
+  contents: read
+
+jobs:
+  format-files:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Format changed frontend files without pushing
+        shell: bash
+        run: |
+          files=(
+            features/profile/extraction-review.tsx
+            features/profile/item-dialog.tsx
+            features/profile/periods.ts
+            features/profile/profile-workspace.tsx
+            features/profile/sections.ts
+            tests/unit/profile-periods.test.ts
+          )
+          pnpm exec prettier --write "${files[@]}"
+          for file in "${files[@]}"; do
+            echo "GENIURA_FMT_START:${file}"
+            cat "$file"
+            printf '\nGENIURA_FMT_END:%s\n' "$file"
+          done
