@@ -38,9 +38,11 @@ function periodPart(fields: Fields, end: boolean, locale: string): string | null
 
   if (precision === "day" && day) return day;
   if (year && month && month >= 1 && month <= 12 && precision !== "year") {
-    return new Intl.DateTimeFormat(locale, { month: "short", year: "numeric", timeZone: "UTC" }).format(
-      new Date(Date.UTC(year, month - 1, 1)),
-    );
+    return new Intl.DateTimeFormat(locale, {
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(Date.UTC(year, month - 1, 1)));
   }
   if (year) return String(year);
   return day;
@@ -68,7 +70,10 @@ export function displayReviewPeriod(
 }
 
 /** Keep explicit empties and avoid sending stale day/month fields after precision changes. */
-export function prepareStructuredPeriodPayload(values: Fields, enabled = STRUCTURED_PERIODS_ENABLED): Fields {
+export function prepareStructuredPeriodPayload(
+  values: Fields,
+  enabled = STRUCTURED_PERIODS_ENABLED,
+): Fields {
   if (!enabled) return { ...values };
   const next = { ...values };
   for (const prefix of ["start", "end"] as const) {
