@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f. Profile schemas (Experience/Education and their request variants) synchronized from geniura-api@943bac4b2f777131853fa66a1bdb84b483c26d22.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
  * OpenAPI spec version: 1.0.0-dev
  */
 import type { ReportCategoryEnum } from "./reportCategoryEnum";

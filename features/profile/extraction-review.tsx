@@ -81,7 +81,8 @@ function usePayloadText(vocabulary: Vocabulary) {
     // A corrected source period is authoritative; do not preview the old
     // parsed years while the backend is re-deriving them on confirmation.
     const previewPeriod =
-      override && Object.prototype.hasOwnProperty.call(override, "source_period") &&
+      override &&
+      Object.prototype.hasOwnProperty.call(override, "source_period") &&
       override.source_period !== original.source_period
         ? String(override.source_period ?? "")
         : displayReviewPeriod(p, locale, t("item.present"));
@@ -100,9 +101,7 @@ function usePayloadText(vocabulary: Vocabulary) {
       case "occupation":
         return label("occupations", s("occupation_id")) ?? s("label");
       case "experience":
-        return [s("title"), s("employer_name"), previewPeriod]
-          .filter(Boolean)
-          .join(" · ");
+        return [s("title"), s("employer_name"), previewPeriod].filter(Boolean).join(" · ");
       case "education":
         return [
           s("degree"),
