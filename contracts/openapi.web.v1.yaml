@@ -5444,7 +5444,8 @@ components:
         - detail
     Education:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment
+        and silent typos).
       properties:
         id:
           type: string
@@ -5461,6 +5462,33 @@ components:
         field_of_study:
           type: string
           maxLength: 160
+        source_period:
+          type: string
+          maxLength: 160
+        start_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
+        end_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -5492,7 +5520,6 @@ components:
       required:
         - created_at
         - id
-        - institution
         - source
         - updated_at
         - verification_method
@@ -5519,13 +5546,25 @@ components:
         * `bac_plus_3` - Bac Plus 3
         * `bac_plus_5` - Bac Plus 5
         * `doctorate` - Doctorate
+    EndDatePrecisionEnum:
+      enum:
+        - unknown
+        - year
+        - month
+        - day
+      type: string
+      description: |-
+        * `unknown` - Unknown
+        * `year` - Year
+        * `month` - Month
+        * `day` - Day
     EducationRequest:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment
+        and silent typos).
       properties:
         institution:
           type: string
-          minLength: 1
           maxLength: 200
         degree:
           type: string
@@ -5535,6 +5574,33 @@ components:
         field_of_study:
           type: string
           maxLength: 160
+        source_period:
+          type: string
+          maxLength: 160
+        start_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
+        end_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -5543,8 +5609,6 @@ components:
           type: string
           format: date
           nullable: true
-      required:
-        - institution
     EligibilityEnum:
       enum:
         - eligible
@@ -5671,7 +5735,8 @@ components:
         - type
     Experience:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment
+        and silent typos).
       properties:
         id:
           type: string
@@ -5691,6 +5756,33 @@ components:
           type: string
           format: uuid
           nullable: true
+        source_period:
+          type: string
+          maxLength: 160
+        start_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
+        end_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -5734,7 +5826,8 @@ components:
         - verified_at
     ExperienceRequest:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment
+        and silent typos).
       properties:
         title:
           type: string
@@ -5751,6 +5844,33 @@ components:
           type: string
           format: uuid
           nullable: true
+        source_period:
+          type: string
+          maxLength: 160
+        start_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
+        end_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -7789,11 +7909,11 @@ components:
           nullable: true
     PatchedEducationRequest:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment
+        and silent typos).
       properties:
         institution:
           type: string
-          minLength: 1
           maxLength: 200
         degree:
           type: string
@@ -7803,6 +7923,33 @@ components:
         field_of_study:
           type: string
           maxLength: 160
+        source_period:
+          type: string
+          maxLength: 160
+        start_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
+        end_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -7813,7 +7960,8 @@ components:
           nullable: true
     PatchedExperienceRequest:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment
+        and silent typos).
       properties:
         title:
           type: string
@@ -7830,6 +7978,33 @@ components:
           type: string
           format: uuid
           nullable: true
+        source_period:
+          type: string
+          maxLength: 160
+        start_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_year:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        end_month:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        start_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
+        end_date_precision:
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date

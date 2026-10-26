@@ -7,6 +7,7 @@
  * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
  * OpenAPI spec version: 1.0.0-dev
  */
+import type { EndDatePrecisionEnum } from "./endDatePrecisionEnum";
 
 /**
  * Rejects unknown input keys (protection against mass assignment and silent typos).
@@ -23,6 +24,34 @@ export interface PatchedExperienceRequest {
   occupation?: string | null;
   /** @nullable */
   city?: string | null;
+  /** @maxLength 160 */
+  source_period?: string;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  start_year?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  start_month?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  end_year?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  end_month?: number | null;
+  start_date_precision?: EndDatePrecisionEnum;
+  end_date_precision?: EndDatePrecisionEnum;
   /** @nullable */
   start_date?: string | null;
   /** @nullable */

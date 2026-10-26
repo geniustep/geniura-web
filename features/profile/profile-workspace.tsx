@@ -45,6 +45,7 @@ import { ifMatch, isConflict, useRefreshProfile } from "./api";
 import { IdentityDialog } from "./identity-dialog";
 import { ItemDialog } from "./item-dialog";
 import { useLanguageName, useVocabularyLabel } from "./labels";
+import { displayProfilePeriod } from "./periods";
 import { SECTIONS, type SectionItem, type SectionKind } from "./sections";
 
 const SECTION_ICONS = {
@@ -74,6 +75,7 @@ function useItemText(vocabulary: Vocabulary) {
   const t = useTranslations("Profile");
   const tJobs = useTranslations("Jobs");
   const format = useFormatter();
+  const locale = useLocale();
   const languageName = useLanguageName();
   const label = useVocabularyLabel(vocabulary);
 
@@ -81,11 +83,7 @@ function useItemText(vocabulary: Vocabulary) {
     typeof value === "string" && value
       ? format.dateTime(new Date(value), { year: "numeric", month: "short" })
       : null;
-  const period = (start: unknown, end: unknown, current?: boolean) => {
-    const from = year(start);
-    const to = current ? t("item.present") : year(end);
-    return from || to ? [from ?? "…", to ?? "…"].join(" – ") : null;
-  };
+  const period = (item: SectionItem) => displayProfilePeriod(item, locale, t("item.present"));
 
   return (
     kind: SectionKind,
@@ -96,18 +94,15 @@ function useItemText(vocabulary: Vocabulary) {
         return {
           title: String(item.degree || item.institution),
           meta: [
-            item.degree ? String(item.institution) : null,
+            item.degree ? String(item.institution || t("form.notSpecified")) : null,
             item.level ? tJobs(`educationLevel.${item.level}` as "educationLevel.none") : null,
-            period(item.start_date, item.end_date),
+            period(item),
           ],
         };
       case "experiences":
         return {
           title: String(item.title),
-          meta: [
-            item.employer_name ? String(item.employer_name) : null,
-            period(item.start_date, item.end_date, Boolean(item.is_current)),
-          ],
+          meta: [item.employer_name ? String(item.employer_name) : null, period(item)],
         };
       case "skills":
         return {

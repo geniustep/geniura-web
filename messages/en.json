@@ -739,7 +739,14 @@
       "available_from": "Available from",
       "desired_contract_types": "Contract types you are looking for",
       "desired_work_modes": "Work modes",
-      "willing_to_relocate": "Willing to move to another city"
+      "willing_to_relocate": "Willing to move to another city",
+      "source_period": "Period as written in CV",
+      "start_year": "Start year",
+      "start_month": "Start month",
+      "end_year": "End year",
+      "end_month": "End month",
+      "start_date_precision": "Start date precision",
+      "end_date_precision": "End date precision"
     },
     "enums": {
       "educationLevel": {
@@ -798,7 +805,9 @@
       "searching": "Searching…",
       "noSkillFound": "Nothing in the list. Try another word.",
       "counter": "{count} of {max} characters",
-      "notSpecified": "Not specified"
+      "notSpecified": "Not specified",
+      "periodHint": "Keep the period as written in the CV. Do not assume an unspecified day.",
+      "institutionHint": "Leave blank when no school is named in the source."
     },
     "conflict": {
       "title": "Changed on another device",
@@ -1015,7 +1024,8 @@
       "partialNote": "You can save part of it and come back later.",
       "later": "Later",
       "saving": "Saving…",
-      "save": "{count, plural, =0 {Decide for each item} one {Save # decision} other {Save # decisions}}"
+      "save": "{count, plural, =0 {Decide for each item} one {Save # decision} other {Save # decisions}}",
+      "confidence": "Extraction confidence: {value}%"
     },
     "match": {
       "requirement": "Requirement",
@@ -1061,6 +1071,12 @@
       "cancel": "Cancel",
       "sending": "Sending…",
       "confirm": "Send my application"
+    },
+    "datePrecision": {
+      "unknown": "Not specified",
+      "year": "Year only",
+      "month": "Month and year",
+      "day": "Day, month and year"
     }
   }
 }

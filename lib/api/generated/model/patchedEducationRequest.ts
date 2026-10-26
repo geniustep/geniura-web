@@ -8,21 +8,47 @@
  * OpenAPI spec version: 1.0.0-dev
  */
 import type { EducationLevelEnum } from "./educationLevelEnum";
+import type { EndDatePrecisionEnum } from "./endDatePrecisionEnum";
 
 /**
  * Rejects unknown input keys (protection against mass assignment and silent typos).
  */
 export interface PatchedEducationRequest {
-  /**
-   * @minLength 1
-   * @maxLength 200
-   */
+  /** @maxLength 200 */
   institution?: string;
   /** @maxLength 160 */
   degree?: string;
   level?: EducationLevelEnum;
   /** @maxLength 160 */
   field_of_study?: string;
+  /** @maxLength 160 */
+  source_period?: string;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  start_year?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  start_month?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  end_year?: number | null;
+  /**
+   * @minimum 0
+   * @maximum 32767
+   * @nullable
+   */
+  end_month?: number | null;
+  start_date_precision?: EndDatePrecisionEnum;
+  end_date_precision?: EndDatePrecisionEnum;
   /** @nullable */
   start_date?: string | null;
   /** @nullable */

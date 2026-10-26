@@ -739,7 +739,14 @@
       "available_from": "Disponible desde",
       "desired_contract_types": "Tipos de contrato que buscas",
       "desired_work_modes": "Modalidades de trabajo",
-      "willing_to_relocate": "Dispuesto/a a mudarme a otra ciudad"
+      "willing_to_relocate": "Dispuesto/a a mudarme a otra ciudad",
+      "source_period": "Periodo según el CV",
+      "start_year": "Año de inicio",
+      "start_month": "Mes de inicio",
+      "end_year": "Año de fin",
+      "end_month": "Mes de fin",
+      "start_date_precision": "Precisión del inicio",
+      "end_date_precision": "Precisión del fin"
     },
     "enums": {
       "educationLevel": {
@@ -798,7 +805,9 @@
       "searching": "Buscando…",
       "noSkillFound": "Nada en la lista. Prueba otra palabra.",
       "counter": "{count} de {max} caracteres",
-      "notSpecified": "Sin especificar"
+      "notSpecified": "Sin especificar",
+      "periodHint": "Conserva el periodo indicado en el CV. No supongas un día que no aparece.",
+      "institutionHint": "Déjalo vacío si el centro no figura en el documento."
     },
     "conflict": {
       "title": "Modificado desde otro dispositivo",
@@ -1015,7 +1024,8 @@
       "partialNote": "Puedes guardar una parte y volver más tarde.",
       "later": "Más tarde",
       "saving": "Guardando…",
-      "save": "{count, plural, =0 {Decide cada elemento} one {Guardar # decisión} other {Guardar # decisiones}}"
+      "save": "{count, plural, =0 {Decide cada elemento} one {Guardar # decisión} other {Guardar # decisiones}}",
+      "confidence": "Confianza de la extracción: {value}%"
     },
     "match": {
       "requirement": "Requisito",
@@ -1061,6 +1071,12 @@
       "cancel": "Cancelar",
       "sending": "Enviando…",
       "confirm": "Enviar mi candidatura"
+    },
+    "datePrecision": {
+      "unknown": "Sin especificar",
+      "year": "Solo año",
+      "month": "Mes y año",
+      "day": "Día, mes y año"
     }
   }
 }

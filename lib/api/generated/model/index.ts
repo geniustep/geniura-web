@@ -67,6 +67,7 @@ export * from "./educationLevelEnum";
 export * from "./educationRequest";
 export * from "./eligibilityEnum";
 export * from "./emailVerifyRequest";
+export * from "./endDatePrecisionEnum";
 export * from "./enrollment";
 export * from "./enrollmentStatusEnum";
 export * from "./enrollRequest";

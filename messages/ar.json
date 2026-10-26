@@ -739,7 +739,14 @@
       "available_from": "متاح ابتداءً من",
       "desired_contract_types": "أنواع العقود التي تبحث عنها",
       "desired_work_modes": "أنماط العمل",
-      "willing_to_relocate": "مستعد للانتقال إلى مدينة أخرى"
+      "willing_to_relocate": "مستعد للانتقال إلى مدينة أخرى",
+      "source_period": "الفترة كما وردت في السيرة",
+      "start_year": "سنة البداية",
+      "start_month": "شهر البداية",
+      "end_year": "سنة النهاية",
+      "end_month": "شهر النهاية",
+      "start_date_precision": "دقة تاريخ البداية",
+      "end_date_precision": "دقة تاريخ النهاية"
     },
     "enums": {
       "educationLevel": {
@@ -798,7 +805,9 @@
       "searching": "جارٍ البحث…",
       "noSkillFound": "لا نتيجة في القاموس. جرّب كلمة أخرى.",
       "counter": "{count} من {max} حرفًا",
-      "notSpecified": "غير محدد"
+      "notSpecified": "غير محدد",
+      "periodHint": "احتفظ بالفترة الأصلية كما وردت في السيرة. لا تفترض يومًا عندما لا يُذكر.",
+      "institutionHint": "اترك المؤسسة فارغة إذا لم ترد في الشهادة."
     },
     "conflict": {
       "title": "عُدّل هذا من جهاز آخر",
@@ -1015,7 +1024,8 @@
       "partialNote": "يمكنك حفظ جزء والعودة للباقي لاحقًا.",
       "later": "لاحقًا",
       "saving": "جارٍ الحفظ…",
-      "save": "{count, plural, =0 {اختر لكل عنصر} one {حفظ قرار واحد} two {حفظ قرارين} few {حفظ # قرارات} other {حفظ # قرار}}"
+      "save": "{count, plural, =0 {اختر لكل عنصر} one {حفظ قرار واحد} two {حفظ قرارين} few {حفظ # قرارات} other {حفظ # قرار}}",
+      "confidence": "درجة ثقة الاستخراج: {value}%"
     },
     "match": {
       "requirement": "متطلب",
@@ -1061,6 +1071,12 @@
       "cancel": "إلغاء",
       "sending": "جارٍ الإرسال…",
       "confirm": "إرسال ترشيحي"
+    },
+    "datePrecision": {
+      "unknown": "غير محددة",
+      "year": "السنة فقط",
+      "month": "الشهر والسنة",
+      "day": "اليوم والشهر والسنة"
     }
   }
 }

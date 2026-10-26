@@ -16,6 +16,7 @@ import { fieldErrors, isApiError } from "@/lib/api/errors";
 import { type Vocabulary } from "@/lib/jobs/labels";
 
 import { cleanPayload, ifMatch, isConflict, useRefreshProfile } from "./api";
+import { prepareStructuredPeriodPayload, STRUCTURED_PERIODS_ENABLED } from "./periods";
 import { useLanguageName } from "./labels";
 import {
   formValues,
@@ -49,6 +50,7 @@ function FieldControl({
   vocabulary: Vocabulary;
 }) {
   const t = useTranslations("Profile");
+  const locale = useLocale();
   const languageName = useLanguageName();
   const common = {
     id,
@@ -76,6 +78,50 @@ function FieldControl({
           value={String(value)}
           onChange={(e) => onChange(e.target.value)}
         />
+      );
+    case "year":
+      return (
+        <Input
+          {...common}
+          type="number"
+          min={1900}
+          max={2100}
+          step={1}
+          dir="ltr"
+          value={String(value)}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      );
+    case "month":
+      return (
+        <NativeSelect
+          {...common}
+          dir="ltr"
+          value={String(value)}
+          onChange={(e) => onChange(e.target.value)}
+        >
+          <option value="">{t("form.notSpecified")}</option>
+          {Array.from({ length: 12 }, (_, index) => {
+            const month = index + 1;
+            return (
+              <option key={month} value={String(month)}>
+                {new Intl.DateTimeFormat(locale, { month: "long" }).format(
+                  new Date(Date.UTC(2024, index, 1)),
+                )}
+              </option>
+            );
+          })}
+        </NativeSelect>
+      );
+    case "precision":
+      return (
+        <NativeSelect {...common} value={String(value)} onChange={(e) => onChange(e.target.value)}>
+          {(["unknown", "year", "month", "day"] as const).map((precision) => (
+            <option key={precision} value={precision}>
+              {t(`datePrecision.${precision}`)}
+            </option>
+          ))}
+        </NativeSelect>
       );
     case "years":
       return (
@@ -195,7 +241,11 @@ export function ItemDialog({
         ([name]) => !(item && section.fields.find((f) => f.name === name)?.createOnly),
       ),
     );
-    const body = cleanPayload(editable, section.nullable) as never;
+    const normalized =
+      STRUCTURED_PERIODS_ENABLED && (kind === "experiences" || kind === "educations")
+        ? prepareStructuredPeriodPayload(editable)
+        : editable;
+    const body = cleanPayload(normalized, section.nullable) as never;
     try {
       if (item) await section.api.update(item.id, body, ifMatch(withVersion));
       else await section.api.create(body);
@@ -230,7 +280,10 @@ export function ItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent closeLabel={tCommon("close")} className="w-[min(36rem,100vw-2rem)]">
+      <DialogContent
+        closeLabel={tCommon("close")}
+        className="max-h-[90vh] w-[min(36rem,100vw-2rem)] overflow-y-auto"
+      >
         <DialogTitle>{t(`sections.${kind}.${item ? "editTitle" : "addTitle"}`)}</DialogTitle>
         <DialogDescription>{t(`sections.${kind}.hint`)}</DialogDescription>
 
@@ -298,6 +351,40 @@ export function ItemDialog({
         <form id={formId} className="grid gap-4" onSubmit={onSubmit} noValidate>
           <div className="grid gap-4 sm:grid-cols-2">
             {section.fields.map((field) => {
+              if (STRUCTURED_PERIODS_ENABLED && (kind === "experiences" || kind === "educations")) {
+                const prefix = field.name.startsWith("start_")
+                  ? "start"
+                  : field.name.startsWith("end_")
+                    ? "end"
+                    : null;
+                if (
+                  prefix &&
+                  (kind !== "experiences" || values.is_current !== true || prefix !== "end")
+                ) {
+                  const precision = values[`${prefix}_date_precision`];
+                  if (
+                    field.name.endsWith("_year") &&
+                    !["year", "month"].includes(String(precision))
+                  )
+                    return null;
+                  if (field.name.endsWith("_month") && precision !== "month") return null;
+                  if (field.name.endsWith("_date") && precision !== "day") return null;
+                }
+                if (
+                  prefix === "end" &&
+                  kind === "experiences" &&
+                  values.is_current === true &&
+                  field.name !== "end_date_precision"
+                )
+                  return null;
+                if (
+                  prefix === "end" &&
+                  kind === "experiences" &&
+                  values.is_current === true &&
+                  field.name === "end_date_precision"
+                )
+                  return null;
+              }
               const id = `${formId}-${field.name}`;
               const errorId = errors[field.name] ? `${id}-error` : undefined;
               const wide =
@@ -340,6 +427,14 @@ export function ItemDialog({
                       {control}
                       {locked ? (
                         <p className="text-xs text-muted-foreground">{t("form.identityLocked")}</p>
+                      ) : null}
+                      {field.name === "source_period" ? (
+                        <p className="text-xs text-muted-foreground">{t("form.periodHint")}</p>
+                      ) : null}
+                      {field.name === "institution" &&
+                      kind === "educations" &&
+                      STRUCTURED_PERIODS_ENABLED ? (
+                        <p className="text-xs text-muted-foreground">{t("form.institutionHint")}</p>
                       ) : null}
                     </>
                   )}
