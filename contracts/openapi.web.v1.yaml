@@ -5458,7 +5458,7 @@ components:
           type: string
           maxLength: 160
         level:
-          $ref: '#/components/schemas/EducationLevelEnum'
+          $ref: "#/components/schemas/EducationLevelEnum"
         field_of_study:
           type: string
           maxLength: 160
@@ -5486,9 +5486,9 @@ components:
           minimum: 0
           nullable: true
         start_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         end_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -5499,7 +5499,7 @@ components:
           nullable: true
         source:
           allOf:
-          - $ref: '#/components/schemas/ProvenanceSourceEnum'
+            - $ref: "#/components/schemas/ProvenanceSourceEnum"
           readOnly: true
         verified_at:
           type: string
@@ -5518,12 +5518,12 @@ components:
           format: date-time
           readOnly: true
       required:
-      - created_at
-      - id
-      - source
-      - updated_at
-      - verification_method
-      - verified_at
+        - created_at
+        - id
+        - source
+        - updated_at
+        - verification_method
+        - verified_at
     EducationLevelEnum:
       enum:
         - none
@@ -5548,10 +5548,10 @@ components:
         * `doctorate` - Doctorate
     EndDatePrecisionEnum:
       enum:
-      - unknown
-      - year
-      - month
-      - day
+        - unknown
+        - year
+        - month
+        - day
       type: string
       description: |-
         * `unknown` - Unknown
@@ -5570,7 +5570,7 @@ components:
           type: string
           maxLength: 160
         level:
-          $ref: '#/components/schemas/EducationLevelEnum'
+          $ref: "#/components/schemas/EducationLevelEnum"
         field_of_study:
           type: string
           maxLength: 160
@@ -5598,9 +5598,9 @@ components:
           minimum: 0
           nullable: true
         start_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         end_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -5780,9 +5780,9 @@ components:
           minimum: 0
           nullable: true
         start_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         end_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -5798,7 +5798,7 @@ components:
           maxLength: 3000
         source:
           allOf:
-          - $ref: '#/components/schemas/ProvenanceSourceEnum'
+            - $ref: "#/components/schemas/ProvenanceSourceEnum"
           readOnly: true
         verified_at:
           type: string
@@ -5817,13 +5817,13 @@ components:
           format: date-time
           readOnly: true
       required:
-      - created_at
-      - id
-      - source
-      - title
-      - updated_at
-      - verification_method
-      - verified_at
+        - created_at
+        - id
+        - source
+        - title
+        - updated_at
+        - verification_method
+        - verified_at
     ExperienceRequest:
       type: object
       description: Rejects unknown input keys (protection against mass assignment
@@ -5868,9 +5868,9 @@ components:
           minimum: 0
           nullable: true
         start_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         end_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -5885,7 +5885,7 @@ components:
           type: string
           maxLength: 3000
       required:
-      - title
+        - title
     ExtractedItem:
       type: object
       properties:
@@ -7919,7 +7919,7 @@ components:
           type: string
           maxLength: 160
         level:
-          $ref: '#/components/schemas/EducationLevelEnum'
+          $ref: "#/components/schemas/EducationLevelEnum"
         field_of_study:
           type: string
           maxLength: 160
@@ -7947,9 +7947,9 @@ components:
           minimum: 0
           nullable: true
         start_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         end_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
@@ -8002,9 +8002,9 @@ components:
           minimum: 0
           nullable: true
         start_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         end_date_precision:
-          $ref: '#/components/schemas/EndDatePrecisionEnum'
+          $ref: "#/components/schemas/EndDatePrecisionEnum"
         start_date:
           type: string
           format: date
