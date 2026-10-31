@@ -4,6 +4,7 @@ export * from "./auth/auth.zod";
 export * from "./candidates/candidates.zod";
 export * from "./commerce-organization/commerce-organization.zod";
 export * from "./data-rights/data-rights.zod";
+export * from "./guest-onboarding/guest-onboarding.zod";
 export * from "./health/health.zod";
 export * from "./jobs-organization/jobs-organization.zod";
 export * from "./jobs-public/jobs-public.zod";

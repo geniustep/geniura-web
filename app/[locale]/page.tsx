@@ -124,7 +124,7 @@ export default async function HomePage({ params }: HomePageProps) {
             </p>
             <div className="mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
               <Link
-                href={{ pathname: "/register", query: { next: `/${locale}/account/profile` } }}
+                href="/start"
                 className={buttonVariants({
                   variant: "action",
                   size: "lg",

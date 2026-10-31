@@ -44,8 +44,8 @@ describe("BFF route, cookie and CSRF isolation", () => {
   });
 
   it("permits only declared public paths and HTTP methods", () => {
-    expect(Object.keys(publicApiRoutes)).toHaveLength(114);
-    expect(Object.values(publicApiRoutes).flat()).toHaveLength(150);
+    expect(Object.keys(publicApiRoutes)).toHaveLength(118);
+    expect(Object.values(publicApiRoutes).flat()).toHaveLength(156);
     expect(allowedBackendPath("/api/v1/staff/metrics", "GET")).toBeNull();
     expect(allowedBackendPath("/api/v1/files/verification-documents/token", "GET")).toBeNull();
     expect(allowedBackendPath("/api/v1/organizations", "POST")).toBe("/api/v1/organizations/");

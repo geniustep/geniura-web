@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@d626e1012e164d8ff71249d25ecdd875d12a6256.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@5b14e360eec32b308d6b52b4eadb7cbf89957e22.
  * OpenAPI spec version: 1.0.0-dev
  */
 
@@ -45,7 +45,9 @@ export * from "./candidateVisibilityEnum";
 export * from "./certification";
 export * from "./certificationKindEnum";
 export * from "./certificationRequest";
+export * from "./claim";
 export * from "./closeJobRequest";
+export * from "./codeRequest";
 export * from "./completeness";
 export * from "./completionEvidence";
 export * from "./completionEvidenceKindEnum";
@@ -67,6 +69,7 @@ export * from "./education";
 export * from "./educationLevelEnum";
 export * from "./educationRequest";
 export * from "./eligibilityEnum";
+export * from "./emailRequest";
 export * from "./emailVerifyRequest";
 export * from "./enrollment";
 export * from "./enrollmentStatusEnum";
@@ -81,6 +84,7 @@ export * from "./extractedItem";
 export * from "./extractedItemKindEnum";
 export * from "./extractedItemReviewEnum";
 export * from "./extraction";
+export * from "./guestDetail";
 export * from "./health";
 export * from "./healthChecks";
 export * from "./interview";
@@ -109,6 +113,7 @@ export * from "./jobsListSort";
 export * from "./language";
 export * from "./languageLevelEnum";
 export * from "./languageRequest";
+export * from "./localeEnum";
 export * from "./location";
 export * from "./locationKindEnum";
 export * from "./locationLabels";
@@ -194,6 +199,7 @@ export * from "./preferences";
 export * from "./preferenceState";
 export * from "./previewRequestRequest";
 export * from "./progress";
+export * from "./proof";
 export * from "./provenanceSourceEnum";
 export * from "./publicJob";
 export * from "./publicJobList";
@@ -244,6 +250,7 @@ export * from "./skillLabels";
 export * from "./skillLevelEnum";
 export * from "./skillSynonymsItem";
 export * from "./skillVocabularyList";
+export * from "./state";
 export * from "./step";
 export * from "./stepProgressResult";
 export * from "./stepProgressStatusEnum";
@@ -265,6 +272,7 @@ export * from "./transitionToStatusEnum";
 export * from "./uploadIntentRequest";
 export * from "./uploadIntentResponse";
 export * from "./uploadIntentResponseUpload";
+export * from "./uploadRequest";
 export * from "./userSignupIntentEnum";
 export * from "./verificationDocument";
 export * from "./verificationDocumentFileTypeEnum";
