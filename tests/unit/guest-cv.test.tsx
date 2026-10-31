@@ -116,6 +116,17 @@ describe("guest CV onboarding", () => {
     await screen.findByRole("button", { name: ar.GuestCv.send });
     expect(api.claimGuestDraft).toHaveBeenCalledOnce();
   });
+  it("does not offer draft-file deletion after the CV has moved to the account", async () => {
+    api.getGuestDraft.mockResolvedValue({
+      ...ready,
+      status: "claimed",
+      claimed: true,
+      identity: {},
+    });
+    setup(true);
+    await screen.findByRole("link", { name: ar.GuestCv.profile });
+    expect(screen.queryByRole("button", { name: ar.GuestCv.delete })).not.toBeInTheDocument();
+  });
   it("lets the owner delete private draft data", async () => {
     setup();
     const button = await screen.findByRole("button", { name: ar.GuestCv.delete });

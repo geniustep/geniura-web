@@ -223,7 +223,7 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
           )}
         </>
       )}
-      {data ? (
+      {data && !data.claimed ? (
         <Button
           className="h-auto min-h-11 py-3 whitespace-normal"
           variant="outline"
