@@ -108,7 +108,13 @@ export function LoginForm({ next }: { next?: string }) {
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         {t("login.noAccount")}{" "}
-        <Link href="/register" className="font-medium text-action hover:underline">
+        <Link
+          href={{
+            pathname: "/register",
+            query: next ? { next: safeRedirectPath(next) } : undefined,
+          }}
+          className="font-medium text-action hover:underline"
+        >
           {t("login.toRegister")}
         </Link>
       </p>

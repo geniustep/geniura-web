@@ -47,6 +47,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
+      { source: "/:locale/start", headers: privateNoStore },
       { source: "/:locale/account", headers: privateNoStore },
       { source: "/:locale/account/:path*", headers: privateNoStore },
     ];
