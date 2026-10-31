@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { useAuthRegisterCreate } from "@/lib/api/generated/endpoints/auth/auth";
 import { AuthRegisterCreateBody } from "@/lib/api/generated/zod/auth/auth.zod";
 import { Link } from "@/lib/i18n/navigation";
+import { safeRedirectPath } from "@/lib/auth/safe-redirect";
 
 import { FormAlert, FormField } from "./form-parts";
 import { applyServerErrors } from "./use-server-errors";
@@ -24,7 +25,7 @@ type Input = z.input<typeof schema>;
 type Output = z.output<typeof schema>;
 const intents = ["candidate", "employer"] as const;
 
-export function RegisterForm() {
+export function RegisterForm({ next }: { next?: string }) {
   const t = useTranslations("Auth");
   const locale = useLocale();
   const [general, setGeneral] = useState<string[]>([]);
@@ -54,7 +55,13 @@ export function RegisterForm() {
         title={t("register.doneTitle")}
         description={t("register.doneBody")}
         action={
-          <Link href="/login" className="text-sm font-medium text-action hover:underline">
+          <Link
+            href={{
+              pathname: "/login",
+              query: next ? { next: safeRedirectPath(next) } : undefined,
+            }}
+            className="text-sm font-medium text-action hover:underline"
+          >
             {t("backToLogin")}
           </Link>
         }
@@ -159,7 +166,10 @@ export function RegisterForm() {
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         {t("register.hasAccount")}{" "}
-        <Link href="/login" className="font-medium text-action hover:underline">
+        <Link
+          href={{ pathname: "/login", query: next ? { next: safeRedirectPath(next) } : undefined }}
+          className="font-medium text-action hover:underline"
+        >
           {t("register.toLogin")}
         </Link>
       </p>

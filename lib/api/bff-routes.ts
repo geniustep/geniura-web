@@ -2,6 +2,10 @@
  * Keep in sync with OpenAPI; backend RBAC remains authoritative.
  */
 export const publicApiRoutes: Readonly<Record<string, readonly string[]>> = {
+  "/api/v1/onboarding/guest-cv": ["GET", "POST", "DELETE"],
+  "/api/v1/onboarding/guest-cv/email-code": ["POST"],
+  "/api/v1/onboarding/guest-cv/verify-email": ["POST"],
+  "/api/v1/onboarding/guest-cv/claim": ["POST"],
   "/api/v1/auth/csrf": ["GET"],
   "/api/v1/auth/email/resend": ["POST"],
   "/api/v1/auth/email/verify": ["POST"],
