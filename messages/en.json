@@ -374,7 +374,7 @@
       "share_request_expired": "This request has expired.",
       "duplicate_application": "You already applied for this job.",
       "email_not_verified": "Confirm your email address first.",
-      "resume_not_ready": "This CV has not passed the safety check yet.",
+      "resume_not_ready": "This CV is not ready yet.",
       "resume_limit_reached": "Maximum number of versions reached. Delete one first.",
       "file_too_large": "The file is larger than allowed."
     },
@@ -693,7 +693,7 @@
       },
       "resumes": {
         "title": "My CVs",
-        "subtitle": "Your CV versions, their safety check, reading, and the review of what was read."
+        "subtitle": "Your CV versions, processing status and extracted information review."
       },
       "privacy": {
         "title": "Who can see my profile?",
@@ -916,7 +916,7 @@
         "resume": "Upload your CV"
       },
       "optional": "Optional",
-      "resumeChecking": "Your CV is being checked. You can attach it once it passes."
+      "resumeChecking": "Your CV is being prepared. You can attach it when processing finishes."
     },
     "links": {
       "resumes": "My CVs",
@@ -982,7 +982,7 @@
     },
     "resumes": {
       "stage": {
-        "scan": "Checking the file",
+        "scan": "Preparing the file",
         "read": "Reading the information",
         "review": "Information to review",
         "done": "Reviewed",
@@ -992,7 +992,7 @@
       "wrongType": "Choose a PDF or Word (DOCX) file.",
       "tooLarge": "5 MB maximum.",
       "chooseFile": "Choose a file first.",
-      "uploaded": "File received. Checking it now.",
+      "uploaded": "File received. Preparing it for reading.",
       "uploadTitle": "Upload a new version",
       "uploadHint": "We read education, skills and languages from it; then you decide. Earlier versions stay as they are.",
       "dropHere": "Drop the file here or choose it",
@@ -1006,7 +1006,7 @@
       "primary": "Primary",
       "meta": "Version {version} · {date}",
       "failedExplain": "The file is safe and can be attached to applications, but its content could not be read. Try again or enter the information yourself.",
-      "rejectedExplain": "The file did not pass the safety check, so it cannot be downloaded or sent. Upload another file.",
+      "rejectedExplain": "The file could not be accepted in its current format. Upload another file.",
       "review": "Review information",
       "retry": "Read again",
       "primarySet": "Set as primary.",
@@ -1137,7 +1137,7 @@
     "authNote": "In the current version, upload and extraction start after sign-in. No file has been uploaded at this step.",
     "signIn": "Sign in",
     "register": "Create an account",
-    "reviewPromise": "After upload and scanning, review the extracted information before confirming it. Nothing is added to your profile automatically.",
+    "reviewPromise": "After upload, review the extracted information before confirming it. Nothing is added to your profile automatically.",
     "manualTitle": "Create your profile without a CV",
     "manualBody": "Enter your details, experience, education and skills directly. You can add a CV later.",
     "openProfile": "Open my professional profile",
@@ -1152,10 +1152,10 @@
     "loading": "Loading draft…",
     "retry": "Try again",
     "title": "Upload your CV",
-    "privacy": "We will check the file and suggest its information. Your private draft expires after 24 hours and you can delete it at any time.",
+    "privacy": "We will read your CV and suggest its information. Your private draft expires after 24 hours and you can delete it at any time.",
     "file": "Choose your CV",
     "limits": "PDF or DOCX, up to 5 MB.",
-    "processing": "Checking your CV and extracting information…",
+    "processing": "Reading your CV and extracting information…",
     "failed": "Processing failed. Delete this draft and try another file, or continue manually.",
     "profile": "Open my professional profile",
     "welcomeName": "Welcome {name}",
