@@ -66,13 +66,11 @@ for (const [locale, messages] of Object.entries(catalogs)) {
       return reply(404, { code: "not_found" });
     });
     await page.goto(`/${locale}/start?step=upload`);
-    await page
-      .getByLabel(t.file)
-      .setInputFiles({
-        name: "cv.pdf",
-        mimeType: "application/pdf",
-        buffer: Buffer.from("synthetic browser fixture; backend parsing tested separately"),
-      });
+    await page.getByLabel(t.file).setInputFiles({
+      name: "cv.pdf",
+      mimeType: "application/pdf",
+      buffer: Buffer.from("synthetic browser fixture; backend parsing tested separately"),
+    });
     await expect(
       page.getByRole("heading", { name: t.welcomeName.replace("{name}", "Synthetic Person") }),
     ).toBeVisible();
