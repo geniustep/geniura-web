@@ -2,7 +2,7 @@ import { allowedBackendPath } from "@/lib/api/bff-routes";
 import { addPrelaunchAccessHeader } from "@/lib/api/prelaunch-access";
 
 type Context = { params: Promise<{ path: string[] }> };
-const COOKIE_NAMES = new Set(["geniura_sid", "geniura_csrftoken"]);
+const COOKIE_NAMES = new Set(["geniura_sid", "geniura_csrftoken", "geniura_guest_cv"]);
 const MAX_BYTES = 24 * 1024 * 1024;
 const INPUT_HEADERS = [
   "accept",

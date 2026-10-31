@@ -4,6 +4,7 @@ export * from "./auth/auth";
 export * from "./candidates/candidates";
 export * from "./commerce-organization/commerce-organization";
 export * from "./data-rights/data-rights";
+export * from "./guest-onboarding/guest-onboarding";
 export * from "./health/health";
 export * from "./jobs-organization/jobs-organization";
 export * from "./jobs-public/jobs-public";

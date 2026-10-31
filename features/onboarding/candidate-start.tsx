@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FormAlert } from "@/features/auth/form-parts";
+import { GuestCv } from "@/features/onboarding/guest-cv";
 import { ResumesPanel } from "@/features/profile/resumes-panel";
 import { isApiError } from "@/lib/api/errors";
 import { useAuthMeRetrieve } from "@/lib/api/generated/endpoints/me/me";
@@ -18,7 +19,7 @@ export function CandidateStart() {
   const t = useTranslations("CandidateStart");
   const query = useSearchParams();
   const [step, setStep] = useState<"choose" | "upload" | "manual">(() =>
-    query.get("step") === "upload"
+    ["upload", "claim"].includes(query.get("step") ?? "")
       ? "upload"
       : query.get("step") === "manual"
         ? "manual"
@@ -93,6 +94,10 @@ export function CandidateStart() {
             </Button>
           </div>
         </section>
+      ) : process.env.NEXT_PUBLIC_ENABLE_GUEST_CV === "true" &&
+        step === "upload" &&
+        (!me.data || query.get("step") === "claim") ? (
+        <GuestCv signedIn={!!me.data} />
       ) : !me.data ? (
         <section className="grid gap-4 rounded-xl border bg-card p-6 sm:p-9">
           <LockKeyholeIcon className="size-8 text-action" aria-hidden="true" />
