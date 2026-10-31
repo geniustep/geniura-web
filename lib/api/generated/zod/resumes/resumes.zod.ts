@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b509bef0143ac2d003a1c5dcda88ec1b8b068334.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
@@ -80,6 +80,17 @@ export const CandidatesMeResumesDestroyResponse = zod.void();
 
 export const CandidatesMeResumesCompleteCreateParams = zod.object({
   resume_id: zod.uuid(),
+});
+
+export const candidatesMeResumesCompleteCreateBodyChecksumSha256Min = 64;
+export const candidatesMeResumesCompleteCreateBodyChecksumSha256Max = 64;
+
+export const CandidatesMeResumesCompleteCreateBody = zod.object({
+  checksum_sha256: zod
+    .string()
+    .min(candidatesMeResumesCompleteCreateBodyChecksumSha256Min)
+    .max(candidatesMeResumesCompleteCreateBodyChecksumSha256Max)
+    .optional(),
 });
 
 export const CandidatesMeResumesCompleteCreateResponse = zod.object({

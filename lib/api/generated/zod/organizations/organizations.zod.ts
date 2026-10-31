@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b509bef0143ac2d003a1c5dcda88ec1b8b068334.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
@@ -37,6 +37,8 @@ export const organizationsListResponseResultsItemContactPhoneMax = 30;
 export const organizationsListResponseResultsItemDescriptionMax = 5000;
 
 export const organizationsListResponseResultsItemSizeBandMax = 20;
+
+export const organizationsListResponseResultsItemStatusDefault = `pending`;
 
 export const OrganizationsListResponse = zod.object({
   count: zod.int(),
@@ -79,7 +81,8 @@ export const OrganizationsListResponse = zod.object({
           .enum(["pending", "verified", "rejected", "suspended"])
           .describe(
             "* `pending` - Pending\n* `verified` - Verified\n* `rejected` - Rejected\n* `suspended` - Suspended",
-          ),
+          )
+          .default(organizationsListResponseResultsItemStatusDefault),
         status_reason: zod.string(),
         verified_at: zod.iso.datetime({ offset: true }).nullable(),
         created_at: zod.iso.datetime({ offset: true }),
@@ -171,6 +174,8 @@ export const organizationsCreateResponseDescriptionMax = 5000;
 
 export const organizationsCreateResponseSizeBandMax = 20;
 
+export const organizationsCreateResponseStatusDefault = `pending`;
+
 export const OrganizationsCreateResponse = zod
   .object({
     id: zod.uuid(),
@@ -201,7 +206,8 @@ export const OrganizationsCreateResponse = zod
       .enum(["pending", "verified", "rejected", "suspended"])
       .describe(
         "* `pending` - Pending\n* `verified` - Verified\n* `rejected` - Rejected\n* `suspended` - Suspended",
-      ),
+      )
+      .default(organizationsCreateResponseStatusDefault),
     status_reason: zod.string(),
     verified_at: zod.iso.datetime({ offset: true }).nullable(),
     created_at: zod.iso.datetime({ offset: true }),
@@ -239,6 +245,8 @@ export const organizationsRetrieveResponseDescriptionMax = 5000;
 
 export const organizationsRetrieveResponseSizeBandMax = 20;
 
+export const organizationsRetrieveResponseStatusDefault = `pending`;
+
 export const OrganizationsRetrieveResponse = zod
   .object({
     id: zod.uuid(),
@@ -269,7 +277,8 @@ export const OrganizationsRetrieveResponse = zod
       .enum(["pending", "verified", "rejected", "suspended"])
       .describe(
         "* `pending` - Pending\n* `verified` - Verified\n* `rejected` - Rejected\n* `suspended` - Suspended",
-      ),
+      )
+      .default(organizationsRetrieveResponseStatusDefault),
     status_reason: zod.string(),
     verified_at: zod.iso.datetime({ offset: true }).nullable(),
     created_at: zod.iso.datetime({ offset: true }),
@@ -361,6 +370,8 @@ export const organizationsPartialUpdateResponseDescriptionMax = 5000;
 
 export const organizationsPartialUpdateResponseSizeBandMax = 20;
 
+export const organizationsPartialUpdateResponseStatusDefault = `pending`;
+
 export const OrganizationsPartialUpdateResponse = zod
   .object({
     id: zod.uuid(),
@@ -391,7 +402,8 @@ export const OrganizationsPartialUpdateResponse = zod
       .enum(["pending", "verified", "rejected", "suspended"])
       .describe(
         "* `pending` - Pending\n* `verified` - Verified\n* `rejected` - Rejected\n* `suspended` - Suspended",
-      ),
+      )
+      .default(organizationsPartialUpdateResponseStatusDefault),
     status_reason: zod.string(),
     verified_at: zod.iso.datetime({ offset: true }).nullable(),
     created_at: zod.iso.datetime({ offset: true }),

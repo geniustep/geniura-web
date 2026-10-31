@@ -1,12 +1,12 @@
 {
   "sourceRepository": "geniustep/geniura-api (private)",
   "sourceFile": "docs/openapi/openapi.yaml",
-  "sourceCommit": "ec0890a5ae22a7f07bcd870add6540aa776a464f",
-  "sourceSha256": "cbd3faf207dafdcbef793862487aaf44f1930964e4f6bf74cad2f722e8d5878b",
-  "outputSha256": "cf257ea43919e60e7c2575fbb96d8a88f70205f601bf226ecda67b641387676b",
-  "operations": 150,
-  "paths": 114,
-  "schemasKept": 230,
+  "sourceCommit": "b509bef0143ac2d003a1c5dcda88ec1b8b068334",
+  "sourceSha256": "166bcb1e58075dfb8b691a286a39156492faf9ed79a610c8422a3fd4e3832afb",
+  "outputSha256": "852bd247f0c993c656c1998dd542d88e35a365e4ed987e976c2c5e635b28bdd7",
+  "operations": 156,
+  "paths": 118,
+  "schemasKept": 239,
   "schemasPruned": 79,
   "corrections": [
     "paginated: /api/v1/candidates/me/applications",
@@ -27,23 +27,5 @@
     "vocabulary: /api/v1/taxonomy/sectors",
     "vocabulary: /api/v1/taxonomy/skills",
     "error envelope: ErrorResponse + default response on every operation"
-  ],
-  "upstreamGitBlobSha": "722617d0acd75d39d210066be7684bb0a14361bd",
-  "sourceHashScope": "sha256 of the private upstream file at sourceCommit (hash only; the file itself is not published)",
-  "profileSchemaOverlay": {
-    "sourceRepository": "geniustep/geniura-api (private)",
-    "sourceFile": "docs/openapi/openapi.yaml",
-    "sourceCommit": "943bac4b2f777131853fa66a1bdb84b483c26d22",
-    "sourceGitBlobSha": "ffe504a4ba7a0857fcb0bfebd12b3ef39ca18055",
-    "schemas": [
-      "Education",
-      "EducationRequest",
-      "Experience",
-      "ExperienceRequest",
-      "PatchedEducationRequest",
-      "PatchedExperienceRequest",
-      "EndDatePrecisionEnum"
-    ],
-    "note": "Only public CV profile schemas synchronized; original web contract, public path filtering and verified pagination overrides retained. No private staff endpoints added."
-  }
+  ]
 }

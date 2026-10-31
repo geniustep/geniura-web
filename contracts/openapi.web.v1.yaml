@@ -5,7 +5,7 @@ info:
   description: |-
     Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
 
-    Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@ec0890a5ae22a7f07bcd870add6540aa776a464f.
+    Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b509bef0143ac2d003a1c5dcda88ec1b8b068334.
 paths:
   /api/v1/auth/csrf:
     get:
@@ -842,7 +842,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/EducationRequest"
-        required: true
       security:
         - sessionCookie: []
       responses:
@@ -1510,6 +1509,16 @@ paths:
           required: true
       tags:
         - Resumes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checksum_sha256:
+                  type: string
+                  minLength: 64
+                  maxLength: 64
       security:
         - sessionCookie: []
       responses:
@@ -2483,6 +2492,146 @@ paths:
       responses:
         "204":
           description: No response body
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/onboarding/guest-cv:
+    get:
+      operationId: onboarding_guest_cv_retrieve
+      tags:
+        - Guest onboarding
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/State"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: onboarding_guest_cv_create
+      tags:
+        - Guest onboarding
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/UploadRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UploadRequest"
+        required: true
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/State"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: onboarding_guest_cv_destroy
+      tags:
+        - Guest onboarding
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "204":
+          description: No response body
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/onboarding/guest-cv/claim:
+    post:
+      operationId: onboarding_guest_cv_claim_create
+      tags:
+        - Guest onboarding
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Claim"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/onboarding/guest-cv/email-code:
+    post:
+      operationId: onboarding_guest_cv_email_code_create
+      tags:
+        - Guest onboarding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmailRequest"
+        required: true
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestDetail"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/onboarding/guest-cv/verify-email:
+    post:
+      operationId: onboarding_guest_cv_verify_email_create
+      tags:
+        - Guest onboarding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeRequest"
+        required: true
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Proof"
+          description: ""
         default:
           description: Error envelope
           content:
@@ -5115,12 +5264,29 @@ components:
           nullable: true
       required:
         - name
+    Claim:
+      type: object
+      properties:
+        resume_id:
+          type: string
+          format: uuid
+      required:
+        - resume_id
     CloseJobRequest:
       type: object
       properties:
         close_open_applications:
           type: boolean
           default: false
+    CodeRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          pattern: ^[0-9]{6}$
+      required:
+        - code
     Completeness:
       type: object
       properties:
@@ -5444,8 +5610,7 @@ components:
         - detail
     Education:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment
-        and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment and silent typos).
       properties:
         id:
           type: string
@@ -5546,22 +5711,9 @@ components:
         * `bac_plus_3` - Bac Plus 3
         * `bac_plus_5` - Bac Plus 5
         * `doctorate` - Doctorate
-    EndDatePrecisionEnum:
-      enum:
-        - unknown
-        - year
-        - month
-        - day
-      type: string
-      description: |-
-        * `unknown` - Unknown
-        * `year` - Year
-        * `month` - Month
-        * `day` - Day
     EducationRequest:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment
-        and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment and silent typos).
       properties:
         institution:
           type: string
@@ -5619,6 +5771,20 @@ components:
         * `eligible` - eligible
         * `needs_verification` - needs_verification
         * `mandatory_not_met` - mandatory_not_met
+    EmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        locale:
+          allOf:
+            - $ref: "#/components/schemas/LocaleEnum"
+          default: ar
+      required:
+        - email
     EmailVerifyRequest:
       type: object
       description: Rejects unknown input keys (protection against mass assignment and silent typos).
@@ -5629,6 +5795,18 @@ components:
           maxLength: 512
       required:
         - token
+    EndDatePrecisionEnum:
+      enum:
+        - unknown
+        - year
+        - month
+        - day
+      type: string
+      description: |-
+        * `unknown` - Unknown
+        * `year` - Year
+        * `month` - Month
+        * `day` - Day
     EnrollRequest:
       type: object
       description: Rejects unknown input keys (protection against mass assignment and silent typos).
@@ -5735,8 +5913,7 @@ components:
         - type
     Experience:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment
-        and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment and silent typos).
       properties:
         id:
           type: string
@@ -5826,8 +6003,7 @@ components:
         - verified_at
     ExperienceRequest:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment
-        and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment and silent typos).
       properties:
         title:
           type: string
@@ -5999,6 +6175,13 @@ components:
         - resume_id
         - resume_status
         - status
+    GuestDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+        - detail
     Health:
       type: object
       properties:
@@ -6502,6 +6685,18 @@ components:
           $ref: "#/components/schemas/LanguageLevelEnum"
       required:
         - language_code
+    LocaleEnum:
+      enum:
+        - ar
+        - fr
+        - en
+        - es
+      type: string
+      description: |-
+        * `ar` - ar
+        * `fr` - fr
+        * `en` - en
+        * `es` - es
     Location:
       type: object
       properties:
@@ -7540,6 +7735,7 @@ components:
           allOf:
             - $ref: "#/components/schemas/OrganizationStatusEnum"
           readOnly: true
+          default: pending
         status_reason:
           type: string
           readOnly: true
@@ -7909,8 +8105,7 @@ components:
           nullable: true
     PatchedEducationRequest:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment
-        and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment and silent typos).
       properties:
         institution:
           type: string
@@ -7960,8 +8155,7 @@ components:
           nullable: true
     PatchedExperienceRequest:
       type: object
-      description: Rejects unknown input keys (protection against mass assignment
-        and silent typos).
+      description: Rejects unknown input keys (protection against mass assignment and silent typos).
       properties:
         title:
           type: string
@@ -8341,6 +8535,16 @@ components:
         - status
         - step
         - updated_at
+    Proof:
+      type: object
+      properties:
+        verified:
+          type: boolean
+        account_exists:
+          type: boolean
+      required:
+        - account_exists
+        - verified
     ProvenanceSourceEnum:
       enum:
         - asserted
@@ -9429,6 +9633,25 @@ components:
         * `intermediate` - Intermediate
         * `advanced` - Advanced
         * `expert` - Expert
+    State:
+      type: object
+      properties:
+        status:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+        identity: {}
+        email_verified:
+          type: boolean
+        claimed:
+          type: boolean
+      required:
+        - claimed
+        - email_verified
+        - expires_at
+        - identity
+        - status
     Step:
       type: object
       properties:
@@ -9606,6 +9829,14 @@ components:
       required:
         - resume
         - upload
+    UploadRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+      required:
+        - file
     UserSignupIntentEnum:
       enum:
         - candidate
