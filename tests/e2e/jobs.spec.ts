@@ -43,10 +43,13 @@ test("the home page shows the latest jobs or explains the outage", async ({ page
   ).toBeVisible();
 });
 
-test("home search examples land on the results URL", async ({ page }) => {
+test("home latest-jobs section opens public browsing without an account", async ({ page }) => {
   await page.goto("/fr");
-  await page.getByRole("link", { name: "Comptable" }).click();
-  await expect(page).toHaveURL(/\/fr\/jobs\?q=Comptable$/);
+  await page
+    .getByRole("region", { name: "Offres récentes", exact: true })
+    .getByRole("link", { name: "Voir toutes les offres", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/fr\/jobs$/);
 });
 
 test.describe("malformed job ids", () => {
