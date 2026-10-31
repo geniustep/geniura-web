@@ -106,6 +106,16 @@ describe("guest CV onboarding", () => {
       expect(api.push).toHaveBeenCalledWith("/account/profile/resumes/resume-1/review"),
     );
   });
+  it("refreshes an expired claim so the signed-in owner can request a new code", async () => {
+    api.getGuestDraft
+      .mockResolvedValueOnce({ ...ready, email_verified: true })
+      .mockResolvedValue(ready);
+    api.claimGuestDraft.mockRejectedValue(new ApiError(403, { code: "guest_claim_not_allowed" }));
+    setup(true);
+    fireEvent.click(await screen.findByRole("button", { name: ar.GuestCv.claim }));
+    await screen.findByRole("button", { name: ar.GuestCv.send });
+    expect(api.claimGuestDraft).toHaveBeenCalledOnce();
+  });
   it("lets the owner delete private draft data", async () => {
     setup();
     const button = await screen.findByRole("button", { name: ar.GuestCv.delete });

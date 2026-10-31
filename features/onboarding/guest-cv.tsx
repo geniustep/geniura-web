@@ -47,6 +47,8 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
       await action();
     } catch (cause) {
       setError(cause);
+      // Refresh expiry/proof state so an expired claim can request a new code.
+      await draft.refetch();
     } finally {
       setBusy(false);
     }
