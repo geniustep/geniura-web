@@ -2,10 +2,10 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const pages = [
-  { locale: "ar", dir: "rtl", heading: /عروض عمل/ },
-  { locale: "fr", dir: "ltr", heading: /Des offres d’emploi/ },
-  { locale: "en", dir: "ltr", heading: /Job offers/ },
-  { locale: "es", dir: "ltr", heading: /Ofertas de empleo/ },
+  { locale: "ar", dir: "rtl", heading: /سيرتك الذاتية/ },
+  { locale: "fr", dir: "ltr", heading: /Votre CV/ },
+  { locale: "en", dir: "ltr", heading: /Your CV/ },
+  { locale: "es", dir: "ltr", heading: /Tu CV/ },
 ] as const;
 
 for (const { locale, dir, heading } of pages) {

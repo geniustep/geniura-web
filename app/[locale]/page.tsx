@@ -1,20 +1,22 @@
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  CheckIcon,
-  FileCheck2Icon,
-  MapPinIcon,
+  BriefcaseBusinessIcon,
+  GraduationCapIcon,
+  LanguagesIcon,
+  LockKeyholeIcon,
+  FileTextIcon,
   SearchIcon,
-  UsersRoundIcon,
-  WalletIcon,
+  MapPinIcon,
+  Building2Icon,
+  ShieldCheckIcon,
+  ListChecksIcon,
 } from "lucide-react";
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import { Suspense } from "react";
-
 import { Container } from "@/components/layout/container";
-import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LatestJobs } from "@/features/home/latest-jobs";
@@ -26,8 +28,6 @@ import { vocabularyOptions } from "@/lib/jobs/labels";
 import { jsonLdScript } from "@/lib/seo/json-ld";
 import { buildSiteIdentityGraph } from "@/lib/seo/site-identity";
 import { buildSocialMetadata } from "@/lib/seo/social";
-import { cn } from "@/lib/utils";
-
 type HomePageProps = {
   params: Promise<{ locale: string }>;
 };
@@ -50,22 +50,6 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
       ]),
     },
   };
-}
-
-const examples = ["one", "two", "three", "four"] as const;
-const steps = ["search", "apply", "follow"] as const;
-
-const chipClass =
-  "inline-flex min-h-9 items-center rounded-full border border-white/20 bg-white/8 px-4 text-sm font-medium text-white hover:bg-white/15";
-
-function LatestJobsSkeleton() {
-  return (
-    <div className="grid gap-5 lg:grid-cols-2" aria-busy="true">
-      {[0, 1, 2, 3].map((index) => (
-        <Skeleton key={index} className="h-60 rounded-2xl" />
-      ))}
-    </div>
-  );
 }
 
 /** City list of the hero search; the keyword field works on its own if the vocabulary is down. */
@@ -108,360 +92,262 @@ export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("Home");
-  const tCommon = await getTranslations("Common");
+  const h = await getTranslations("Home.profileFirst");
   const tJobs = await getTranslations("Jobs");
-  const tStatus = await getTranslations("Status.application");
-  // Arrows point toward the reading direction.
   const ForwardIcon = getDirection(locale) === "rtl" ? ArrowLeftIcon : ArrowRightIcon;
-
+  const profileSections = [
+    ["experience", BriefcaseBusinessIcon],
+    ["education", GraduationCapIcon],
+    ["skills", ListChecksIcon],
+    ["languages", LanguagesIcon],
+  ] as const;
+  const benefits = [
+    ["organise", FileTextIcon],
+    ["browse", SearchIcon],
+    ["privacy", LockKeyholeIcon],
+  ] as const;
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdScript(buildSiteIdentityGraph()) }}
       />
-      {/* Hero: navy band, search first, and a labelled example of what follow-up looks like. */}
-      <section className="bg-navy-grid text-white">
-        <Container className="grid items-center gap-14 py-16 sm:py-20 lg:grid-cols-[1.35fr_1fr] lg:py-24">
-          <div className="flex min-w-0 flex-col items-start gap-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-gold/50 px-4 py-1 text-sm font-medium text-gold-soft">
-              <span aria-hidden="true" className="size-1.5 rounded-full bg-gold" />
-              {t("eyebrow")}
-            </span>
-            <h1 className="max-w-3xl text-5xl leading-[1.08] font-bold tracking-tight sm:text-6xl lg:text-7xl lg:leading-[1.05] rtl:leading-[1.25]">
-              {t("titleLead")} <span className="text-gold">{t("titleAccent")}</span>
+      <section className="bg-navy text-white">
+        <Container className="grid items-center gap-9 py-9 sm:py-12 lg:grid-cols-[1.12fr_1fr] lg:gap-16">
+          <div className="flex min-w-0 flex-col items-center gap-5 text-center sm:items-start sm:text-start">
+            <h1 className="font-display text-4xl leading-[1.25] font-bold sm:text-5xl lg:text-7xl rtl:leading-[1.4]">
+              {h("titleLead")} <span className="block text-gold">{h("titleAccent")}</span>
             </h1>
-            <p className="max-w-xl text-lg text-on-navy-muted sm:text-xl">{t("subtitle")}</p>
-
-            {/* Plain GET form: works before JavaScript loads and lands on the shareable results URL. */}
-            <form
-              role="search"
-              action={`/${locale}/jobs`}
-              method="get"
-              className="mt-2 flex w-full max-w-3xl flex-col gap-2 rounded-[1.25rem] bg-card p-2 text-foreground shadow-hero sm:flex-row"
-            >
-              <div className="flex flex-[2] items-center gap-3 px-4 py-2">
-                <SearchIcon className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <label htmlFor="home-q" className="text-xs font-semibold text-subtle-foreground">
-                    {tJobs("search.label")}
-                  </label>
-                  <input
-                    id="home-q"
-                    name="q"
-                    type="search"
-                    dir="auto"
-                    maxLength={200}
-                    enterKeyHint="search"
-                    placeholder={t("searchPlaceholder")}
-                    className="h-8 w-full min-w-0 bg-transparent text-lg outline-none placeholder:text-muted-foreground"
-                  />
-                </div>
-              </div>
-              <div aria-hidden="true" className="my-2 hidden w-px bg-border sm:block" />
-              <div className="flex flex-1 items-center gap-3 border-t px-4 py-2 sm:border-t-0">
-                <MapPinIcon className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <label
-                    htmlFor="home-location"
-                    className="text-xs font-semibold text-subtle-foreground"
-                  >
-                    {tJobs("search.location")}
-                  </label>
-                  <Suspense
-                    fallback={
-                      <select
-                        id="home-location"
-                        disabled
-                        className="h-8 w-full appearance-none bg-transparent text-lg text-muted-foreground outline-none"
-                      >
-                        <option>{tJobs("search.anyLocation")}</option>
-                      </select>
-                    }
-                  >
-                    <LocationSelect
-                      id="home-location"
-                      name="location"
-                      anyLabel={tJobs("search.anyLocation")}
-                    />
-                  </Suspense>
-                </div>
-              </div>
-              <Button type="submit" variant="action" size="lg" className="h-16 rounded-2xl px-9">
-                {tJobs("search.submit")}
-              </Button>
-            </form>
-            <p className="text-sm text-on-navy-subtle">{t("searchHint")}</p>
-            <div className="flex flex-wrap items-center gap-2">
-              <span id="home-examples" className="text-sm text-on-navy-subtle">
-                {t("examplesLabel")}
-              </span>
-              <ul aria-labelledby="home-examples" className="flex flex-wrap gap-2">
-                {examples.map((key) => (
-                  <li key={key}>
-                    <Link
-                      href={{ pathname: "/jobs", query: { q: t(`examples.${key}`) } }}
-                      className={chipClass}
-                    >
-                      {t(`examples.${key}`)}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <Link
-                    href={{ pathname: "/jobs", query: { work_mode: "remote" } }}
-                    className={chipClass}
-                  >
-                    {tJobs("workMode.remote")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href={{ pathname: "/jobs", query: { contract_type: "permanent" } }}
-                    className={chipClass}
-                  >
-                    {tJobs("contractType.permanent")}
-                  </Link>
-                </li>
-              </ul>
+            <h2 className="max-w-2xl text-xl font-semibold sm:text-2xl">{h("promise")}</h2>
+            <p className="max-w-xl text-base leading-relaxed text-on-navy-muted sm:text-lg">
+              {h("description")}
+            </p>
+            <div className="mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
+              <Link
+                href={{ pathname: "/register", query: { next: `/${locale}/account/profile` } }}
+                className={buttonVariants({
+                  variant: "action",
+                  size: "lg",
+                  className: "rounded-xl text-center whitespace-normal",
+                })}
+              >
+                {h("createProfile")}
+              </Link>
+              <Link
+                href="/employers"
+                className={buttonVariants({
+                  variant: "outline-inverse",
+                  size: "lg",
+                  className: "rounded-xl text-center whitespace-normal",
+                })}
+              >
+                {h("employerAction")}
+              </Link>
             </div>
+            <Link
+              href="/jobs"
+              className="inline-flex min-h-11 items-center gap-3 text-sm text-on-navy-info hover:underline"
+            >
+              {h("browseWithoutAccount")}
+              <ForwardIcon className="size-5 shrink-0" aria-hidden="true" />
+            </Link>
           </div>
-
-          <ApplicationPreview
-            labels={{
-              label: t("preview.label"),
-              example: t("preview.example"),
-              jobTitle: t("preview.jobTitle"),
-              company: t("preview.company"),
-              monogram: t("preview.monogram"),
-              submitted: tStatus("submitted"),
-              submittedOn: t("preview.submittedOn"),
-              inReview: tStatus("in_review"),
-              reviewOn: t("preview.reviewOn"),
-              interview: tStatus("interview"),
-              interviewOn: t("preview.interviewOn"),
-              decision: t("preview.decision"),
-              freeTitle: t("free.title"),
-              freeBody: t("free.body"),
-            }}
-          />
+          <figure
+            aria-label={h("previewLabel")}
+            className="min-w-0 rounded-xl bg-card p-5 text-card-foreground shadow-float sm:p-6"
+          >
+            <figcaption className="mb-4 text-xs text-muted-foreground">
+              {h("previewLabel")}
+            </figcaption>
+            <div className="flex gap-5">
+              <aside
+                aria-label={h("profileTitle")}
+                className="hidden w-32 shrink-0 flex-col gap-5 border-e pe-4 text-sm lg:flex"
+              >
+                {profileSections.map(([key, Icon]) => (
+                  <span key={key} className="flex items-center gap-2">
+                    <Icon className="size-5 shrink-0 text-action" aria-hidden="true" />
+                    {h(key)}
+                  </span>
+                ))}
+              </aside>
+              <div className="min-w-0 flex-1">
+                <h2 className="mb-2 hidden text-lg font-semibold sm:block">{h("profileTitle")}</h2>
+                <dl>
+                  {profileSections.map(([key, Icon]) => (
+                    <div
+                      key={key}
+                      className="flex items-center justify-between gap-4 border-b py-3 sm:block"
+                    >
+                      <dt className="flex items-center gap-2 text-sm font-semibold">
+                        <Icon className="size-5 shrink-0 text-action" aria-hidden="true" />
+                        {h(key)}
+                      </dt>
+                      <dd className="text-xs text-muted-foreground sm:mt-2 sm:ps-7">
+                        {h(`${key}Hint`)}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                <div className="mt-4 text-center sm:text-start">
+                  <p className="flex items-center justify-center gap-2 text-sm font-semibold sm:justify-start">
+                    <LockKeyholeIcon className="size-4 shrink-0" aria-hidden="true" />
+                    {h("privateTitle")}
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    {h("privateBody")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </figure>
         </Container>
       </section>
-
+      <section aria-label={h("benefitsLabel")} className="bg-background">
+        <Container className="grid divide-y py-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {benefits.map(([key, Icon]) => (
+            <article
+              key={key}
+              className="flex items-center gap-4 py-4 sm:flex-col sm:px-6 sm:text-center"
+            >
+              <Icon className="size-7 shrink-0" aria-hidden="true" />
+              <div>
+                <h2 className="text-base font-semibold">{h(`${key}Title`)}</h2>
+                <p className="mt-2 text-sm text-muted-foreground">{h(`${key}Body`)}</p>
+              </div>
+            </article>
+          ))}
+        </Container>
+      </section>
       <section aria-labelledby="latest-title">
-        <Container className="flex flex-col gap-8 py-20">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <h2 id="latest-title" className="text-4xl font-bold sm:text-5xl">
-                {t("latest.title")}
-              </h2>
-              <p className="text-muted-foreground">{t("latest.subtitle")}</p>
-            </div>
-            <Link href="/jobs" className={buttonVariants({ variant: "link", size: "md" })}>
+        <Container className="flex flex-col gap-6 py-10">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 id="latest-title" className="text-2xl font-bold">
+              {t("latest.title")}
+            </h2>
+            <Link href="/jobs" className={buttonVariants({ variant: "link" })}>
               {t("latest.all")}
               <ForwardIcon aria-hidden="true" />
             </Link>
           </div>
-          <Suspense fallback={<LatestJobsSkeleton />}>
+          <form
+            role="search"
+            action={`/${locale}/jobs`}
+            method="get"
+            className="flex w-full flex-col gap-2 rounded-xl border bg-card p-2 text-foreground sm:flex-row"
+          >
+            <div className="flex flex-[2] items-center gap-3 px-4 py-2">
+              <SearchIcon className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <div className="flex min-w-0 flex-1 flex-col">
+                <label htmlFor="home-q" className="text-xs font-semibold text-subtle-foreground">
+                  {tJobs("search.label")}
+                </label>
+                <input
+                  id="home-q"
+                  name="q"
+                  type="search"
+                  dir="auto"
+                  maxLength={200}
+                  enterKeyHint="search"
+                  placeholder={t("searchPlaceholder")}
+                  className="h-8 w-full min-w-0 bg-transparent text-lg outline-none placeholder:text-muted-foreground"
+                />
+              </div>
+            </div>
+            <div aria-hidden="true" className="my-2 hidden w-px bg-border sm:block" />
+            <div className="flex flex-1 items-center gap-3 border-t px-4 py-2 sm:border-t-0">
+              <MapPinIcon className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <div className="flex min-w-0 flex-1 flex-col">
+                <label
+                  htmlFor="home-location"
+                  className="text-xs font-semibold text-subtle-foreground"
+                >
+                  {tJobs("search.location")}
+                </label>
+                <Suspense
+                  fallback={
+                    <select
+                      id="home-location"
+                      disabled
+                      className="h-8 w-full appearance-none bg-transparent text-lg text-muted-foreground outline-none"
+                    >
+                      <option>{tJobs("search.anyLocation")}</option>
+                    </select>
+                  }
+                >
+                  <LocationSelect
+                    id="home-location"
+                    name="location"
+                    anyLabel={tJobs("search.anyLocation")}
+                  />
+                </Suspense>
+              </div>
+            </div>
+            <Button type="submit" variant="action" size="lg" className="h-16 rounded-2xl px-9">
+              {tJobs("search.submit")}
+            </Button>
+          </form>
+
+          <Suspense
+            fallback={
+              <div className="grid gap-5 lg:grid-cols-2" aria-busy="true">
+                <Skeleton className="h-48 rounded-xl" />
+                <Skeleton className="h-48 rounded-xl" />
+              </div>
+            }
+          >
             <LatestJobs />
           </Suspense>
         </Container>
       </section>
-
-      <section aria-labelledby="steps-title">
-        <Container className="grid gap-12 py-12 lg:grid-cols-[1fr_1.6fr]">
-          <h2 id="steps-title" className="text-4xl leading-tight font-bold sm:text-5xl">
-            {t("steps.title")}
+      <section id="how" aria-labelledby="steps-title">
+        <Container className="py-6">
+          <h2 id="steps-title" className="mb-6 text-2xl font-bold">
+            {h("stepsTitle")}
           </h2>
-          <ol className="flex flex-col border-b">
-            {steps.map((key, index) => (
-              <li key={key} className="flex gap-7 border-t py-6">
+          <ol className="grid gap-6 sm:grid-cols-3">
+            {["create", "review", "explore"].map((key, index) => (
+              <li key={key} className="flex gap-4">
                 <span
                   aria-hidden="true"
-                  className="min-w-14 font-display text-4xl leading-none font-bold text-action"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary font-display text-xl text-secondary-foreground"
                 >
-                  {String(index + 1).padStart(2, "0")}
+                  {index + 1}
                 </span>
-                <div className="flex flex-col gap-1">
-                  <h3 className="text-xl font-semibold">{t(`steps.${key}.title`)}</h3>
-                  <p className="text-muted-foreground">{t(`steps.${key}.body`)}</p>
+                <div>
+                  <h3 className="text-base font-semibold">{h(`${key}Title`)}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{h(`${key}Body`)}</p>
                 </div>
               </li>
             ))}
           </ol>
         </Container>
       </section>
-
-      {/* The employer tools are not open yet: the cards lead to the explanatory page only. */}
-      <section aria-label={t("employers.eyebrow")}>
-        <Container className="grid gap-5 pt-12 pb-24 md:grid-cols-2">
-          <ServiceCard
-            tone="navy"
-            icon={FileCheck2Icon}
-            eyebrow={t("employers.eyebrow")}
-            title={t("employers.title")}
-            body={t("employers.body")}
-            href="/employers#publish"
-            linkLabel={t("employers.learnMore")}
-            soon={tCommon("comingSoon")}
-          />
-          <ServiceCard
-            tone="sand"
-            icon={UsersRoundIcon}
-            eyebrow={t("service.eyebrow")}
-            title={t("service.title")}
-            body={t("service.body")}
-            href="/employers#service"
-            linkLabel={t("service.learnMore")}
-            soon={tCommon("comingSoon")}
-          />
+      <section>
+        <Container className="py-8">
+          <div className="flex flex-wrap items-center gap-5 rounded-xl bg-secondary p-6">
+            <Building2Icon className="size-8 shrink-0" aria-hidden="true" />
+            <div className="min-w-0 flex-1">
+              <h2 className="text-xl font-bold">{h("employerTitle")}</h2>
+              <p className="mt-2 text-sm text-muted-foreground">{h("employerBody")}</p>
+            </div>
+            <Link
+              href="/employers"
+              className={buttonVariants({
+                size: "lg",
+                className: "w-full rounded-xl text-center whitespace-normal sm:w-auto",
+              })}
+            >
+              {h("employerLink")}
+              <ForwardIcon aria-hidden="true" />
+            </Link>
+          </div>
+          <p className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground">
+            <ShieldCheckIcon className="size-5" aria-hidden="true" />
+            <span>{h("trust")}</span>
+          </p>
         </Container>
       </section>
     </>
-  );
-}
-
-type PreviewLabels = Record<
-  | "label"
-  | "example"
-  | "jobTitle"
-  | "company"
-  | "monogram"
-  | "submitted"
-  | "submittedOn"
-  | "inReview"
-  | "reviewOn"
-  | "interview"
-  | "interviewOn"
-  | "decision"
-  | "freeTitle"
-  | "freeBody",
-  string
->;
-
-/** Static, clearly labelled illustration: it shows the follow-up, it is not a real application. */
-function ApplicationPreview({ labels }: { labels: PreviewLabels }) {
-  const done = [
-    { label: labels.submitted, date: labels.submittedOn },
-    { label: labels.inReview, date: labels.reviewOn },
-  ];
-  return (
-    <figure aria-label={labels.label} className="flex min-w-0 flex-col gap-4">
-      <div className="flex flex-col gap-5 rounded-[1.4rem] bg-card p-6 text-foreground shadow-hero">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="inline-flex size-11 items-center justify-center rounded-xl bg-secondary font-display font-bold text-secondary-foreground"
-            >
-              {labels.monogram}
-            </span>
-            <div className="flex flex-col">
-              <span className="font-semibold">{labels.jobTitle}</span>
-              <span className="text-sm text-muted-foreground">{labels.company}</span>
-            </div>
-          </div>
-          <span className="text-xs text-muted-foreground">{labels.example}</span>
-        </div>
-        <ol className="flex flex-col">
-          {done.map((step) => (
-            <li key={step.label} className="flex gap-3.5">
-              <div className="flex flex-col items-center">
-                <span className="inline-flex size-5.5 items-center justify-center rounded-full bg-success text-success-foreground">
-                  <CheckIcon className="size-3" strokeWidth={3} aria-hidden="true" />
-                </span>
-                <span aria-hidden="true" className="h-6 w-0.5 bg-success" />
-              </div>
-              <div className="flex flex-1 justify-between gap-2">
-                <span className="font-medium">{step.label}</span>
-                <span className="text-sm text-muted-foreground">{step.date}</span>
-              </div>
-            </li>
-          ))}
-          <li className="flex gap-3.5">
-            <div className="flex flex-col items-center">
-              <span
-                aria-hidden="true"
-                className="size-5.5 rounded-full border-3 border-action bg-card"
-              />
-              <span aria-hidden="true" className="h-6 w-0.5 bg-border" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-semibold text-action">{labels.interview}</span>
-              <span className="text-sm text-subtle-foreground">{labels.interviewOn}</span>
-            </div>
-          </li>
-          <li className="flex gap-3.5">
-            <span
-              aria-hidden="true"
-              className="size-5.5 rounded-full border-2 border-dashed border-input"
-            />
-            <span className="text-muted-foreground">{labels.decision}</span>
-          </li>
-        </ol>
-      </div>
-      <div className="flex w-[82%] items-center gap-3.5 self-end rounded-2xl border border-white/15 bg-navy-raised p-4 shadow-hero">
-        <WalletIcon className="size-6 shrink-0 text-gold" aria-hidden="true" />
-        <div className="flex flex-col">
-          <span className="font-semibold">{labels.freeTitle}</span>
-          <span className="text-sm text-on-navy-muted">{labels.freeBody}</span>
-        </div>
-      </div>
-    </figure>
-  );
-}
-
-function ServiceCard({
-  tone,
-  icon: Icon,
-  eyebrow,
-  title,
-  body,
-  href,
-  linkLabel,
-  soon,
-}: {
-  tone: "navy" | "sand";
-  icon: typeof WalletIcon;
-  eyebrow: string;
-  title: string;
-  body: string;
-  href: string;
-  linkLabel: string;
-  soon: string;
-}) {
-  const navy = tone === "navy";
-  return (
-    <article
-      className={cn(
-        "flex min-h-80 flex-col gap-4 rounded-3xl p-8 sm:p-10",
-        navy ? "bg-navy text-white" : "bg-accent text-foreground",
-      )}
-    >
-      <Icon className={cn("size-7", navy ? "text-gold" : "text-gold-ink")} aria-hidden="true" />
-      <p
-        className={cn("text-sm font-semibold", navy ? "text-gold-soft" : "text-accent-foreground")}
-      >
-        {eyebrow}
-      </p>
-      <h2 className="text-3xl leading-tight font-bold sm:text-4xl">{title}</h2>
-      <p className={cn("max-w-md", navy ? "text-on-navy-muted" : "text-accent-foreground")}>
-        {body}
-      </p>
-      <div className="mt-auto flex flex-wrap items-center gap-3 pt-4">
-        <Link
-          href={href}
-          className={buttonVariants({ size: "lg", variant: navy ? "inverse" : "primary" })}
-        >
-          {linkLabel}
-        </Link>
-        <Badge
-          variant="neutral"
-          className={navy ? "bg-white/10 text-white" : "bg-white/70 text-foreground"}
-        >
-          {soon}
-        </Badge>
-      </div>
-    </article>
   );
 }
