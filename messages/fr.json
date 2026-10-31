@@ -374,7 +374,7 @@
       "share_request_expired": "Le délai de cette demande est écoulé.",
       "duplicate_application": "Vous avez déjà candidaté à cette offre.",
       "email_not_verified": "Confirmez d'abord votre adresse e-mail.",
-      "resume_not_ready": "Ce CV n'a pas encore passé le contrôle de sécurité.",
+      "resume_not_ready": "Ce CV n’est pas encore prêt.",
       "resume_limit_reached": "Nombre maximal de versions atteint. Supprimez-en une d'abord.",
       "file_too_large": "Le fichier dépasse la taille autorisée."
     },
@@ -693,7 +693,7 @@
       },
       "resumes": {
         "title": "Mes CV",
-        "subtitle": "Vos versions de CV, leur contrôle, leur lecture et la revue des informations lues."
+        "subtitle": "Vos versions de CV, leur traitement et la révision des informations extraites."
       },
       "privacy": {
         "title": "Qui peut voir mon profil ?",
@@ -916,7 +916,7 @@
         "resume": "Déposez votre CV"
       },
       "optional": "Facultatif",
-      "resumeChecking": "Votre CV est en cours de contrôle. Vous pourrez le joindre ensuite."
+      "resumeChecking": "Votre CV est en préparation. Vous pourrez le joindre une fois le traitement terminé."
     },
     "links": {
       "resumes": "Mes CV",
@@ -982,7 +982,7 @@
     },
     "resumes": {
       "stage": {
-        "scan": "Contrôle du fichier",
+        "scan": "Préparation du fichier",
         "read": "Lecture des informations",
         "review": "Informations à revoir",
         "done": "Revu",
@@ -992,7 +992,7 @@
       "wrongType": "Choisissez un fichier PDF ou Word (DOCX).",
       "tooLarge": "5 Mo maximum.",
       "chooseFile": "Choisissez d'abord un fichier.",
-      "uploaded": "Fichier reçu. Contrôle en cours.",
+      "uploaded": "Fichier reçu. Préparation de la lecture.",
       "uploadTitle": "Déposer une nouvelle version",
       "uploadHint": "Nous y lisons formation, compétences et langues ; vous décidez ensuite. Les versions précédentes restent inchangées.",
       "dropHere": "Glissez le fichier ici ou choisissez-le",
@@ -1006,7 +1006,7 @@
       "primary": "Principal",
       "meta": "Version {version} · {date}",
       "failedExplain": "Le fichier est sain et peut être joint à vos candidatures, mais son contenu n'a pas pu être lu. Réessayez ou saisissez les informations.",
-      "rejectedExplain": "Le fichier n'a pas passé le contrôle de sécurité : il ne peut être ni téléchargé ni envoyé. Déposez-en un autre.",
+      "rejectedExplain": "Le fichier n’a pas pu être accepté dans son format actuel. Importez un autre fichier.",
       "review": "Revoir les informations",
       "retry": "Relire",
       "primarySet": "Version principale définie.",
@@ -1137,7 +1137,7 @@
     "authNote": "Dans la version actuelle, le téléversement et l’extraction commencent après connexion. Aucun fichier n’a été envoyé à cette étape.",
     "signIn": "Se connecter",
     "register": "Créer un compte",
-    "reviewPromise": "Après le téléversement et le contrôle, vous vérifiez les informations extraites avant de les valider. Aucune intégration automatique.",
+    "reviewPromise": "Après l’importation, vérifiez les informations extraites avant de les valider. Aucune information n’est ajoutée automatiquement.",
     "manualTitle": "Créez votre profil sans CV",
     "manualBody": "Renseignez directement vos informations, expériences, formations et compétences. Vous pourrez ajouter un CV plus tard.",
     "openProfile": "Ouvrir mon profil professionnel",
@@ -1152,10 +1152,10 @@
     "loading": "Chargement du brouillon…",
     "retry": "Réessayer",
     "title": "Importez votre CV",
-    "privacy": "Nous vérifierons le fichier et proposerons ses informations. Votre brouillon privé expire après 24 heures et peut être supprimé à tout moment.",
+    "privacy": "Nous lirons votre CV et proposerons ses informations. Votre brouillon privé expire après 24 heures et peut être supprimé à tout moment.",
     "file": "Choisir le CV",
     "limits": "PDF ou DOCX, 5 Mo maximum.",
-    "processing": "Vérification du CV et extraction en cours…",
+    "processing": "Lecture du CV et extraction des informations…",
     "failed": "Le traitement a échoué. Supprimez ce brouillon et essayez un autre fichier, ou continuez manuellement.",
     "profile": "Ouvrir mon profil professionnel",
     "welcomeName": "Bienvenue {name}",

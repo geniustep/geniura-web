@@ -374,7 +374,7 @@
       "share_request_expired": "Esta solicitud ha caducado.",
       "duplicate_application": "Ya te postulaste a esta oferta.",
       "email_not_verified": "Confirma primero tu correo electrónico.",
-      "resume_not_ready": "Este CV aún no ha superado el control de seguridad.",
+      "resume_not_ready": "Este CV aún no está listo.",
       "resume_limit_reached": "Has alcanzado el número máximo de versiones. Elimina una primero.",
       "file_too_large": "El archivo supera el tamaño permitido."
     },
@@ -693,7 +693,7 @@
       },
       "resumes": {
         "title": "Mis CV",
-        "subtitle": "Tus versiones de CV, su control de seguridad, su lectura y la revisión de lo leído."
+        "subtitle": "Tus versiones del CV, su procesamiento y la revisión de los datos extraídos."
       },
       "privacy": {
         "title": "¿Quién puede ver mi perfil?",
@@ -916,7 +916,7 @@
         "resume": "Sube tu CV"
       },
       "optional": "Opcional",
-      "resumeChecking": "Tu CV se está revisando. Podrás adjuntarlo cuando lo supere."
+      "resumeChecking": "Tu CV se está preparando. Podrás adjuntarlo cuando termine el procesamiento."
     },
     "links": {
       "resumes": "Mis CV",
@@ -982,7 +982,7 @@
     },
     "resumes": {
       "stage": {
-        "scan": "Revisando el archivo",
+        "scan": "Preparando el archivo",
         "read": "Leyendo la información",
         "review": "Información por revisar",
         "done": "Revisado",
@@ -992,7 +992,7 @@
       "wrongType": "Elige un archivo PDF o Word (DOCX).",
       "tooLarge": "Máximo 5 MB.",
       "chooseFile": "Elige primero un archivo.",
-      "uploaded": "Archivo recibido. Lo estamos revisando.",
+      "uploaded": "Archivo recibido. Preparándolo para su lectura.",
       "uploadTitle": "Subir una nueva versión",
       "uploadHint": "Leemos formación, competencias e idiomas; luego decides tú. Las versiones anteriores no cambian.",
       "dropHere": "Arrastra el archivo aquí o elígelo",
@@ -1006,7 +1006,7 @@
       "primary": "Principal",
       "meta": "Versión {version} · {date}",
       "failedExplain": "El archivo es seguro y se puede adjuntar, pero no pudimos leer su contenido. Inténtalo de nuevo o introduce la información.",
-      "rejectedExplain": "El archivo no superó el control de seguridad: no se puede descargar ni enviar. Sube otro.",
+      "rejectedExplain": "No se pudo aceptar el archivo en su formato actual. Sube otro archivo.",
       "review": "Revisar información",
       "retry": "Volver a leer",
       "primarySet": "Marcada como principal.",
@@ -1137,7 +1137,7 @@
     "authNote": "En la versión actual, la carga y la extracción empiezan después de iniciar sesión. No se ha enviado ningún archivo en este paso.",
     "signIn": "Iniciar sesión",
     "register": "Crear una cuenta",
-    "reviewPromise": "Tras la carga y el control, revisa los datos extraídos antes de confirmarlos. No se añaden automáticamente a tu perfil.",
+    "reviewPromise": "Tras la carga, revisa los datos extraídos antes de confirmarlos. No se añaden automáticamente a tu perfil.",
     "manualTitle": "Crea tu perfil sin CV",
     "manualBody": "Introduce tus datos, experiencia, formación y competencias directamente. Puedes añadir un CV más adelante.",
     "openProfile": "Abrir mi perfil profesional",
@@ -1152,10 +1152,10 @@
     "loading": "Cargando borrador…",
     "retry": "Reintentar",
     "title": "Sube tu CV",
-    "privacy": "Comprobaremos el archivo y sugeriremos sus datos. Tu borrador privado caduca tras 24 horas y puedes eliminarlo en cualquier momento.",
+    "privacy": "Leeremos tu CV y sugeriremos sus datos. Tu borrador privado caduca tras 24 horas y puedes eliminarlo en cualquier momento.",
     "file": "Elegir CV",
     "limits": "PDF o DOCX, hasta 5 MB.",
-    "processing": "Comprobando el CV y extrayendo datos…",
+    "processing": "Leyendo el CV y extrayendo datos…",
     "failed": "No se pudo procesar. Elimina el borrador y prueba otro archivo, o continúa manualmente.",
     "profile": "Abrir mi perfil profesional",
     "welcomeName": "Bienvenido/a {name}",
