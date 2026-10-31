@@ -58,7 +58,7 @@ describe("candidate onboarding", () => {
     expect(screen.queryByTestId("authenticated-upload")).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "تسجيل الدخول" })).toHaveAttribute(
       "href",
-      "/login?next=%2Far%2Fstart%3Fstep%3Dupload",
+      "/login?next=%2Fstart%3Fstep%3Dupload",
     );
     expect(screen.getByText(/لم يُرفع أي ملف/)).toBeVisible();
   });
@@ -68,7 +68,7 @@ describe("candidate onboarding", () => {
     fireEvent.click(screen.getByRole("button", { name: "أدخل معلوماتي يدويًا" }));
     expect(screen.getByRole("link", { name: "إنشاء حساب" })).toHaveAttribute(
       "href",
-      "/register?next=%2Far%2Fstart%3Fstep%3Dmanual",
+      "/register?next=%2Fstart%3Fstep%3Dmanual",
     );
   });
   it("resumes the authenticated upload and greets only with the account name", () => {

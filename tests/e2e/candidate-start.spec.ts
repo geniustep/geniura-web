@@ -23,7 +23,7 @@ for (const { locale, title, action } of locales) {
     await page.getByRole("button", { name: action, exact: true }).click();
     await expect(page.locator(`main a[href*="/login?next="]`)).toHaveAttribute(
       "href",
-      new RegExp(`next=%2F${locale}%2Fstart%3Fstep%3Dupload`),
+      /next=%2Fstart%3Fstep%3Dupload/,
     );
     await expect(page.locator('main input[type="file"]')).toHaveCount(0);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);

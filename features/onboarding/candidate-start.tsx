@@ -1,7 +1,7 @@
 "use client";
 
 import { FileTextIcon, LockKeyholeIcon, PencilLineIcon, UploadIcon } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -16,7 +16,6 @@ import { Link } from "@/lib/i18n/navigation";
 
 export function CandidateStart() {
   const t = useTranslations("CandidateStart");
-  const locale = useLocale();
   const query = useSearchParams();
   const [step, setStep] = useState<"choose" | "upload" | "manual">(() =>
     query.get("step") === "upload"
@@ -28,7 +27,7 @@ export function CandidateStart() {
   const me = useAuthMeRetrieve({ query: { retry: false, staleTime: 60_000 } });
   const resumes = useCandidatesMeResumesList({ query: { enabled: !!me.data, retry: false } });
   const guest = isApiError(me.error) && me.error.status === 401;
-  const next = `/${locale}/start?step=${step === "manual" ? "manual" : "upload"}`;
+  const next = `/start?step=${step === "manual" ? "manual" : "upload"}`;
   const pendingReview = resumes.data?.find((resume) => resume.status === "review_required");
 
   if (me.isPending) return <Skeleton className="h-72 rounded-xl" aria-label={t("loading")} />;
