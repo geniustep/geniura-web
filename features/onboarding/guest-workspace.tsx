@@ -13,6 +13,10 @@ import { SkillPicker } from "@/features/profile/skill-picker";
 import { LANGUAGE_CODES } from "@/features/profile/sections";
 import { NativeSelect } from "@/components/ui/native-select";
 import { authMeRetrieve } from "@/lib/api/generated/endpoints/me/me";
+import {
+  OnboardingGuestCvWorkspaceRetrieveResponse,
+  OnboardingGuestCvWorkspacePartialUpdateResponse,
+} from "@/lib/api/generated/zod/guest-onboarding/guest-onboarding.zod";
 import { clearCsrfToken } from "@/lib/api/fetcher";
 import { isApiError } from "@/lib/api/errors";
 import {
@@ -54,7 +58,8 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
   const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ["guest-workspace"],
-    queryFn: onboardingGuestCvWorkspaceRetrieve,
+    queryFn: async () =>
+      OnboardingGuestCvWorkspaceRetrieveResponse.parse(await onboardingGuestCvWorkspaceRetrieve()),
     retry: false,
     gcTime: 0,
     refetchOnWindowFocus: false,
@@ -93,11 +98,13 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
   async function save() {
     if (!data) throw new Error(t("loadError"));
     if (!dirty) return data;
-    const saved = await onboardingGuestCvWorkspacePartialUpdate({
-      revision: data.revision,
-      identity: data.identity,
-      items: data.items,
-    });
+    const saved = OnboardingGuestCvWorkspacePartialUpdateResponse.parse(
+      await onboardingGuestCvWorkspacePartialUpdate({
+        revision: data.revision,
+        identity: data.identity,
+        items: data.items,
+      }),
+    );
     setEdited(saved);
     setDirty(false);
     setNotice(t("saved"));
@@ -165,7 +172,11 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
                   maxLength={key === "name" ? 150 : key === "phone" ? 50 : 254}
                   disabled={busy}
                   onChange={(event) =>
-                    update({ ...data, identity: { ...data.identity, [key]: event.target.value } })
+                    update({
+                      ...data,
+                      identity: { ...data.identity, [key]: event.target.value },
+                      registration_prepared: key === "email" ? false : data.registration_prepared,
+                    })
                   }
                 />
               </div>
