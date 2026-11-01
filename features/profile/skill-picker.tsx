@@ -24,7 +24,7 @@ export function SkillPicker({
 }: {
   id: string;
   value: string;
-  onChange: (id: string) => void;
+  onChange: (id: string, label?: string) => void;
   disabled: boolean;
   invalid: boolean;
   describedBy?: string;
@@ -110,7 +110,7 @@ export function SkillPicker({
                   skill.id === value && "bg-secondary text-secondary-foreground",
                 )}
                 onClick={() => {
-                  onChange(skill.id);
+                  onChange(skill.id, skill.label);
                   setChosenLabel(skill.label);
                   setText("");
                 }}

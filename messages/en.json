@@ -1182,6 +1182,9 @@
     "draftDetails": "Storage and privacy"
   },
   "GuestWorkspace": {
+    "skillNeedsSelection": "Select a skill to complete this item.",
+    "saving": "Saving…",
+    "saveFailed": "Could not save. Your changes remain here. Try again.",
     "loading": "Opening your draft…",
     "loadError": "Could not open the draft.",
     "retry": "Try again",

@@ -16,6 +16,7 @@ const api = vi.hoisted(() => ({
   login: vi.fn(),
   reset: vi.fn(),
   push: vi.fn(),
+  skills: vi.fn(),
 }));
 vi.mock("@/lib/api/generated/endpoints/guest-onboarding/guest-onboarding", () => ({
   onboardingGuestCvWorkspaceRetrieve: api.retrieve,
@@ -34,27 +35,45 @@ vi.mock("@/lib/api/generated/endpoints/auth/auth", () => ({
   authPasswordResetRequestCreate: api.reset,
 }));
 vi.mock("@/lib/i18n/navigation", () => ({ useRouter: () => ({ push: api.push }) }));
-vi.mock("@/features/profile/skill-picker", () => ({ SkillPicker: () => null }));
+vi.mock("@/lib/api/generated/endpoints/taxonomy/taxonomy", () => ({
+  useTaxonomySkillsList: api.skills,
+}));
+vi.mock("@/features/profile/skill-picker", () => ({
+  SkillPicker: ({
+    value,
+    vocabulary,
+  }: {
+    value: string;
+    vocabulary: { skills: Record<string, { ar?: string }> };
+  }) => <span>{vocabulary.skills[value]?.ar}</span>,
+}));
 const initial = {
   revision: 0,
   identity: { name: "أمينة", email: "amina@example.test", phone: "" },
   items: [],
   registration_prepared: false,
 };
-function setup() {
-  render(
+function setup(draftKey?: string) {
+  return render(
     <QueryClientProvider
       client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
     >
       <NextIntlClientProvider locale="ar" messages={ar}>
-        <GuestWorkspace signedIn={false} />
+        <GuestWorkspace signedIn={false} draftKey={draftKey} />
       </NextIntlClientProvider>
     </QueryClientProvider>,
   );
 }
 beforeEach(() => {
   vi.resetAllMocks();
+  sessionStorage.clear();
   api.retrieve.mockResolvedValue(initial);
+  api.skills.mockReturnValue({
+    data: {
+      results: [{ id: "skill-1", labels: { ar: "إدارة المشاريع", fr: "Gestion de projet" } }],
+    },
+    isPending: false,
+  });
   api.save.mockImplementation(async (data) => ({
     ...data,
     revision: 1,
@@ -87,6 +106,98 @@ describe("guest professional draft", () => {
     fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.identity }));
     expect(screen.getByLabelText(ar.GuestWorkspace.name)).toHaveValue("اسم معدل");
     expect(api.save).not.toHaveBeenCalled();
+  });
+  it("automatically saves edits without registration", async () => {
+    setup();
+    fireEvent.change(await screen.findByLabelText(ar.GuestWorkspace.name), {
+      target: { value: "اسم محفوظ تلقائيا" },
+    });
+    await waitFor(() => expect(api.save).toHaveBeenCalledOnce(), { timeout: 2000 });
+    await screen.findByText(ar.GuestWorkspace.saved);
+    expect(api.register).not.toHaveBeenCalled();
+  });
+  it("retains edits made while a previous save is in flight", async () => {
+    let resolve!: (value: unknown) => void;
+    api.save.mockImplementationOnce(
+      () =>
+        new Promise((done) => {
+          resolve = done;
+        }),
+    );
+    setup();
+    const name = await screen.findByLabelText(ar.GuestWorkspace.name);
+    fireEvent.change(name, { target: { value: "الأول" } });
+    await waitFor(() => expect(api.save).toHaveBeenCalledOnce(), { timeout: 2000 });
+    fireEvent.change(name, { target: { value: "الأخير" } });
+    resolve({ ...initial, revision: 1, identity: { ...initial.identity, name: "الأول" } });
+    await waitFor(() => expect(api.save).toHaveBeenCalledTimes(2));
+    expect(api.save.mock.calls[1]?.[0]).toMatchObject({
+      revision: 1,
+      identity: { name: "الأخير" },
+    });
+    expect(name).toHaveValue("الأخير");
+  });
+  it("recovers pending edits and the selected section after remount", async () => {
+    const key = new Date(Date.now() + 86400000).toISOString();
+    const view = setup(key);
+    fireEvent.change(await screen.findByLabelText(ar.GuestWorkspace.name), {
+      target: { value: "قبل التحديث" },
+    });
+    fireEvent.click(
+      screen.getByRole("button", { name: new RegExp(ar.GuestWorkspace.kinds.experience) }),
+    );
+    view.unmount();
+    setup(key);
+    await waitFor(() =>
+      expect(
+        screen.getByRole("button", { name: new RegExp(ar.GuestWorkspace.kinds.experience) }),
+      ).toHaveAttribute("aria-pressed", "true"),
+    );
+    fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.identity }));
+    expect(screen.getByLabelText(ar.GuestWorkspace.name)).toHaveValue("قبل التحديث");
+  });
+  it("keeps failed saves editable and allows an explicit retry", async () => {
+    api.save.mockRejectedValueOnce(new Error("offline"));
+    setup();
+    fireEvent.change(await screen.findByLabelText(ar.GuestWorkspace.name), {
+      target: { value: "محفوظ محليا" },
+    });
+    await screen.findByText(ar.GuestWorkspace.saveFailed, {}, { timeout: 2000 });
+    expect(screen.getByLabelText(ar.GuestWorkspace.name)).toHaveValue("محفوظ محليا");
+    fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.save }));
+    await screen.findByText(ar.GuestWorkspace.saved);
+    expect(api.save).toHaveBeenCalledTimes(2);
+  });
+  it("does not restore a recovery copy from a different draft or older server revision", async () => {
+    const key = new Date(Date.now() + 86400000).toISOString();
+    sessionStorage.setItem(
+      `geniura:guest-workspace:${key}`,
+      JSON.stringify({
+        value: { ...initial, identity: { ...initial.identity, name: "قديم" } },
+        pending: true,
+        section: "identity",
+      }),
+    );
+    api.retrieve.mockResolvedValue({ ...initial, revision: 2 });
+    setup(key);
+    expect(await screen.findByLabelText(ar.GuestWorkspace.name)).toHaveValue(initial.identity.name);
+    expect(api.save).not.toHaveBeenCalled();
+  });
+  it("shows the dictionary label for extracted skills that only contain an ID", async () => {
+    api.retrieve.mockResolvedValue({
+      ...initial,
+      items: [
+        { kind: "skill", payload: { skill_id: "skill-1" }, source_index: 0 },
+        { kind: "skill", payload: {}, source_index: null },
+      ],
+    });
+    setup();
+    await screen.findByLabelText(ar.GuestWorkspace.name);
+    fireEvent.click(
+      screen.getByRole("button", { name: new RegExp(ar.GuestWorkspace.kinds.skill) }),
+    );
+    expect(screen.getByText("إدارة المشاريع")).toBeVisible();
+    expect(screen.getByText(ar.GuestWorkspace.skillNeedsSelection)).toBeVisible();
   });
   it("stages registration and sends activation only after finishing the draft", async () => {
     setup();

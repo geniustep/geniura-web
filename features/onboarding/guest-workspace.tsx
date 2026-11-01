@@ -3,7 +3,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +36,8 @@ import {
   sendGuestCode,
   verifyGuestCode,
 } from "@/lib/api/guest-cv";
+import { useTaxonomySkillsList } from "@/lib/api/generated/endpoints/taxonomy/taxonomy";
+import { pickLabel } from "@/lib/jobs/labels";
 import { useRouter } from "@/lib/i18n/navigation";
 
 const fields: Record<WorkspaceItemKindEnum, string[]> = {
@@ -50,7 +52,13 @@ const fields: Record<WorkspaceItemKindEnum, string[]> = {
 const emptyVocabulary = { locations: {}, occupations: {}, sectors: {}, skills: {} };
 const languageLevels = ["unspecified", "A1", "A2", "B1", "B2", "C1", "C2", "native"];
 
-export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
+export function GuestWorkspace({
+  signedIn,
+  draftKey = "",
+}: {
+  signedIn: boolean;
+  draftKey?: string;
+}) {
   const t = useTranslations("GuestWorkspace");
   const profile = useTranslations("Profile");
   const locale = useLocale();
@@ -64,6 +72,21 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
     gcTime: 0,
     refetchOnWindowFocus: false,
   });
+  const skills = useTaxonomySkillsList(
+    { limit: 50, locale },
+    {
+      query: {
+        enabled: !!query.data?.items.some((item) => item.kind === "skill"),
+        staleTime: 60_000,
+      },
+    },
+  );
+  const vocabulary = {
+    ...emptyVocabulary,
+    skills: Object.fromEntries(
+      (skills.data?.results ?? []).map((skill) => [skill.id, skill.labels]),
+    ),
+  };
   const [edited, setEdited] = useState<WorkspaceState>();
   const [dirty, setDirty] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -80,9 +103,80 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
   const [existing, setExisting] = useState(false);
   const [proofVerified, setProofVerified] = useState(false);
   const data = edited ?? query.data;
+  const latest = useRef(data);
+  latest.current = data;
+  const unsaved = useRef(dirty);
+  unsaved.current = dirty;
+  const inFlight = useRef<Promise<WorkspaceState> | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
+  const restored = useRef(false);
+  const storageKey = `geniura:guest-workspace:${draftKey}`;
+  const remember = useCallback(
+    (value: WorkspaceState, section: string, pending: boolean) => {
+      if (!draftKey) return;
+      try {
+        sessionStorage.setItem(storageKey, JSON.stringify({ value, section, pending }));
+      } catch {
+        /* The server remains the source of truth when browser storage is unavailable. */
+      }
+    },
+    [draftKey, storageKey],
+  );
+  // Hydrate the tab-local recovery copy only after the owner-protected server read succeeds.
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (!query.data || restored.current) return;
+    restored.current = true;
+    if (!draftKey || Date.parse(draftKey) <= Date.now()) return;
+    try {
+      const cached = JSON.parse(sessionStorage.getItem(storageKey) ?? "null");
+      if (!cached) return;
+      if (["identity", "account", ...Object.keys(fields)].includes(cached.section)) {
+        setActiveSection(cached.section);
+      }
+      const result = OnboardingGuestCvWorkspaceRetrieveResponse.safeParse(cached.value);
+      if (cached.pending && result.success && result.data.revision === query.data.revision) {
+        latest.current = result.data;
+        unsaved.current = true;
+        setEdited(result.data);
+        setDirty(true);
+      }
+    } catch {
+      /* Ignore invalid or unavailable tab storage. */
+    }
+  }, [query.data, draftKey, storageKey]);
+  /* eslint-enable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (data && restored.current) remember(data, activeSection, dirty);
+  }, [data, activeSection, dirty, remember]);
+  useEffect(() => {
+    if (!dirty || busy || saving || saveFailed) return;
+    const timer = window.setTimeout(() => {
+      void save().catch((cause) => {
+        setError(cause);
+        setSaveFailed(true);
+      });
+    }, 700);
+    return () => window.clearTimeout(timer);
+  });
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
   function update(next: WorkspaceState) {
+    latest.current = next;
+    unsaved.current = true;
+    remember(next, activeSection, true);
     setEdited(next);
     setDirty(true);
+    setSaveFailed(false);
+    setError(undefined);
     setNotice("");
   }
   async function run(action: () => Promise<void>) {
@@ -96,20 +190,46 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
       setBusy(false);
     }
   }
-  async function save() {
-    if (!data) throw new Error(t("loadError"));
-    if (!dirty) return data;
-    const saved = OnboardingGuestCvWorkspacePartialUpdateResponse.parse(
-      await onboardingGuestCvWorkspacePartialUpdate({
-        revision: data.revision,
-        identity: data.identity,
-        items: data.items,
-      }),
-    );
-    setEdited(saved);
-    setDirty(false);
-    setNotice(t("saved"));
-    return saved;
+  async function save(): Promise<WorkspaceState> {
+    if (inFlight.current) {
+      await inFlight.current;
+      return save();
+    }
+    const snapshot = latest.current;
+    if (!snapshot) throw new Error(t("loadError"));
+    if (!unsaved.current) return snapshot;
+    setSaving(true);
+    setSaveFailed(false);
+    const request = (async () => {
+      const saved = OnboardingGuestCvWorkspacePartialUpdateResponse.parse(
+        await onboardingGuestCvWorkspacePartialUpdate({
+          revision: snapshot.revision,
+          identity: snapshot.identity,
+          items: snapshot.items,
+        }),
+      );
+      const changed = latest.current !== snapshot;
+      const next = changed ? { ...latest.current!, revision: saved.revision } : saved;
+      latest.current = next;
+      unsaved.current = changed;
+      setEdited(next);
+      setDirty(changed);
+      remember(next, activeSection, changed);
+      if (!changed) setNotice(t("saved"));
+      return next;
+    })();
+    inFlight.current = request;
+    try {
+      await request;
+    } catch (cause) {
+      setSaveFailed(true);
+      throw cause;
+    } finally {
+      inFlight.current = null;
+      setSaving(false);
+    }
+    // Explicit actions must wait until all edits, including those typed during a request, are saved.
+    return unsaved.current ? save() : latest.current!;
   }
   function setPayload(index: number, key: string, value: unknown) {
     if (!data) return;
@@ -266,18 +386,53 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
                               </label>
                               {key === "skill_id" ? (
                                 <>
-                                  {item.payload.label ? (
-                                    <p className="text-sm text-muted-foreground" dir="auto">
-                                      {String(item.payload.label)}
+                                  {!pickLabel(
+                                    vocabulary.skills[String(item.payload.skill_id ?? "")],
+                                    locale,
+                                  ) ? (
+                                    <p className="text-sm font-medium" dir="auto">
+                                      {pickLabel(
+                                        vocabulary.skills[String(item.payload.skill_id ?? "")],
+                                        locale,
+                                      ) ??
+                                        (typeof item.payload.label === "string" &&
+                                        item.payload.label.trim()
+                                          ? item.payload.label
+                                          : null) ??
+                                        (typeof item.payload.code === "string" &&
+                                        item.payload.code.trim()
+                                          ? item.payload.code
+                                          : null) ??
+                                        t(
+                                          skills.isPending && !!item.payload.skill_id
+                                            ? "loading"
+                                            : "skillNeedsSelection",
+                                        )}
                                     </p>
                                   ) : null}
                                   <SkillPicker
                                     id={`item-${index}-${key}`}
                                     value={String(item.payload.skill_id ?? "")}
-                                    onChange={(id) => setPayload(index, key, id)}
+                                    onChange={(id, selectedLabel) =>
+                                      update({
+                                        ...data,
+                                        items: data.items.map((entry, i) =>
+                                          i === index
+                                            ? {
+                                                ...entry,
+                                                payload: {
+                                                  ...entry.payload,
+                                                  skill_id: id,
+                                                  label: selectedLabel ?? "",
+                                                },
+                                              }
+                                            : entry,
+                                        ),
+                                      })
+                                    }
                                     disabled={busy}
                                     invalid={false}
-                                    vocabulary={emptyVocabulary}
+                                    vocabulary={vocabulary}
                                   />
                                 </>
                               ) : key === "language_code" ||
@@ -560,10 +715,15 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
         <Button
           variant="link"
           className="justify-self-start text-muted-foreground"
-          disabled={busy}
+          disabled={busy || saving}
           onClick={() =>
             void run(async () => {
               await deleteGuestDraft();
+              try {
+                sessionStorage.removeItem(storageKey);
+              } catch {
+                /* Unavailable storage. */
+              }
               queryClient.removeQueries({ queryKey: ["guest-workspace"] });
               await queryClient.invalidateQueries({ queryKey: ["guest-cv"] });
             })
@@ -601,8 +761,8 @@ export function GuestWorkspace({ signedIn }: { signedIn: boolean }) {
             >
               {t("finish")}
             </Button>
-            <p className="w-full text-xs text-muted-foreground">
-              {t(dirty ? "unsaved" : "draftExpiry")}
+            <p role="status" className="w-full text-xs text-muted-foreground">
+              {t(saving ? "saving" : saveFailed ? "saveFailed" : dirty ? "unsaved" : "draftExpiry")}
             </p>
           </>
         ) : (

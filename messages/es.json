@@ -1182,6 +1182,9 @@
     "draftDetails": "Conservación y privacidad"
   },
   "GuestWorkspace": {
+    "skillNeedsSelection": "Selecciona una competencia para completar este elemento.",
+    "saving": "Guardando…",
+    "saveFailed": "No se pudo guardar. Tus cambios siguen aquí. Inténtalo de nuevo.",
     "loading": "Abriendo tu borrador…",
     "loadError": "No se pudo abrir el borrador.",
     "retry": "Reintentar",
