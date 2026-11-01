@@ -19,8 +19,8 @@ export default async function Page({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations("CandidateStart");
   return (
-    <Container className="py-10 sm:py-14">
-      <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
+    <Container data-candidate-start className="py-6 sm:py-8">
+      <div data-start-intro className="mx-auto mb-6 max-w-2xl text-center">
         <p className="mb-3 text-xs font-semibold tracking-wide text-muted-foreground">
           {t("eyebrow")}
         </p>

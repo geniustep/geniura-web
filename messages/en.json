@@ -1212,7 +1212,7 @@
     "needAccount": "Get a free account",
     "forgot": "Forgot your password?",
     "optional": "Complete your draft now. Activate your account at the end.",
-    "prepared": "Your account request is saved. Activate it after finishing your draft.",
+    "prepared": "Account prepared. Activate it at the final step.",
     "signedIn": "You are signed in. Your draft is preserved.",
     "resetSent": "If this email has an account, you will receive a password reset email. Your draft stays here.",
     "confirmTo": "We will send a code to",
@@ -1230,6 +1230,9 @@
       "skill": "Skills",
       "occupation": "Occupations",
       "certification": "Certifications"
-    }
+    },
+    "sectionsLabel": "Draft sections",
+    "accountSection": "Account",
+    "options": "Draft options"
   }
 }

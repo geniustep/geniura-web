@@ -54,6 +54,7 @@ for (const [locale, messages] of Object.entries({ ar, fr, en, es })) {
     await page.getByLabel(t.name, { exact: true }).fill("Reviewed Person");
     await page.getByRole("button", { name: t.save, exact: true }).click();
     await expect.poll(() => mutations).toEqual(["/api/bff/api/v1/onboarding/guest-cv/workspace"]);
+    await page.getByRole("button", { name: t.accountSection, exact: true }).click();
     await page.getByLabel(t.password, { exact: true }).fill("Synthetic-Password-928!");
     await page.getByRole("button", { name: t.create, exact: true }).click();
     await expect(page.getByRole("button", { name: t.create, exact: true })).toHaveCount(0);

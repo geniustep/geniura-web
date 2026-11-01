@@ -243,3 +243,13 @@
 @utility font-display {
   font-family: var(--font-display);
 }
+
+/* Focused CV editing: scoped to /start; public pages retain the full footer. */
+body:has([data-candidate-start]) [data-footer-marketing],
+body:has([data-candidate-start]) [data-footer-promise],
+[data-candidate-start]:has([data-guest-workspace]) [data-start-intro] {
+  display: none;
+}
+[data-candidate-start] [data-start-content]:has([data-guest-workspace]) {
+  max-width: 64rem;
+}
