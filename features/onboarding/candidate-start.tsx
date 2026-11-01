@@ -42,17 +42,14 @@ export function CandidateStart() {
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-3xl gap-7">
-      <div className="grid gap-3 rounded-xl bg-card p-6 shadow-card">
-        {me.data ? (
-          <p className="text-lg font-semibold">
-            {me.data.full_name.trim()
-              ? t("welcomeName", { name: me.data.full_name.trim() })
-              : t("welcome")}
-          </p>
-        ) : null}
-        <p className="text-base leading-relaxed text-muted-foreground">{t("description")}</p>
-      </div>
+    <div className="mx-auto grid w-full max-w-2xl gap-5">
+      {me.data ? (
+        <p className="text-center text-lg font-semibold">
+          {me.data.full_name.trim()
+            ? t("welcomeName", { name: me.data.full_name.trim() })
+            : t("welcome")}
+        </p>
+      ) : null}
       {me.data && pendingReview ? (
         <section className="grid gap-3 rounded-xl border bg-card p-6">
           <h2 className="text-xl font-semibold">{t("reviewTitle")}</h2>
@@ -70,23 +67,25 @@ export function CandidateStart() {
         </section>
       ) : null}
       {step === "choose" ? (
-        <section className="grid gap-5 rounded-xl border bg-card p-6 sm:p-9">
-          <UploadIcon className="size-9 text-action" aria-hidden="true" />
+        <section className="grid justify-items-center gap-5 rounded-2xl border bg-card px-6 py-9 text-center shadow-card sm:px-12 sm:py-12">
+          <span className="flex size-16 items-center justify-center rounded-2xl bg-secondary">
+            <UploadIcon className="size-7 text-primary" aria-hidden="true" />
+          </span>
           <h2 className="text-2xl font-semibold">{t("uploadTitle")}</h2>
           <p className="text-muted-foreground">{t("uploadBody")}</p>
           <Button
             variant="action"
             size="lg"
-            className="justify-self-start rounded-xl"
+            className="w-full rounded-xl sm:w-auto sm:min-w-64"
             onClick={() => setStep("upload")}
           >
             {t("uploadAction")}
           </Button>
           <p className="text-sm text-muted-foreground">{t("limits")}</p>
-          <div className="border-t pt-4">
+          <div className="mt-1 w-full border-t pt-4">
             <Button
               variant="link"
-              className="h-auto min-h-11 px-0 text-start whitespace-normal"
+              className="h-auto min-h-11 px-0 whitespace-normal"
               onClick={() => setStep("manual")}
             >
               <PencilLineIcon aria-hidden="true" />
@@ -145,18 +144,32 @@ export function CandidateStart() {
           </Link>
         </section>
       )}
-      {step !== "choose" ? (
-        <Button variant="link" onClick={() => setStep("choose")} className="justify-self-start">
-          {t("back")}
-        </Button>
-      ) : null}
-      <p className="flex items-start gap-2 text-sm text-muted-foreground">
-        <LockKeyholeIcon className="mt-1 size-4 shrink-0" aria-hidden="true" />
-        {t("privacy")}
-      </p>
-      <Link href="/jobs" className="text-sm text-action hover:underline">
-        {t("browse")}
-      </Link>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
+        {step !== "choose" ? (
+          <Button
+            variant="link"
+            onClick={() => setStep("choose")}
+            className="min-h-11 px-0 text-muted-foreground"
+          >
+            {t("back")}
+          </Button>
+        ) : (
+          <span />
+        )}
+        <Link
+          href="/jobs"
+          className="inline-flex min-h-11 items-center text-action hover:underline"
+        >
+          {t("browse")}
+        </Link>
+      </div>
+      <details className="text-center text-sm text-muted-foreground">
+        <summary className="mx-auto flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-md px-3 hover:bg-muted">
+          <LockKeyholeIcon className="size-4" aria-hidden="true" />
+          {t("privacyLabel")}
+        </summary>
+        <p className="mx-auto mt-2 max-w-lg leading-relaxed">{t("privacy")}</p>
+      </details>
     </div>
   );
 }
