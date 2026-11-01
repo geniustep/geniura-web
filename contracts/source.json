@@ -1,12 +1,12 @@
 {
   "sourceRepository": "geniustep/geniura-api (private)",
   "sourceFile": "docs/openapi/openapi.yaml",
-  "sourceCommit": "b509bef0143ac2d003a1c5dcda88ec1b8b068334",
-  "sourceSha256": "166bcb1e58075dfb8b691a286a39156492faf9ed79a610c8422a3fd4e3832afb",
-  "outputSha256": "852bd247f0c993c656c1998dd542d88e35a365e4ed987e976c2c5e635b28bdd7",
-  "operations": 156,
-  "paths": 118,
-  "schemasKept": 239,
+  "sourceCommit": "b9752318349c0c5c43730f4a71d1400b0d95de4b",
+  "sourceSha256": "c7c5ddfb37d4799e005fa4ec85cb904978bb66c0d76675b9ea6afb55fd4f3bff",
+  "outputSha256": "cc485649fa4ddb13d6249af1959a6d3c222436c3a66a8852b99f4c03f86deea9",
+  "operations": 160,
+  "paths": 121,
+  "schemasKept": 247,
   "schemasPruned": 79,
   "corrections": [
     "paginated: /api/v1/candidates/me/applications",

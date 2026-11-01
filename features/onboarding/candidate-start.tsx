@@ -95,7 +95,9 @@ export function CandidateStart() {
         </section>
       ) : process.env.NEXT_PUBLIC_ENABLE_GUEST_CV === "true" &&
         step === "upload" &&
-        (!me.data || query.get("step") === "claim") ? (
+        (!me.data ||
+          query.get("step") === "claim" ||
+          process.env.NEXT_PUBLIC_ENABLE_GUEST_DRAFT_WORKSPACE === "true") ? (
         <GuestCv signedIn={!!me.data} />
       ) : !me.data ? (
         <section className="grid gap-4 rounded-xl border bg-card p-6 sm:p-9">

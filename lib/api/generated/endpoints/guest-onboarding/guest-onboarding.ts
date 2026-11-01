@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b509bef0143ac2d003a1c5dcda88ec1b8b068334.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b9752318349c0c5c43730f4a71d1400b0d95de4b.
  * OpenAPI spec version: 1.0.0-dev
  */
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -29,9 +29,12 @@ import type {
   EmailRequest,
   ErrorResponse,
   GuestDetail,
+  PatchedWorkspaceUpdateRequest,
   Proof,
+  RegistrationIntentRequest,
   State,
   UploadRequest,
+  WorkspaceState,
 } from "../../model";
 
 import { apiFetch } from "../../../fetcher";
@@ -404,6 +407,81 @@ export const useOnboardingGuestCvClaimCreate = <TError = ErrorResponse, TContext
 > => {
   return useMutation(getOnboardingGuestCvClaimCreateMutationOptions(options), queryClient);
 };
+export const getOnboardingGuestCvCompleteCreateUrl = () => {
+  return `/api/v1/onboarding/guest-cv/complete`;
+};
+
+export const onboardingGuestCvCompleteCreate = async (
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<Claim> => {
+  return apiFetch<Claim>(getOnboardingGuestCvCompleteCreateUrl(), {
+    ...options,
+    method: "POST",
+  });
+};
+
+export const getOnboardingGuestCvCompleteCreateMutationKey = () =>
+  ["onboardingGuestCvCompleteCreate"] as const;
+
+export const getOnboardingGuestCvCompleteCreateMutationOptions = <
+  TError = ErrorResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof onboardingGuestCvCompleteCreate>>,
+    TError,
+    void,
+    TContext
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof onboardingGuestCvCompleteCreate>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationKey = getOnboardingGuestCvCompleteCreateMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof onboardingGuestCvCompleteCreate>>,
+    void
+  > = () => {
+    return onboardingGuestCvCompleteCreate(requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type OnboardingGuestCvCompleteCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof onboardingGuestCvCompleteCreate>>
+>;
+
+export type OnboardingGuestCvCompleteCreateMutationError = ErrorResponse;
+
+export const useOnboardingGuestCvCompleteCreate = <TError = ErrorResponse, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof onboardingGuestCvCompleteCreate>>,
+      TError,
+      void,
+      TContext
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof onboardingGuestCvCompleteCreate>>,
+  TError,
+  void,
+  TContext
+> => {
+  return useMutation(getOnboardingGuestCvCompleteCreateMutationOptions(options), queryClient);
+};
 export const getOnboardingGuestCvEmailCodeCreateUrl = () => {
   return `/api/v1/onboarding/guest-cv/email-code`;
 };
@@ -504,6 +582,108 @@ export const useOnboardingGuestCvEmailCodeCreate = <TError = ErrorResponse, TCon
 > => {
   return useMutation(getOnboardingGuestCvEmailCodeCreateMutationOptions(options), queryClient);
 };
+export const getOnboardingGuestCvRegistrationCreateUrl = () => {
+  return `/api/v1/onboarding/guest-cv/registration`;
+};
+
+export const onboardingGuestCvRegistrationCreate = async (
+  registrationIntentRequest: RegistrationIntentRequest,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<GuestDetail> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit["headers"]>,
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(
+          h as Iterable<Iterable<string>>,
+          (entry) => Array.from(entry) as [string, string],
+        ),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+  return apiFetch<GuestDetail>(getOnboardingGuestCvRegistrationCreateUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...getHeaders(options?.headers) },
+    body: JSON.stringify(registrationIntentRequest),
+  });
+};
+
+export const getOnboardingGuestCvRegistrationCreateMutationKey = () =>
+  ["onboardingGuestCvRegistrationCreate"] as const;
+
+export const getOnboardingGuestCvRegistrationCreateMutationOptions = <
+  TError = ErrorResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof onboardingGuestCvRegistrationCreate>>,
+    TError,
+    OnboardingGuestCvRegistrationCreateMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof onboardingGuestCvRegistrationCreate>>,
+  TError,
+  OnboardingGuestCvRegistrationCreateMutationVariables,
+  TContext
+> => {
+  const mutationKey = getOnboardingGuestCvRegistrationCreateMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof onboardingGuestCvRegistrationCreate>>,
+    OnboardingGuestCvRegistrationCreateMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return onboardingGuestCvRegistrationCreate(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type OnboardingGuestCvRegistrationCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof onboardingGuestCvRegistrationCreate>>
+>;
+export type OnboardingGuestCvRegistrationCreateMutationBody = RegistrationIntentRequest;
+export type OnboardingGuestCvRegistrationCreateMutationError = ErrorResponse;
+export type OnboardingGuestCvRegistrationCreateMutationVariables = {
+  data: RegistrationIntentRequest;
+};
+
+export const useOnboardingGuestCvRegistrationCreate = <TError = ErrorResponse, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof onboardingGuestCvRegistrationCreate>>,
+      TError,
+      OnboardingGuestCvRegistrationCreateMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof onboardingGuestCvRegistrationCreate>>,
+  TError,
+  OnboardingGuestCvRegistrationCreateMutationVariables,
+  TContext
+> => {
+  return useMutation(getOnboardingGuestCvRegistrationCreateMutationOptions(options), queryClient);
+};
 export const getOnboardingGuestCvVerifyEmailCreateUrl = () => {
   return `/api/v1/onboarding/guest-cv/verify-email`;
 };
@@ -603,4 +783,233 @@ export const useOnboardingGuestCvVerifyEmailCreate = <TError = ErrorResponse, TC
   TContext
 > => {
   return useMutation(getOnboardingGuestCvVerifyEmailCreateMutationOptions(options), queryClient);
+};
+export const getOnboardingGuestCvWorkspaceRetrieveUrl = () => {
+  return `/api/v1/onboarding/guest-cv/workspace`;
+};
+
+export const onboardingGuestCvWorkspaceRetrieve = async (
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<WorkspaceState> => {
+  return apiFetch<WorkspaceState>(getOnboardingGuestCvWorkspaceRetrieveUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getOnboardingGuestCvWorkspaceRetrieveQueryKey = () => {
+  return [`/api/v1/onboarding/guest-cv/workspace`] as const;
+};
+
+export const getOnboardingGuestCvWorkspaceRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>,
+  TError = ErrorResponse,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getOnboardingGuestCvWorkspaceRetrieveQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>> = ({
+    signal,
+  }) => onboardingGuestCvWorkspaceRetrieve({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type OnboardingGuestCvWorkspaceRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>
+>;
+export type OnboardingGuestCvWorkspaceRetrieveQueryError = ErrorResponse;
+
+export function useOnboardingGuestCvWorkspaceRetrieve<
+  TData = Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>,
+  TError = ErrorResponse,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useOnboardingGuestCvWorkspaceRetrieve<
+  TData = Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>,
+  TError = ErrorResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>,
+          TError,
+          Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useOnboardingGuestCvWorkspaceRetrieve<
+  TData = Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>,
+  TError = ErrorResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useOnboardingGuestCvWorkspaceRetrieve<
+  TData = Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>,
+  TError = ErrorResponse,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof onboardingGuestCvWorkspaceRetrieve>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getOnboardingGuestCvWorkspaceRetrieveQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getOnboardingGuestCvWorkspacePartialUpdateUrl = () => {
+  return `/api/v1/onboarding/guest-cv/workspace`;
+};
+
+export const onboardingGuestCvWorkspacePartialUpdate = async (
+  patchedWorkspaceUpdateRequest?: PatchedWorkspaceUpdateRequest,
+  options?: Parameters<typeof apiFetch>[1],
+): Promise<WorkspaceState> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit["headers"]>,
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(
+          h as Iterable<Iterable<string>>,
+          (entry) => Array.from(entry) as [string, string],
+        ),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+  return apiFetch<WorkspaceState>(getOnboardingGuestCvWorkspacePartialUpdateUrl(), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...getHeaders(options?.headers) },
+    body: JSON.stringify(patchedWorkspaceUpdateRequest),
+  });
+};
+
+export const getOnboardingGuestCvWorkspacePartialUpdateMutationKey = () =>
+  ["onboardingGuestCvWorkspacePartialUpdate"] as const;
+
+export const getOnboardingGuestCvWorkspacePartialUpdateMutationOptions = <
+  TError = ErrorResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof onboardingGuestCvWorkspacePartialUpdate>>,
+    TError,
+    OnboardingGuestCvWorkspacePartialUpdateMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof apiFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof onboardingGuestCvWorkspacePartialUpdate>>,
+  TError,
+  OnboardingGuestCvWorkspacePartialUpdateMutationVariables,
+  TContext
+> => {
+  const mutationKey = getOnboardingGuestCvWorkspacePartialUpdateMutationKey();
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof onboardingGuestCvWorkspacePartialUpdate>>,
+    OnboardingGuestCvWorkspacePartialUpdateMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return onboardingGuestCvWorkspacePartialUpdate(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type OnboardingGuestCvWorkspacePartialUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof onboardingGuestCvWorkspacePartialUpdate>>
+>;
+export type OnboardingGuestCvWorkspacePartialUpdateMutationBody =
+  PatchedWorkspaceUpdateRequest | undefined;
+export type OnboardingGuestCvWorkspacePartialUpdateMutationError = ErrorResponse;
+export type OnboardingGuestCvWorkspacePartialUpdateMutationVariables = {
+  data?: PatchedWorkspaceUpdateRequest;
+};
+
+export const useOnboardingGuestCvWorkspacePartialUpdate = <
+  TError = ErrorResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof onboardingGuestCvWorkspacePartialUpdate>>,
+      TError,
+      OnboardingGuestCvWorkspacePartialUpdateMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof apiFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof onboardingGuestCvWorkspacePartialUpdate>>,
+  TError,
+  OnboardingGuestCvWorkspacePartialUpdateMutationVariables,
+  TContext
+> => {
+  return useMutation(
+    getOnboardingGuestCvWorkspacePartialUpdateMutationOptions(options),
+    queryClient,
+  );
 };

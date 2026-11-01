@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b509bef0143ac2d003a1c5dcda88ec1b8b068334.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b9752318349c0c5c43730f4a71d1400b0d95de4b.
  * OpenAPI spec version: 1.0.0-dev
  */
 
@@ -193,6 +193,7 @@ export * from "./patchedPreferencesRequest";
 export * from "./patchedPreferencesUpdateRequest";
 export * from "./patchedRecruitmentOrderRequest";
 export * from "./patchedVisibilityRequest";
+export * from "./patchedWorkspaceUpdateRequest";
 export * from "./path";
 export * from "./preferenceItemRequest";
 export * from "./preferenceMatrix";
@@ -214,6 +215,7 @@ export * from "./recruitmentOrderRequest";
 export * from "./recruitmentOrderScopeEnum";
 export * from "./recruitmentOrderStatusEnum";
 export * from "./registerRequest";
+export * from "./registrationIntentRequest";
 export * from "./reportCategoryEnum";
 export * from "./reportCreateRequest";
 export * from "./reportReceipt";
@@ -287,3 +289,11 @@ export * from "./visibility";
 export * from "./vocabularyVersionStatusEnum";
 export * from "./workModeEnum";
 export * from "./workScheduleEnum";
+export * from "./workspaceIdentity";
+export * from "./workspaceIdentityRequest";
+export * from "./workspaceItem";
+export * from "./workspaceItemKindEnum";
+export * from "./workspaceItemPayload";
+export * from "./workspaceItemRequest";
+export * from "./workspaceItemRequestPayload";
+export * from "./workspaceState";
