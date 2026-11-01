@@ -65,7 +65,7 @@ describe("candidate onboarding", () => {
   it("preserves the manual route through authentication", () => {
     state.me = { error: new ApiError(401, {}), isPending: false };
     setup();
-    fireEvent.click(screen.getByRole("button", { name: "أدخل معلوماتي يدويًا" }));
+    fireEvent.click(screen.getByRole("button", { name: ar.CandidateStart.manualAction }));
     expect(screen.getByRole("link", { name: "إنشاء حساب" })).toHaveAttribute(
       "href",
       "/register?next=%2Fstart%3Fstep%3Dmanual",

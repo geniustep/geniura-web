@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test";
 
 const locales = [
   { locale: "ar", title: "لنبدأ بملفك المهني", action: "أضف سيرتك الذاتية" },
-  { locale: "fr", title: "Commençons votre profil professionnel", action: "Ajouter mon CV" },
-  { locale: "en", title: "Let’s start your professional profile", action: "Add my CV" },
-  { locale: "es", title: "Empecemos tu perfil profesional", action: "Añadir mi CV" },
+  { locale: "fr", title: "Créons votre profil", action: "Ajouter mon CV" },
+  { locale: "en", title: "Let’s create your profile", action: "Add my CV" },
+  { locale: "es", title: "Creemos tu perfil", action: "Añadir mi CV" },
 ];
 for (const { locale, title, action } of locales) {
   test(`${locale}: offers the candidate journey before authentication`, async ({

@@ -1,5 +1,6 @@
 "use client";
 
+import { FileCheck2Icon, LoaderCircleIcon, UploadIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
@@ -58,7 +59,10 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
     return (
       <section className="grid gap-4">
         <FormAlert error={draft.error} />
-        <Button className="h-auto min-h-11 py-3 whitespace-normal" onClick={() => draft.refetch()}>
+        <Button
+          className="h-auto min-h-12 rounded-xl py-3 whitespace-normal"
+          onClick={() => draft.refetch()}
+        >
           {t("retry")}
         </Button>
       </section>
@@ -67,40 +71,71 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
   const displayName = name ?? data?.identity.name ?? "";
   const displayEmail = email ?? data?.identity.email ?? "";
   return (
-    <section className="grid gap-5 rounded-xl border bg-card p-6 sm:p-9" aria-busy={busy}>
+    <section
+      className="grid gap-5 rounded-2xl border bg-card p-6 shadow-card sm:p-9"
+      aria-busy={busy}
+    >
       <FormAlert error={error} />
       {!data ? (
         <>
-          <h2 className="text-2xl font-semibold">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("privacy")}</p>
-          <label htmlFor="guest-file">{t("file")}</label>
-          <Input
-            id="guest-file"
-            type="file"
-            accept=".pdf,.docx"
-            disabled={busy}
-            onChange={(event) => {
-              const file = event.currentTarget.files?.[0];
-              if (!file) return;
-              if (file.size > 5 * 1024 * 1024 || !/\.(pdf|docx)$/i.test(file.name)) {
-                setError(new Error(t("limits")));
-                return;
-              }
-              void run(async () => {
-                await uploadGuestDraft(file);
-                await draft.refetch();
-              });
-            }}
-          />
-          <p className="text-sm text-muted-foreground">{t("limits")}</p>
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold">{t("title")}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("uploadHint")}</p>
+          </div>
+          <div className="relative grid min-h-56 content-center justify-items-center gap-4 rounded-xl border-2 border-dashed border-input bg-muted/40 p-6 text-center transition-colors focus-within:border-action focus-within:ring-2 focus-within:ring-ring hover:border-action hover:bg-secondary/50">
+            <UploadIcon className="size-9 text-primary" aria-hidden="true" />
+            <label
+              htmlFor="guest-file"
+              className="rounded-full bg-action px-6 py-3 font-semibold text-action-foreground"
+            >
+              {t("file")}
+            </label>
+            <p className="text-sm text-muted-foreground" id="guest-file-limits">
+              {t("limits")}
+            </p>
+            <input
+              className="absolute inset-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-wait"
+              aria-describedby="guest-file-limits"
+              id="guest-file"
+              type="file"
+              accept=".pdf,.docx"
+              disabled={busy}
+              onChange={(event) => {
+                const file = event.currentTarget.files?.[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024 || !/\.(pdf|docx)$/i.test(file.name)) {
+                  setError(new Error(t("limits")));
+                  return;
+                }
+                void run(async () => {
+                  await uploadGuestDraft(file);
+                  await draft.refetch();
+                });
+              }}
+            />
+          </div>
+          <details className="text-sm text-muted-foreground">
+            <summary className="flex min-h-11 cursor-pointer items-center">
+              {t("draftDetails")}
+            </summary>
+            <p className="pb-2 leading-relaxed">{t("privacy")}</p>
+          </details>
           {error instanceof Error && !isApiError(error) ? (
             <p role="alert">{error.message}</p>
           ) : null}
         </>
       ) : data.status === "queued" || data.status === "processing" ? (
-        <p role="status" aria-live="polite">
-          {t("processing")}
-        </p>
+        <div
+          role="status"
+          aria-live="polite"
+          className="grid min-h-56 content-center justify-items-center gap-5 text-center"
+        >
+          <LoaderCircleIcon
+            className="size-9 text-action motion-safe:animate-spin"
+            aria-hidden="true"
+          />
+          <p className="text-lg font-medium">{t("processing")}</p>
+        </div>
       ) : data.status === "failed" ? (
         <p role="alert">{t("failed")}</p>
       ) : data.status === "claimed" ? (
@@ -109,24 +144,35 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
         </Link>
       ) : (
         <>
-          <h2 className="text-2xl font-semibold">
-            {displayName.trim() ? t("welcomeName", { name: displayName.trim() }) : t("welcome")}
-          </h2>
-          <p className="text-muted-foreground">{t("suggestions")}</p>
-          <label htmlFor="guest-name">{t("name")}</label>
-          <Input
-            id="guest-name"
-            autoComplete="name"
-            maxLength={100}
-            value={displayName}
-            onChange={(event) => setName(event.target.value)}
-          />
+          <div className="flex items-start gap-4">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
+              <FileCheck2Icon className="size-5" aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
+              <h2 className="text-2xl font-semibold [overflow-wrap:anywhere]">
+                {displayName.trim() ? t("welcomeName", { name: displayName.trim() }) : t("welcome")}
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">{t("suggestions")}</p>
+            </div>
+          </div>
+          <div className="grid gap-2">
+            <label htmlFor="guest-name">{t("name")}</label>
+            <Input
+              id="guest-name"
+              autoComplete="name"
+              maxLength={100}
+              value={displayName}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </div>
           {data.identity.phone ? (
-            <p className="text-sm">{t("phoneSuggestion", { phone: data.identity.phone })}</p>
+            <p className="text-sm text-muted-foreground" dir="auto">
+              {t("phoneSuggestion", { phone: data.identity.phone })}
+            </p>
           ) : null}
           {signedIn && data.email_verified ? (
             <Button
-              className="h-auto min-h-11 py-3 whitespace-normal"
+              className="h-auto min-h-12 rounded-xl py-3 whitespace-normal"
               variant="action"
               disabled={busy}
               onClick={() =>
@@ -168,7 +214,9 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
                 });
               }}
             >
-              <p>{signedIn ? t("sameEmail") : t("proofReason")}</p>
+              <p className="border-t pt-5 text-sm text-muted-foreground">
+                {signedIn ? t("sameEmail") : t("proofReason")}
+              </p>
               <label htmlFor="guest-email">{t("email")}</label>
               <Input
                 id="guest-email"
@@ -198,7 +246,7 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
                     onChange={(event) => setCode(event.target.value)}
                   />
                   <Button
-                    className="h-auto min-h-11 py-3 whitespace-normal"
+                    className="h-auto min-h-12 rounded-xl py-3 whitespace-normal"
                     type="button"
                     variant="link"
                     disabled={busy}
@@ -212,7 +260,7 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
                 </>
               ) : null}
               <Button
-                className="h-auto min-h-11 py-3 whitespace-normal"
+                className="h-auto min-h-12 rounded-xl py-3 whitespace-normal"
                 type="submit"
                 variant="action"
                 disabled={busy}
@@ -225,8 +273,8 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
       )}
       {data && !data.claimed ? (
         <Button
-          className="h-auto min-h-11 py-3 whitespace-normal"
-          variant="outline"
+          className="h-auto min-h-12 rounded-xl py-3 whitespace-normal"
+          variant="link"
           disabled={busy}
           onClick={() =>
             void run(async () => {
