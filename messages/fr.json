@@ -1212,7 +1212,7 @@
     "needAccount": "Obtenir un compte gratuit",
     "forgot": "Mot de passe oublié ?",
     "optional": "Complétez votre brouillon maintenant. Activez votre compte à la fin.",
-    "prepared": "Votre demande de compte est enregistrée. Activez-le après avoir terminé votre brouillon.",
+    "prepared": "Compte préparé. Activation à la dernière étape.",
     "signedIn": "Vous êtes connecté. Votre brouillon est conservé.",
     "resetSent": "Si un compte correspond à cette adresse, vous recevrez un e-mail de réinitialisation. Votre brouillon reste ici.",
     "confirmTo": "Le code sera envoyé à",
@@ -1230,6 +1230,9 @@
       "skill": "Compétences",
       "occupation": "Métiers",
       "certification": "Certifications"
-    }
+    },
+    "sectionsLabel": "Sections du brouillon",
+    "accountSection": "Compte",
+    "options": "Options du brouillon"
   }
 }

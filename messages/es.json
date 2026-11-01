@@ -1212,7 +1212,7 @@
     "needAccount": "Obtener una cuenta gratis",
     "forgot": "¿Olvidaste tu contraseña?",
     "optional": "Completa tu borrador ahora y activa tu cuenta al final.",
-    "prepared": "Tu solicitud de cuenta está guardada. Actívala cuando termines el borrador.",
+    "prepared": "Cuenta preparada. Actívala al finalizar.",
     "signedIn": "Has iniciado sesión. Tu borrador está guardado.",
     "resetSent": "Si existe una cuenta con ese correo, recibirás un mensaje para restablecer la contraseña. Tu borrador sigue aquí.",
     "confirmTo": "Enviaremos el código a",
@@ -1230,6 +1230,9 @@
       "skill": "Habilidades",
       "occupation": "Profesiones",
       "certification": "Certificaciones"
-    }
+    },
+    "sectionsLabel": "Secciones del borrador",
+    "accountSection": "Cuenta",
+    "options": "Opciones del borrador"
   }
 }

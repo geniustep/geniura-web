@@ -42,7 +42,7 @@ export function CandidateStart() {
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-2xl gap-5">
+    <div data-start-content className="mx-auto grid w-full max-w-2xl gap-3">
       {me.data ? (
         <p className="text-center text-lg font-semibold">
           {me.data.full_name.trim()

@@ -75,8 +75,23 @@ describe("guest professional draft", () => {
     expect(api.send).not.toHaveBeenCalled();
     expect(api.register).not.toHaveBeenCalled();
   });
+  it("shows one section at a time and preserves unsaved edits when switching", async () => {
+    setup();
+    fireEvent.change(await screen.findByLabelText(ar.GuestWorkspace.name), {
+      target: { value: "اسم معدل" },
+    });
+    fireEvent.click(
+      screen.getByRole("button", { name: new RegExp(ar.GuestWorkspace.kinds.experience) }),
+    );
+    expect(screen.queryByLabelText(ar.GuestWorkspace.name)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.identity }));
+    expect(screen.getByLabelText(ar.GuestWorkspace.name)).toHaveValue("اسم معدل");
+    expect(api.save).not.toHaveBeenCalled();
+  });
   it("stages registration and sends activation only after finishing the draft", async () => {
     setup();
+    await screen.findByLabelText(ar.GuestWorkspace.name);
+    fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.accountSection }));
     await screen.findByLabelText(ar.GuestWorkspace.password);
     fireEvent.change(screen.getByLabelText(ar.GuestWorkspace.password), {
       target: { value: "Synthetic-Password-284!" },
@@ -103,9 +118,11 @@ describe("guest professional draft", () => {
   it("offers password recovery without leaving or discarding the draft", async () => {
     setup();
     await screen.findByLabelText(ar.GuestWorkspace.name);
+    fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.accountSection }));
     fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.haveAccount }));
     fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.forgot }));
     await waitFor(() => expect(api.reset).toHaveBeenCalledWith({ email: "amina@example.test" }));
+    fireEvent.click(screen.getByRole("button", { name: ar.GuestWorkspace.identity }));
     expect(screen.getByLabelText(ar.GuestWorkspace.name)).toHaveValue("أمينة");
     expect(api.push).not.toHaveBeenCalled();
   });
