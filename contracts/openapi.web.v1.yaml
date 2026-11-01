@@ -5,7 +5,7 @@ info:
   description: |-
     Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
 
-    Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b509bef0143ac2d003a1c5dcda88ec1b8b068334.
+    Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b9752318349c0c5c43730f4a71d1400b0d95de4b.
 paths:
   /api/v1/auth/csrf:
     get:
@@ -2584,6 +2584,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/onboarding/guest-cv/complete:
+    post:
+      operationId: onboarding_guest_cv_complete_create
+      tags:
+        - Guest onboarding
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Claim"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/onboarding/guest-cv/email-code:
     post:
       operationId: onboarding_guest_cv_email_code_create
@@ -2594,6 +2615,33 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/EmailRequest"
+        required: true
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestDetail"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/onboarding/guest-cv/registration:
+    post:
+      operationId: onboarding_guest_cv_registration_create
+      tags:
+        - Guest onboarding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegistrationIntentRequest"
         required: true
       security:
         - sessionCookie: []
@@ -2631,6 +2679,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Proof"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/onboarding/guest-cv/workspace:
+    get:
+      operationId: onboarding_guest_cv_workspace_retrieve
+      tags:
+        - Guest onboarding
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceState"
+          description: ""
+        default:
+          description: Error envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: onboarding_guest_cv_workspace_partial_update
+      tags:
+        - Guest onboarding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchedWorkspaceUpdateRequest"
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceState"
           description: ""
         default:
           description: Error envelope
@@ -8425,6 +8519,18 @@ components:
       properties:
         visibility:
           $ref: "#/components/schemas/CandidateVisibilityEnum"
+    PatchedWorkspaceUpdateRequest:
+      type: object
+      properties:
+        revision:
+          type: integer
+          minimum: 0
+        identity:
+          $ref: "#/components/schemas/WorkspaceIdentityRequest"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkspaceItemRequest"
     Path:
       type: object
       description: Rejects unknown input keys (protection against mass assignment and silent typos).
@@ -8964,6 +9070,25 @@ components:
           maxLength: 10
       required:
         - email
+        - password
+    RegistrationIntentRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 128
+        locale:
+          $ref: "#/components/schemas/LocaleEnum"
+      required:
+        - email
+        - locale
         - password
     ReportCategoryEnum:
       enum:
@@ -10048,6 +10173,115 @@ components:
         * `full_time` - Full Time
         * `part_time` - Part Time
         * `shifts` - Shifts
+    WorkspaceIdentity:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 150
+        email:
+          oneOf:
+            - type: string
+              format: email
+              maxLength: 254
+            - type: string
+              maxLength: 0
+        phone:
+          type: string
+          maxLength: 50
+      required:
+        - email
+        - name
+        - phone
+    WorkspaceIdentityRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 150
+        email:
+          oneOf:
+            - type: string
+              format: email
+              maxLength: 254
+            - type: string
+              maxLength: 0
+        phone:
+          type: string
+          maxLength: 50
+      required:
+        - email
+        - name
+        - phone
+    WorkspaceItem:
+      type: object
+      properties:
+        kind:
+          $ref: "#/components/schemas/WorkspaceItemKindEnum"
+        payload:
+          type: object
+          additionalProperties: {}
+        source_index:
+          type: integer
+          minimum: 0
+          nullable: true
+      required:
+        - kind
+        - payload
+        - source_index
+    WorkspaceItemKindEnum:
+      enum:
+        - certification
+        - education
+        - experience
+        - headline
+        - language
+        - occupation
+        - skill
+      type: string
+      description: |-
+        * `certification` - certification
+        * `education` - education
+        * `experience` - experience
+        * `headline` - headline
+        * `language` - language
+        * `occupation` - occupation
+        * `skill` - skill
+    WorkspaceItemRequest:
+      type: object
+      properties:
+        kind:
+          $ref: "#/components/schemas/WorkspaceItemKindEnum"
+        payload:
+          type: object
+          additionalProperties: {}
+        source_index:
+          type: integer
+          minimum: 0
+          nullable: true
+      required:
+        - kind
+        - payload
+        - source_index
+    WorkspaceState:
+      type: object
+      properties:
+        revision:
+          type: integer
+          minimum: 0
+        identity:
+          $ref: "#/components/schemas/WorkspaceIdentity"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkspaceItem"
+        registration_prepared:
+          type: boolean
+      required:
+        - identity
+        - items
+        - registration_prepared
+        - revision
     _JobRef:
       type: object
       properties:

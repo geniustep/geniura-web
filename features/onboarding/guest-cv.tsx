@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { GuestWorkspace } from "./guest-workspace";
 import { FormAlert } from "@/features/auth/form-parts";
 import {
   claimGuestDraft,
@@ -70,6 +71,9 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
   }
   const displayName = name ?? data?.identity.name ?? "";
   const displayEmail = email ?? data?.identity.email ?? "";
+  if (process.env.NEXT_PUBLIC_ENABLE_GUEST_DRAFT_WORKSPACE === "true" && data?.status === "ready") {
+    return <GuestWorkspace signedIn={signedIn} />;
+  }
   return (
     <section
       className="grid gap-5 rounded-2xl border bg-card p-6 shadow-card sm:p-9"

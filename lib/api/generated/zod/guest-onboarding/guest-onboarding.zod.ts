@@ -4,7 +4,7 @@
  * Geniura API
  * Geniura backend API v1 (development build). Authentication uses HttpOnly session cookies plus CSRF header for unsafe methods. Errors follow {code, message, details, request_id}.
  *
- * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b509bef0143ac2d003a1c5dcda88ec1b8b068334.
+ * Web copy: staff/audit paths removed and verified corrections applied (see contracts/overrides.json). Source: geniura-api@b9752318349c0c5c43730f4a71d1400b0d95de4b.
  * OpenAPI spec version: 1.0.0-dev
  */
 import * as zod from "zod";
@@ -35,6 +35,10 @@ export const OnboardingGuestCvClaimCreateResponse = zod.object({
   resume_id: zod.uuid(),
 });
 
+export const OnboardingGuestCvCompleteCreateResponse = zod.object({
+  resume_id: zod.uuid(),
+});
+
 export const onboardingGuestCvEmailCodeCreateBodyEmailMax = 254;
 
 export const onboardingGuestCvEmailCodeCreateBodyLocaleDefault = `ar`;
@@ -51,6 +55,22 @@ export const OnboardingGuestCvEmailCodeCreateResponse = zod.object({
   detail: zod.string(),
 });
 
+export const onboardingGuestCvRegistrationCreateBodyEmailMax = 254;
+
+export const onboardingGuestCvRegistrationCreateBodyPasswordMax = 128;
+
+export const OnboardingGuestCvRegistrationCreateBody = zod.object({
+  email: zod.email().min(1).max(onboardingGuestCvRegistrationCreateBodyEmailMax),
+  password: zod.string().min(1).max(onboardingGuestCvRegistrationCreateBodyPasswordMax),
+  locale: zod
+    .enum(["ar", "fr", "en", "es"])
+    .describe("* `ar` - ar\n* `fr` - fr\n* `en` - en\n* `es` - es"),
+});
+
+export const OnboardingGuestCvRegistrationCreateResponse = zod.object({
+  detail: zod.string(),
+});
+
 export const onboardingGuestCvVerifyEmailCreateBodyCodeRegExp = new RegExp("^[0-9]{6}$");
 
 export const OnboardingGuestCvVerifyEmailCreateBody = zod.object({
@@ -60,4 +80,148 @@ export const OnboardingGuestCvVerifyEmailCreateBody = zod.object({
 export const OnboardingGuestCvVerifyEmailCreateResponse = zod.object({
   verified: zod.boolean(),
   account_exists: zod.boolean(),
+});
+
+export const onboardingGuestCvWorkspaceRetrieveResponseRevisionMin = 0;
+
+export const onboardingGuestCvWorkspaceRetrieveResponseIdentityNameMax = 150;
+
+export const onboardingGuestCvWorkspaceRetrieveResponseIdentityEmailOneMax = 254;
+
+export const onboardingGuestCvWorkspaceRetrieveResponseIdentityEmailTwoMax = 0;
+
+export const onboardingGuestCvWorkspaceRetrieveResponseIdentityPhoneMax = 50;
+
+export const onboardingGuestCvWorkspaceRetrieveResponseItemsItemSourceIndexMin = 0;
+
+export const OnboardingGuestCvWorkspaceRetrieveResponse = zod.object({
+  revision: zod.int().min(onboardingGuestCvWorkspaceRetrieveResponseRevisionMin),
+  identity: zod.object({
+    name: zod.string().max(onboardingGuestCvWorkspaceRetrieveResponseIdentityNameMax),
+    email: zod.union([
+      zod.email().max(onboardingGuestCvWorkspaceRetrieveResponseIdentityEmailOneMax),
+      zod.string().max(onboardingGuestCvWorkspaceRetrieveResponseIdentityEmailTwoMax),
+    ]),
+    phone: zod.string().max(onboardingGuestCvWorkspaceRetrieveResponseIdentityPhoneMax),
+  }),
+  items: zod.array(
+    zod.object({
+      kind: zod
+        .enum([
+          "certification",
+          "education",
+          "experience",
+          "headline",
+          "language",
+          "occupation",
+          "skill",
+        ])
+        .describe(
+          "* `certification` - certification\n* `education` - education\n* `experience` - experience\n* `headline` - headline\n* `language` - language\n* `occupation` - occupation\n* `skill` - skill",
+        ),
+      payload: zod.record(zod.string(), zod.unknown()),
+      source_index: zod
+        .int()
+        .min(onboardingGuestCvWorkspaceRetrieveResponseItemsItemSourceIndexMin)
+        .nullable(),
+    }),
+  ),
+  registration_prepared: zod.boolean(),
+});
+
+export const onboardingGuestCvWorkspacePartialUpdateBodyRevisionMin = 0;
+
+export const onboardingGuestCvWorkspacePartialUpdateBodyIdentityNameMax = 150;
+
+export const onboardingGuestCvWorkspacePartialUpdateBodyIdentityEmailOneMax = 254;
+
+export const onboardingGuestCvWorkspacePartialUpdateBodyIdentityEmailTwoMax = 0;
+
+export const onboardingGuestCvWorkspacePartialUpdateBodyIdentityPhoneMax = 50;
+
+export const onboardingGuestCvWorkspacePartialUpdateBodyItemsItemSourceIndexMin = 0;
+
+export const OnboardingGuestCvWorkspacePartialUpdateBody = zod.object({
+  revision: zod.int().min(onboardingGuestCvWorkspacePartialUpdateBodyRevisionMin).optional(),
+  identity: zod
+    .object({
+      name: zod.string().max(onboardingGuestCvWorkspacePartialUpdateBodyIdentityNameMax),
+      email: zod.union([
+        zod.email().max(onboardingGuestCvWorkspacePartialUpdateBodyIdentityEmailOneMax),
+        zod.string().max(onboardingGuestCvWorkspacePartialUpdateBodyIdentityEmailTwoMax),
+      ]),
+      phone: zod.string().max(onboardingGuestCvWorkspacePartialUpdateBodyIdentityPhoneMax),
+    })
+    .optional(),
+  items: zod
+    .array(
+      zod.object({
+        kind: zod
+          .enum([
+            "certification",
+            "education",
+            "experience",
+            "headline",
+            "language",
+            "occupation",
+            "skill",
+          ])
+          .describe(
+            "* `certification` - certification\n* `education` - education\n* `experience` - experience\n* `headline` - headline\n* `language` - language\n* `occupation` - occupation\n* `skill` - skill",
+          ),
+        payload: zod.record(zod.string(), zod.unknown()),
+        source_index: zod
+          .int()
+          .min(onboardingGuestCvWorkspacePartialUpdateBodyItemsItemSourceIndexMin)
+          .nullable(),
+      }),
+    )
+    .optional(),
+});
+
+export const onboardingGuestCvWorkspacePartialUpdateResponseRevisionMin = 0;
+
+export const onboardingGuestCvWorkspacePartialUpdateResponseIdentityNameMax = 150;
+
+export const onboardingGuestCvWorkspacePartialUpdateResponseIdentityEmailOneMax = 254;
+
+export const onboardingGuestCvWorkspacePartialUpdateResponseIdentityEmailTwoMax = 0;
+
+export const onboardingGuestCvWorkspacePartialUpdateResponseIdentityPhoneMax = 50;
+
+export const onboardingGuestCvWorkspacePartialUpdateResponseItemsItemSourceIndexMin = 0;
+
+export const OnboardingGuestCvWorkspacePartialUpdateResponse = zod.object({
+  revision: zod.int().min(onboardingGuestCvWorkspacePartialUpdateResponseRevisionMin),
+  identity: zod.object({
+    name: zod.string().max(onboardingGuestCvWorkspacePartialUpdateResponseIdentityNameMax),
+    email: zod.union([
+      zod.email().max(onboardingGuestCvWorkspacePartialUpdateResponseIdentityEmailOneMax),
+      zod.string().max(onboardingGuestCvWorkspacePartialUpdateResponseIdentityEmailTwoMax),
+    ]),
+    phone: zod.string().max(onboardingGuestCvWorkspacePartialUpdateResponseIdentityPhoneMax),
+  }),
+  items: zod.array(
+    zod.object({
+      kind: zod
+        .enum([
+          "certification",
+          "education",
+          "experience",
+          "headline",
+          "language",
+          "occupation",
+          "skill",
+        ])
+        .describe(
+          "* `certification` - certification\n* `education` - education\n* `experience` - experience\n* `headline` - headline\n* `language` - language\n* `occupation` - occupation\n* `skill` - skill",
+        ),
+      payload: zod.record(zod.string(), zod.unknown()),
+      source_index: zod
+        .int()
+        .min(onboardingGuestCvWorkspacePartialUpdateResponseItemsItemSourceIndexMin)
+        .nullable(),
+    }),
+  ),
+  registration_prepared: zod.boolean(),
 });
