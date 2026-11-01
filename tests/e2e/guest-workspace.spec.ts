@@ -15,7 +15,10 @@ for (const [locale, messages] of Object.entries({ ar, fr, en, es })) {
     let state = {
       revision: 0,
       identity: { name: "Synthetic Person", email: "person@example.test", phone: "" },
-      items: [],
+      items: [
+        { kind: "skill", payload: { skill_id: "skill-1" }, source_index: 0 },
+        { kind: "skill", payload: { skill_id: "skill-2" }, source_index: 1 },
+      ],
       registration_prepared: false,
     };
     await page.route("**/api/bff/**", async (route) => {
@@ -24,6 +27,33 @@ for (const [locale, messages] of Object.entries({ ar, fr, en, es })) {
       const reply = (status: number, body: unknown) =>
         route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) });
       if (method !== "GET") mutations.push(path);
+      if (path.endsWith("/taxonomy/skills"))
+        return reply(200, {
+          count: 2,
+          locale,
+          results: [
+            {
+              id: "skill-1",
+              label: "Project management",
+              labels: {
+                fr: "Gestion de projet",
+                ar: "إدارة المشاريع",
+                en: "Project management",
+                es: "Gestión de proyectos",
+              },
+            },
+            {
+              id: "skill-2",
+              label: "Communication",
+              labels: {
+                fr: "Communication",
+                ar: "التواصل",
+                en: "Communication",
+                es: "Comunicación",
+              },
+            },
+          ],
+        });
       if (path.endsWith("/auth/me")) return reply(401, { code: "not_authenticated" });
       if (path.endsWith("/auth/csrf")) return reply(200, { csrf_token: "a".repeat(64) });
       if (path.endsWith("/guest-cv/workspace")) {
@@ -52,8 +82,44 @@ for (const [locale, messages] of Object.entries({ ar, fr, en, es })) {
     });
     await page.goto(`/${locale}/start?step=upload`);
     await page.getByLabel(t.name, { exact: true }).fill("Reviewed Person");
-    await page.getByRole("button", { name: t.save, exact: true }).click();
+    await expect(page.getByText(t.saved, { exact: true })).toBeVisible();
     await expect.poll(() => mutations).toEqual(["/api/bff/api/v1/onboarding/guest-cv/workspace"]);
+    await page.getByRole("button", { name: new RegExp(t.kinds.experience) }).click();
+    await page.reload();
+    await expect(
+      page.getByRole("button", { name: new RegExp(t.kinds.experience) }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: t.identity, exact: true }).click();
+    await expect(page.getByLabel(t.name, { exact: true })).toHaveValue("Reviewed Person");
+    // Reload before the debounce fires: the tab-local copy must retain the pending edit.
+    page.on("dialog", (dialog) => dialog.accept());
+    await page.getByLabel(t.name, { exact: true }).fill("Restored Person");
+    await page.reload();
+    await expect(page.getByLabel(t.name, { exact: true })).toHaveValue("Restored Person");
+    await expect.poll(() => state.identity.name).toBe("Restored Person");
+    await page.getByRole("button", { name: new RegExp(t.kinds.skill) }).click();
+    await expect(
+      page.getByText(
+        {
+          ar: "إدارة المشاريع",
+          fr: "Gestion de projet",
+          en: "Project management",
+          es: "Gestión de proyectos",
+        }[locale]!,
+        { exact: true },
+      ),
+    ).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole("button", { name: new RegExp(t.kinds.skill) })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await expect(
+      page.getByText(
+        { ar: "التواصل", fr: "Communication", en: "Communication", es: "Comunicación" }[locale]!,
+        { exact: true },
+      ),
+    ).toBeVisible();
     await page.getByRole("button", { name: t.accountSection, exact: true }).click();
     await page.getByLabel(t.password, { exact: true }).fill("Synthetic-Password-928!");
     await page.getByRole("button", { name: t.create, exact: true }).click();

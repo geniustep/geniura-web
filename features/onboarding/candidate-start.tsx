@@ -18,13 +18,20 @@ import { Link } from "@/lib/i18n/navigation";
 export function CandidateStart() {
   const t = useTranslations("CandidateStart");
   const query = useSearchParams();
-  const [step, setStep] = useState<"choose" | "upload" | "manual">(() =>
+  const [step, setCurrentStep] = useState<"choose" | "upload" | "manual">(() =>
     ["upload", "claim"].includes(query.get("step") ?? "")
       ? "upload"
       : query.get("step") === "manual"
         ? "manual"
         : "choose",
   );
+  function setStep(nextStep: "choose" | "upload" | "manual") {
+    setCurrentStep(nextStep);
+    const url = new URL(window.location.href);
+    if (nextStep === "choose") url.searchParams.delete("step");
+    else url.searchParams.set("step", nextStep);
+    window.history.replaceState(null, "", url);
+  }
   const me = useAuthMeRetrieve({ query: { retry: false, staleTime: 60_000 } });
   const resumes = useCandidatesMeResumesList({ query: { enabled: !!me.data, retry: false } });
   const guest = isApiError(me.error) && me.error.status === 401;

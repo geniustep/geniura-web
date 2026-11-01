@@ -47,6 +47,7 @@ function setup() {
 }
 afterEach(() => {
   cleanup();
+  window.history.replaceState(null, "", "/");
   state.step = "";
   state.resumes = [];
 });
@@ -55,6 +56,7 @@ describe("candidate onboarding", () => {
     state.me = { error: new ApiError(401, { code: "not_authenticated" }), isPending: false };
     setup();
     fireEvent.click(screen.getByRole("button", { name: "أضف سيرتك الذاتية" }));
+    expect(new URL(window.location.href).searchParams.get("step")).toBe("upload");
     expect(screen.queryByTestId("authenticated-upload")).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "تسجيل الدخول" })).toHaveAttribute(
       "href",

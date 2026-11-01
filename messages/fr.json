@@ -1182,6 +1182,9 @@
     "draftDetails": "Conservation et confidentialité"
   },
   "GuestWorkspace": {
+    "skillNeedsSelection": "Sélectionnez une compétence pour compléter cet élément.",
+    "saving": "Enregistrement…",
+    "saveFailed": "Échec de l’enregistrement. Vos modifications restent ici. Réessayez.",
     "loading": "Ouverture de votre brouillon…",
     "loadError": "Impossible d’ouvrir le brouillon.",
     "retry": "Réessayer",

@@ -72,7 +72,7 @@ export function GuestCv({ signedIn = false }: { signedIn?: boolean }) {
   const displayName = name ?? data?.identity.name ?? "";
   const displayEmail = email ?? data?.identity.email ?? "";
   if (process.env.NEXT_PUBLIC_ENABLE_GUEST_DRAFT_WORKSPACE === "true" && data?.status === "ready") {
-    return <GuestWorkspace signedIn={signedIn} />;
+    return <GuestWorkspace key={data.expires_at} signedIn={signedIn} draftKey={data.expires_at} />;
   }
   return (
     <section
