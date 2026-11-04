@@ -355,7 +355,8 @@
     "sessions": "Devices and sessions",
     "logout": "Sign out",
     "label": "Account menu",
-    "profile": "My professional profile"
+    "profile": "My professional profile",
+    "workspace": "My professional space"
   },
   "Errors": {
     "api": {
@@ -1237,5 +1238,99 @@
     "sectionsLabel": "Draft sections",
     "accountSection": "Account",
     "options": "Draft options"
+  },
+  "CandidateHome": {
+    "title": "My professional space",
+    "overview": "Overview",
+    "profile": "My profile",
+    "jobs": "Job opportunities",
+    "applications": "My applications",
+    "settings": "Account settings",
+    "navigation": "Professional space navigation",
+    "welcomeName": "Hello, {name}",
+    "welcome": "Welcome",
+    "intro": "Your next step, profile and applications in one place.",
+    "nextStep": "Your next step",
+    "loading": "Loading your space…",
+    "loadError": "Could not refresh your space. Your information is retained.",
+    "retry": "Try again",
+    "resumeDraft": "Continue my draft",
+    "openProfile": "Open my profile",
+    "profileError": "Could not load your profile.",
+    "noHeadline": "Add a headline that introduces your experience.",
+    "hasInformation": "Information added",
+    "addInformation": "Add information",
+    "education": "Education and certifications",
+    "resumes": "My CV",
+    "resumeBody": "Review extracted information before adding it to your profile.",
+    "manageResumes": "Manage my CVs",
+    "explore": "Explore jobs",
+    "jobsBody": "Browse published opportunities and explore those that interest you.",
+    "privacy": "Privacy and sharing",
+    "noApplications": "You have not applied for a job yet.",
+    "applicationsError": "Could not load your applications. Try again.",
+    "allApplications": "All my applications",
+    "viewJob": "View job",
+    "submittedOn": "Applied on {date}",
+    "more": "Load more",
+    "actions": {
+      "verify": {
+        "title": "Confirm your email",
+        "body": "Complete email confirmation from your account settings.",
+        "cta": "Account settings"
+      },
+      "draft": {
+        "title": "Your draft is waiting",
+        "body": "Pick up where you left off and review your information.",
+        "cta": "Continue my draft"
+      },
+      "review": {
+        "title": "Your CV is ready for review",
+        "body": "Check and correct extracted information before adding it to your profile.",
+        "cta": "Review my information"
+      },
+      "processing": {
+        "title": "Your CV is being processed",
+        "body": "Track its status or edit your profile while you wait.",
+        "cta": "View status"
+      },
+      "failed": {
+        "title": "Your CV needs attention",
+        "body": "Check its status or complete your profile manually.",
+        "cta": "Manage my CV"
+      },
+      "profile": {
+        "title": "Let’s complete your profile",
+        "body": "Add your essential information, with or without a CV.",
+        "cta": "Complete my profile"
+      },
+      "jobs": {
+        "title": "Discover your next opportunity",
+        "body": "Browse published jobs and choose those that interest you.",
+        "cta": "Explore jobs"
+      }
+    },
+    "sections": {
+      "headline": "Headline",
+      "experience": "Experience",
+      "skills": "Skills",
+      "languages": "Languages"
+    },
+    "visibility": {
+      "private": "Private profile",
+      "applications_only": "Shared with employers you applied to",
+      "discoverable": "Profile discoverable according to your privacy settings"
+    },
+    "statuses": {
+      "submitted": "Submitted",
+      "in_review": "In review",
+      "shortlisted": "Shortlisted",
+      "interview": "Interview",
+      "offer": "Offer",
+      "hired": "Hired",
+      "rejected": "Rejected",
+      "withdrawn": "Withdrawn",
+      "closed": "Closed"
+    }
   }
 }

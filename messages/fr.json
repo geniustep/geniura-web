@@ -355,7 +355,8 @@
     "sessions": "Appareils et sessions",
     "logout": "Se déconnecter",
     "label": "Menu du compte",
-    "profile": "Mon profil professionnel"
+    "profile": "Mon profil professionnel",
+    "workspace": "Mon espace professionnel"
   },
   "Errors": {
     "api": {
@@ -1237,5 +1238,99 @@
     "sectionsLabel": "Sections du brouillon",
     "accountSection": "Compte",
     "options": "Options du brouillon"
+  },
+  "CandidateHome": {
+    "title": "Mon espace professionnel",
+    "overview": "Vue d’ensemble",
+    "profile": "Mon profil",
+    "jobs": "Offres d’emploi",
+    "applications": "Mes candidatures",
+    "settings": "Paramètres du compte",
+    "navigation": "Navigation de l’espace professionnel",
+    "welcomeName": "Bonjour, {name}",
+    "welcome": "Bienvenue",
+    "intro": "Votre prochaine étape, votre profil et vos candidatures au même endroit.",
+    "nextStep": "Votre prochaine étape",
+    "loading": "Chargement de votre espace…",
+    "loadError": "Impossible d’actualiser votre espace. Vos informations sont conservées.",
+    "retry": "Réessayer",
+    "resumeDraft": "Reprendre mon brouillon",
+    "openProfile": "Ouvrir mon profil",
+    "profileError": "Impossible de charger le profil.",
+    "noHeadline": "Ajoutez un titre qui présente votre expérience.",
+    "hasInformation": "Informations ajoutées",
+    "addInformation": "Ajouter des informations",
+    "education": "Formation et certifications",
+    "resumes": "Mon CV",
+    "resumeBody": "Vérifiez les informations extraites avant de les intégrer à votre profil.",
+    "manageResumes": "Gérer mes CV",
+    "explore": "Explorer les offres",
+    "jobsBody": "Consultez les offres publiées et explorez celles qui vous intéressent.",
+    "privacy": "Confidentialité et partage",
+    "noApplications": "Vous n’avez pas encore envoyé de candidature.",
+    "applicationsError": "Impossible de charger vos candidatures. Réessayez.",
+    "allApplications": "Toutes mes candidatures",
+    "viewJob": "Voir l’offre",
+    "submittedOn": "Candidature envoyée le {date}",
+    "more": "Voir plus",
+    "actions": {
+      "verify": {
+        "title": "Confirmez votre adresse e-mail",
+        "body": "Terminez la confirmation depuis les paramètres de votre compte.",
+        "cta": "Paramètres du compte"
+      },
+      "draft": {
+        "title": "Votre brouillon vous attend",
+        "body": "Reprenez où vous en étiez et vérifiez vos informations.",
+        "cta": "Continuer mon brouillon"
+      },
+      "review": {
+        "title": "Votre CV est prêt à être vérifié",
+        "body": "Vérifiez et corrigez les informations extraites avant de les ajouter à votre profil.",
+        "cta": "Vérifier mes informations"
+      },
+      "processing": {
+        "title": "Votre CV est en cours de traitement",
+        "body": "Suivez son état ou modifiez votre profil en attendant.",
+        "cta": "Voir l’état"
+      },
+      "failed": {
+        "title": "Votre CV demande votre attention",
+        "body": "Consultez son état ou complétez votre profil manuellement.",
+        "cta": "Gérer mon CV"
+      },
+      "profile": {
+        "title": "Complétons votre profil",
+        "body": "Ajoutez vos informations essentielles, avec ou sans CV.",
+        "cta": "Compléter mon profil"
+      },
+      "jobs": {
+        "title": "Découvrez votre prochaine opportunité",
+        "body": "Parcourez les offres publiées et choisissez celles qui vous intéressent.",
+        "cta": "Explorer les offres"
+      }
+    },
+    "sections": {
+      "headline": "Titre professionnel",
+      "experience": "Expériences",
+      "skills": "Compétences",
+      "languages": "Langues"
+    },
+    "visibility": {
+      "private": "Profil privé",
+      "applications_only": "Partagé avec les employeurs de vos candidatures",
+      "discoverable": "Profil découvrable selon vos paramètres de confidentialité"
+    },
+    "statuses": {
+      "submitted": "Envoyée",
+      "in_review": "En cours d’examen",
+      "shortlisted": "Présélectionnée",
+      "interview": "Entretien",
+      "offer": "Proposition",
+      "hired": "Recrutée",
+      "rejected": "Refusée",
+      "withdrawn": "Retirée",
+      "closed": "Clôturée"
+    }
   }
 }

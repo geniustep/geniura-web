@@ -355,7 +355,8 @@
     "sessions": "Dispositivos y sesiones",
     "logout": "Cerrar sesión",
     "label": "Menú de la cuenta",
-    "profile": "Mi perfil profesional"
+    "profile": "Mi perfil profesional",
+    "workspace": "Mi espacio profesional"
   },
   "Errors": {
     "api": {
@@ -1237,5 +1238,99 @@
     "sectionsLabel": "Secciones del borrador",
     "accountSection": "Cuenta",
     "options": "Opciones del borrador"
+  },
+  "CandidateHome": {
+    "title": "Mi espacio profesional",
+    "overview": "Resumen",
+    "profile": "Mi perfil",
+    "jobs": "Ofertas de empleo",
+    "applications": "Mis candidaturas",
+    "settings": "Ajustes de la cuenta",
+    "navigation": "Navegación del espacio profesional",
+    "welcomeName": "Hola, {name}",
+    "welcome": "Bienvenido",
+    "intro": "Tu próximo paso, perfil y candidaturas en un mismo lugar.",
+    "nextStep": "Tu próximo paso",
+    "loading": "Cargando tu espacio…",
+    "loadError": "No se pudo actualizar tu espacio. Tu información se conserva.",
+    "retry": "Reintentar",
+    "resumeDraft": "Continuar mi borrador",
+    "openProfile": "Abrir mi perfil",
+    "profileError": "No se pudo cargar tu perfil.",
+    "noHeadline": "Añade un título que presente tu experiencia.",
+    "hasInformation": "Información añadida",
+    "addInformation": "Añadir información",
+    "education": "Formación y certificaciones",
+    "resumes": "Mi CV",
+    "resumeBody": "Revisa la información extraída antes de incorporarla a tu perfil.",
+    "manageResumes": "Gestionar mis CV",
+    "explore": "Explorar ofertas",
+    "jobsBody": "Consulta las ofertas publicadas y explora las que te interesen.",
+    "privacy": "Privacidad y uso compartido",
+    "noApplications": "Aún no has enviado ninguna candidatura.",
+    "applicationsError": "No se pudieron cargar tus candidaturas. Reinténtalo.",
+    "allApplications": "Todas mis candidaturas",
+    "viewJob": "Ver oferta",
+    "submittedOn": "Candidatura enviada el {date}",
+    "more": "Ver más",
+    "actions": {
+      "verify": {
+        "title": "Confirma tu correo electrónico",
+        "body": "Completa la confirmación desde los ajustes de tu cuenta.",
+        "cta": "Ajustes de la cuenta"
+      },
+      "draft": {
+        "title": "Tu borrador te espera",
+        "body": "Retoma donde lo dejaste y revisa tu información.",
+        "cta": "Continuar mi borrador"
+      },
+      "review": {
+        "title": "Tu CV está listo para revisar",
+        "body": "Comprueba y corrige la información extraída antes de añadirla a tu perfil.",
+        "cta": "Revisar mi información"
+      },
+      "processing": {
+        "title": "Tu CV se está procesando",
+        "body": "Consulta su estado o edita tu perfil mientras esperas.",
+        "cta": "Ver estado"
+      },
+      "failed": {
+        "title": "Tu CV requiere atención",
+        "body": "Consulta su estado o completa tu perfil manualmente.",
+        "cta": "Gestionar mi CV"
+      },
+      "profile": {
+        "title": "Completemos tu perfil",
+        "body": "Añade tu información esencial, con o sin CV.",
+        "cta": "Completar mi perfil"
+      },
+      "jobs": {
+        "title": "Descubre tu próxima oportunidad",
+        "body": "Explora las ofertas publicadas y elige las que te interesen.",
+        "cta": "Explorar ofertas"
+      }
+    },
+    "sections": {
+      "headline": "Título profesional",
+      "experience": "Experiencia",
+      "skills": "Competencias",
+      "languages": "Idiomas"
+    },
+    "visibility": {
+      "private": "Perfil privado",
+      "applications_only": "Compartido con empleadores a los que te has postulado",
+      "discoverable": "Perfil visible según tus ajustes de privacidad"
+    },
+    "statuses": {
+      "submitted": "Enviada",
+      "in_review": "En revisión",
+      "shortlisted": "Preseleccionada",
+      "interview": "Entrevista",
+      "offer": "Oferta",
+      "hired": "Contratada",
+      "rejected": "Rechazada",
+      "withdrawn": "Retirada",
+      "closed": "Cerrada"
+    }
   }
 }

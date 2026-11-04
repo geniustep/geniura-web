@@ -253,3 +253,9 @@ body:has([data-candidate-start]) [data-footer-promise],
 [data-candidate-start] [data-start-content]:has([data-guest-workspace]) {
   max-width: 64rem;
 }
+
+/* Keep the signed-in workspace focused on its tasks. */
+body:has([data-candidate-space]) [data-footer-marketing],
+body:has([data-candidate-space]) [data-footer-promise] {
+  display: none;
+}

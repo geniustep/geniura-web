@@ -2,6 +2,7 @@
 
 import { Menu } from "@base-ui/react/menu";
 import {
+  LayoutDashboardIcon,
   IdCardIcon,
   LogInIcon,
   LogOutIcon,
@@ -54,49 +55,67 @@ export function UserMenu() {
   const displayName = me.data.full_name || me.data.email;
 
   return (
-    <Menu.Root>
-      <Menu.Trigger
-        aria-label={t("label")}
-        className="inline-flex h-11 max-w-48 items-center gap-2 rounded-full ps-1 pe-3 text-sm font-medium hover:bg-muted data-popup-open:bg-muted"
-      >
-        <span
-          aria-hidden="true"
-          className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-navy text-gold"
+    <div className="flex items-center gap-1">
+      {me.data.signup_intent !== "employer" ? (
+        <Link
+          href="/account/home"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold hover:bg-muted"
         >
-          <UserRoundIcon className="size-4" />
-        </span>
-        <bdi className="hidden truncate sm:inline">{displayName}</bdi>
-      </Menu.Trigger>
-      <Menu.Portal>
-        <Menu.Positioner sideOffset={6} align="end" className="z-50 outline-none">
-          <Menu.Popup className="min-w-56 rounded-2xl bg-popover p-1.5 text-popover-foreground shadow-float outline-none">
-            <div className="px-3 py-2 text-xs text-muted-foreground">
-              <bdi>{me.data.email}</bdi>
-            </div>
-            <Menu.LinkItem render={<Link href="/account/profile" />} className={itemClass}>
-              <IdCardIcon aria-hidden="true" />
-              {t("profile")}
-            </Menu.LinkItem>
-            <Menu.LinkItem render={<Link href="/account" />} className={itemClass}>
-              <UserRoundIcon aria-hidden="true" />
-              {t("account")}
-            </Menu.LinkItem>
-            <Menu.LinkItem render={<Link href="/account/sessions" />} className={itemClass}>
-              <MonitorSmartphoneIcon aria-hidden="true" />
-              {t("sessions")}
-            </Menu.LinkItem>
-            <Menu.Separator className="my-1 h-px bg-border" />
-            <Menu.Item
-              className={itemClass}
-              disabled={logout.isPending}
-              onClick={() => logout.mutate()}
-            >
-              <LogOutIcon aria-hidden="true" />
-              {t("logout")}
-            </Menu.Item>
-          </Menu.Popup>
-        </Menu.Positioner>
-      </Menu.Portal>
-    </Menu.Root>
+          <LayoutDashboardIcon className="size-4" aria-hidden="true" />
+          <span className="hidden lg:inline">{t("workspace")}</span>
+          <span className="sr-only lg:hidden">{t("workspace")}</span>
+        </Link>
+      ) : null}
+      <Menu.Root>
+        <Menu.Trigger
+          aria-label={t("label")}
+          className="inline-flex h-11 max-w-48 items-center gap-2 rounded-full ps-1 pe-3 text-sm font-medium hover:bg-muted data-popup-open:bg-muted"
+        >
+          <span
+            aria-hidden="true"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-navy text-gold"
+          >
+            <UserRoundIcon className="size-4" />
+          </span>
+          <bdi className="hidden truncate sm:inline">{displayName}</bdi>
+        </Menu.Trigger>
+        <Menu.Portal>
+          <Menu.Positioner sideOffset={6} align="end" className="z-50 outline-none">
+            <Menu.Popup className="min-w-56 rounded-2xl bg-popover p-1.5 text-popover-foreground shadow-float outline-none">
+              <div className="px-3 py-2 text-xs text-muted-foreground">
+                <bdi>{me.data.email}</bdi>
+              </div>
+              {me.data.signup_intent !== "employer" ? (
+                <Menu.LinkItem render={<Link href="/account/home" />} className={itemClass}>
+                  <LayoutDashboardIcon aria-hidden="true" />
+                  {t("workspace")}
+                </Menu.LinkItem>
+              ) : null}
+              <Menu.LinkItem render={<Link href="/account/profile" />} className={itemClass}>
+                <IdCardIcon aria-hidden="true" />
+                {t("profile")}
+              </Menu.LinkItem>
+              <Menu.LinkItem render={<Link href="/account" />} className={itemClass}>
+                <UserRoundIcon aria-hidden="true" />
+                {t("account")}
+              </Menu.LinkItem>
+              <Menu.LinkItem render={<Link href="/account/sessions" />} className={itemClass}>
+                <MonitorSmartphoneIcon aria-hidden="true" />
+                {t("sessions")}
+              </Menu.LinkItem>
+              <Menu.Separator className="my-1 h-px bg-border" />
+              <Menu.Item
+                className={itemClass}
+                disabled={logout.isPending}
+                onClick={() => logout.mutate()}
+              >
+                <LogOutIcon aria-hidden="true" />
+                {t("logout")}
+              </Menu.Item>
+            </Menu.Popup>
+          </Menu.Positioner>
+        </Menu.Portal>
+      </Menu.Root>
+    </div>
   );
 }

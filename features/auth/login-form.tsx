@@ -37,7 +37,9 @@ export function LoginForm({ next }: { next?: string }) {
         // A new session starts: drop anything cached for a previous visitor.
         queryClient.clear();
         queryClient.setQueryData(getAuthMeRetrieveQueryKey(), me);
-        router.replace(safeRedirectPath(next));
+        router.replace(
+          safeRedirectPath(next, me.signup_intent === "employer" ? "/account" : "/account/home"),
+        );
         router.refresh();
       },
       onError: (error) =>
