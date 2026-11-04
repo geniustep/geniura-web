@@ -30,6 +30,7 @@ async function AccountDetails({ locale }: { locale: string }) {
   const me = await requireSession(locale, "/account");
   const t = await getTranslations("Account");
   const format = await getFormatter();
+  const home = await getTranslations("CandidateHome");
 
   return (
     <div className="grid gap-6">
@@ -68,6 +69,9 @@ async function AccountDetails({ locale }: { locale: string }) {
         </div>
       </dl>
       <div className="flex flex-wrap gap-3">
+        <Link href="/account/home" className={buttonVariants({ variant: "primary" })}>
+          {home("title")}
+        </Link>
         <Link href="/account/profile" className={buttonVariants({ variant: "primary" })}>
           <IdCardIcon aria-hidden="true" />
           {t("profileLink")}

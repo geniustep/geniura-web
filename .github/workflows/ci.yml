@@ -97,3 +97,35 @@ jobs:
           name: guest-workspace-playwright-report
           path: playwright-report
           retention-days: 7
+
+  candidate-home-e2e:
+    env:
+      NEXT_PUBLIC_ENABLE_GUEST_CV: "true"
+      NEXT_PUBLIC_ENABLE_GUEST_DRAFT_WORKSPACE: "true"
+      API_BASE_URL: "http://127.0.0.1:3104"
+      CANDIDATE_HOME_FIXTURE: "true"
+    needs: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Candidate workspace with a local synthetic API
+        run: |
+          node tests/fixtures/candidate-home-api.mjs &
+          fixture_pid=$!
+          trap 'kill "$fixture_pid"' EXIT
+          pnpm exec playwright test tests/e2e/candidate-home.spec.ts
+      - if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: candidate-home-playwright-report
+          path: playwright-report
+          retention-days: 7
