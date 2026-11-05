@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { candidateNextAction } from "@/features/candidate/next-action";
@@ -7,7 +7,12 @@ import { CandidateHome } from "@/features/candidate/candidate-home";
 import { ApiError } from "@/lib/api/errors";
 import type { CandidateProfile, Me, Resume } from "@/lib/api/generated/model";
 import ar from "@/messages/ar.json";
-const api = vi.hoisted(() => ({ profile: vi.fn(), resumes: vi.fn(), applications: vi.fn() }));
+const api = vi.hoisted(() => ({
+  profile: vi.fn(),
+  resumes: vi.fn(),
+  applications: vi.fn(),
+  pendingReviews: vi.fn(),
+}));
 vi.mock("@/lib/api/generated/endpoints/candidates/candidates", () => ({
   useCandidatesMeRetrieve: api.profile,
 }));
@@ -16,6 +21,10 @@ vi.mock("@/lib/api/generated/endpoints/resumes/resumes", () => ({
 }));
 vi.mock("@/lib/api/generated/endpoints/applications-candidate/applications-candidate", () => ({
   useCandidatesMeApplicationsList: api.applications,
+}));
+vi.mock("@/features/candidate/pending-reviews", async () => ({
+  ...(await vi.importActual("@/features/candidate/pending-reviews")),
+  usePendingReviews: api.pendingReviews,
 }));
 vi.mock("@/lib/i18n/navigation", () => ({
   usePathname: () => "/account/home",
@@ -41,6 +50,7 @@ const resume = (status: Resume["status"]) =>
 afterEach(cleanup);
 beforeEach(() => {
   vi.resetAllMocks();
+  api.pendingReviews.mockReturnValue({ links: {}, loading: false, failed: false });
   api.profile.mockReturnValue({ data: profile, isPending: false, isError: false });
   api.resumes.mockReturnValue({ data: [], isPending: false, isError: false });
   api.applications.mockReturnValue({
@@ -106,6 +116,46 @@ describe("candidate home", () => {
     expect(
       screen.getByRole("heading", { name: ar.CandidateHome.actions.jobs.title }),
     ).toBeVisible();
+  });
+  it("links only known pending sections directly to their extracted item", () => {
+    api.pendingReviews.mockReturnValue({
+      links: {
+        experience: "/account/profile/resumes/resume-1/review#review-item-exp-1",
+        skill: "/account/profile/resumes/resume-1/review#review-item-skill-1",
+      },
+      loading: false,
+      failed: false,
+    });
+    setup();
+    const experience = screen.getAllByText(ar.CandidateHome.sections.experience)[0]!.closest("li")!;
+    const skill = screen.getAllByText(ar.CandidateHome.sections.skills)[0]!.closest("li")!;
+    expect(within(experience).getByRole("link")).toHaveTextContent(
+      ar.CandidateHome.pendingInformation,
+    );
+    expect(within(experience).getByRole("link")).toHaveAttribute(
+      "href",
+      "/account/profile/resumes/resume-1/review#review-item-exp-1",
+    );
+    expect(within(skill).getByRole("link")).toHaveTextContent(
+      ar.CandidateHome.hasInformationPending,
+    );
+    const language = screen.getAllByText(ar.CandidateHome.sections.languages)[0]!.closest("li")!;
+    expect(within(language).getByRole("link")).toHaveTextContent(ar.CandidateHome.addInformation);
+  });
+  it("does not describe missing extraction details as empty profile sections", () => {
+    api.pendingReviews.mockReturnValue({
+      links: {},
+      loading: false,
+      failed: true,
+      fallback: "/account/profile/resumes/resume-1/review",
+    });
+    setup();
+    expect(screen.getByText(ar.CandidateHome.reviewStatusError)).toBeVisible();
+    const experience = screen.getAllByText(ar.CandidateHome.sections.experience)[0]!.closest("li")!;
+    expect(within(experience).getByRole("link")).toHaveTextContent(
+      ar.CandidateHome.reviewInformation,
+    );
+    expect(within(experience).queryByText(ar.CandidateHome.addInformation)).not.toBeInTheDocument();
   });
   it("shows API failure separately from zero applications", () => {
     api.applications.mockReturnValue({ isError: true, isPending: false });

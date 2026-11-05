@@ -1331,6 +1331,12 @@
       "rejected": "Rejected",
       "withdrawn": "Withdrawn",
       "closed": "Closed"
-    }
+    },
+    "pendingInformation": "Awaiting your review",
+    "hasInformationPending": "Saved information · additions to review",
+    "checkingInformation": "Checking information…",
+    "reviewInformation": "Review CV",
+    "reviewStatusError": "Could not update the extracted information status.",
+    "resumeManageHint": "Your uploaded files and their versions."
   }
 }
