@@ -13,9 +13,12 @@ const me = {
   memberships: [],
 };
 const id = "00000000-0000-4000-8000-000000000002";
+const reviewed = new Set();
 createServer((req, res) => {
   const url = new URL(req.url, "http://localhost");
-  const state = (req.headers.cookie ?? "").match(/geniura_sid=([^;]+)/)?.[1];
+  const session = (req.headers.cookie ?? "").match(/geniura_sid=([^;]+)/)?.[1];
+  const state = session?.split("__")[0];
+  const done = reviewed.has(session);
   const send = (status, data) => {
     res.writeHead(status, { "Content-Type": "application/json" });
     res.end(JSON.stringify(data));
@@ -64,13 +67,65 @@ createServer((req, res) => {
         ? [
             {
               id,
-              status: "review_required",
+              status: done ? "reviewed" : "review_required",
               created_at: "2026-11-01T00:00:00Z",
               display_name: "synthetic.pdf",
             },
           ]
         : [],
     );
+  if (url.pathname === `/api/v1/candidates/me/resumes/${id}/review` && req.method === "POST") {
+    req.resume();
+    reviewed.add(session);
+    return send(200, { confirmed: 2, corrected: 0, dismissed: 0, updated: 0 });
+  }
+  if (url.pathname === `/api/v1/candidates/me/resumes/${id}/extraction`)
+    return send(200, {
+      resume_id: id,
+      resume_status: done ? "reviewed" : "review_required",
+      display_status: "",
+      status: "ready",
+      parser: "synthetic-test",
+      error_code: "",
+      items: [
+        {
+          id: "experience-item",
+          kind: "experience",
+          payload: { title: "Synthetic role", employer_name: "Synthetic employer" },
+          confidence: "0.8",
+          evidence_snippet: "",
+          review_status: done ? "confirmed" : "pending",
+          existing_object: null,
+          applied_object_id: null,
+          applied_object_type: "",
+          reviewed_at: null,
+        },
+        {
+          id: "language-item",
+          kind: "language",
+          payload: { language_code: "fr", level: "B2" },
+          confidence: "0.8",
+          evidence_snippet: "",
+          review_status: done ? "confirmed" : "pending",
+          existing_object: null,
+          applied_object_id: null,
+          applied_object_type: "",
+          reviewed_at: null,
+        },
+        {
+          id: "skill-item",
+          kind: "skill",
+          payload: { label: "Synthetic skill" },
+          confidence: "0.8",
+          evidence_snippet: "",
+          review_status: "confirmed",
+          existing_object: null,
+          applied_object_id: "saved-skill",
+          applied_object_type: "skill",
+          reviewed_at: null,
+        },
+      ],
+    });
   if (url.pathname === "/api/v1/candidates/me/applications") {
     if (state === "outage") return send(503, { code: "unavailable" });
     const page = url.searchParams.get("page");

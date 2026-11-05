@@ -21,6 +21,19 @@ for (const [locale, messages] of Object.entries({ ar, fr, en, es })) {
       "href",
       `/${locale}/account/profile/resumes/00000000-0000-4000-8000-000000000002/review`,
     );
+    const experience = page
+      .locator('[aria-labelledby="my-profile"] li')
+      .filter({ hasText: t.sections.experience });
+    await expect(experience.getByRole("link")).toContainText(t.hasInformationPending);
+    await expect(experience.getByRole("link")).toHaveAttribute(
+      "href",
+      `/${locale}/account/profile/resumes/00000000-0000-4000-8000-000000000002/review#review-item-experience-item`,
+    );
+    const skill = page
+      .locator('[aria-labelledby="my-profile"] li')
+      .filter({ hasText: t.sections.skills });
+    await expect(skill.getByRole("link")).toContainText(t.hasInformation);
+    await expect(skill.getByRole("link")).not.toContainText(t.hasInformationPending);
     await expect(page.getByText(t.noApplications, { exact: true })).toBeVisible();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
@@ -72,4 +85,38 @@ test("login preserves an intended private destination", async ({ page }) => {
   await page.getByRole("button", { name: ar.Auth.login.submit, exact: true }).click();
   await expect(page).toHaveURL(/\/ar\/account\/applications$/);
   await expect(page.getByText(ar.CandidateHome.statuses.interview, { exact: true })).toBeVisible();
+});
+
+test("review links open the pending item and clear the marker after explicit approval", async ({
+  page,
+  context,
+}) => {
+  await context.addCookies([
+    { name: "geniura_sid", value: `review__${Date.now()}`, domain: "localhost", path: "/" },
+  ]);
+  await page.goto("/ar/account/home");
+  const experience = page
+    .locator('[aria-labelledby="my-profile"] li')
+    .filter({ hasText: ar.CandidateHome.sections.experience });
+  await expect(experience.getByRole("link")).toContainText(ar.CandidateHome.hasInformationPending);
+  await experience.getByRole("link").click();
+  await expect(page).toHaveURL(/review#review-item-experience-item$/);
+  const item = page.locator("#review-item-experience-item");
+  await expect(item).toBeVisible();
+  await item.getByRole("button", { name: ar.Profile.review.confirm, exact: true }).click();
+  await page
+    .locator("#review-item-language-item")
+    .getByRole("button", { name: ar.Profile.review.confirm, exact: true })
+    .click();
+  await page.getByRole("button", { name: "حفظ قرارين", exact: true }).click();
+  await expect(page).toHaveURL(/\/ar\/account\/profile$/);
+  await page.getByRole("link", { name: ar.CandidateHome.overview, exact: true }).click();
+  const updated = page
+    .locator('[aria-labelledby="my-profile"] li')
+    .filter({ hasText: ar.CandidateHome.sections.experience });
+  await expect(updated.getByRole("link")).toContainText(ar.CandidateHome.hasInformation);
+  await expect(updated.getByRole("link")).not.toContainText(ar.CandidateHome.hasInformationPending);
+  await expect(
+    page.getByRole("heading", { name: ar.CandidateHome.actions.review.title }),
+  ).toHaveCount(0);
 });

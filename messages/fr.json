@@ -1331,6 +1331,12 @@
       "rejected": "Refusée",
       "withdrawn": "Retirée",
       "closed": "Clôturée"
-    }
+    },
+    "pendingInformation": "À vérifier",
+    "hasInformationPending": "Informations enregistrées · ajouts à vérifier",
+    "checkingInformation": "Vérification des informations…",
+    "reviewInformation": "Vérifier le CV",
+    "reviewStatusError": "Impossible de mettre à jour l’état des informations extraites.",
+    "resumeManageHint": "Vos fichiers importés et leurs versions."
   }
 }

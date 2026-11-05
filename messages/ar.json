@@ -1331,6 +1331,12 @@
       "rejected": "مرفوض",
       "withdrawn": "مسحوب",
       "closed": "مغلق"
-    }
+    },
+    "pendingInformation": "تنتظر مراجعتك",
+    "hasInformationPending": "معلومات محفوظة · إضافات للمراجعة",
+    "checkingInformation": "جارٍ التحقق من المعلومات…",
+    "reviewInformation": "راجع السيرة الذاتية",
+    "reviewStatusError": "تعذّر تحديث حالة المعلومات المستخرجة.",
+    "resumeManageHint": "ملفاتك المرفوعة وإصداراتها."
   }
 }

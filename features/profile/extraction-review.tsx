@@ -2,7 +2,7 @@
 
 import { CheckIcon, CopyIcon, PencilIcon, Undo2Icon, XIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
@@ -164,7 +164,10 @@ function ItemCard({
   const reviewed = item.review_status !== "pending";
 
   return (
-    <li className={`grid gap-3 rounded-2xl border bg-card p-4 ${decision ? "opacity-90" : ""}`}>
+    <li
+      id={`review-item-${item.id}`}
+      className={`grid scroll-mt-24 gap-3 rounded-2xl border bg-card p-4 ${decision ? "opacity-90" : ""}`}
+    >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs font-semibold text-muted-foreground">
           {t(`kinds.${item.kind}`)}
@@ -360,6 +363,21 @@ export function ExtractionReview({
   const items = useMemo(() => extraction.data?.items ?? [], [extraction.data]);
   const open = items.filter((i) => i.review_status === "pending");
   const decided = Object.keys(decisions).length;
+  const lastAnchor = useRef("");
+  useEffect(() => {
+    const revealItem = () => {
+      const id = window.location.hash.slice(1);
+      if (!id.startsWith("review-item-") || lastAnchor.current === id) return;
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ block: "start" });
+        lastAnchor.current = id;
+      }
+    };
+    revealItem();
+    window.addEventListener("hashchange", revealItem);
+    return () => window.removeEventListener("hashchange", revealItem);
+  }, [items]);
 
   async function submit() {
     setPending(true);
