@@ -1408,6 +1408,49 @@
     "stepsRequest": "Confirma la solicitud",
     "stepsRequestBody": "Revisa la oferta y envía tú mismo la solicitud.",
     "published": "Publicada",
-    "submitted": "Solicitud enviada"
+    "submitted": "Solicitud enviada",
+    "workspace": "Mi espacio de empresa"
+  },
+  "EmployerWorkspace": {
+    "title": "Mi espacio de empresa",
+    "create": "Crear oferta",
+    "organization": "Empresa",
+    "orgStatus": "Estado de la empresa",
+    "jobs": "Mis ofertas",
+    "refresh": "Actualizar",
+    "error": "No se pudieron cargar los datos. Inténtalo de nuevo.",
+    "retry": "Reintentar",
+    "emptyOrg": "No hay empresas vinculadas a esta cuenta",
+    "emptyOrgBody": "Crea un borrador o inicia sesión con la cuenta utilizada para enviar la solicitud.",
+    "emptyJobs": "No hay ofertas para esta empresa.",
+    "submissionNote": "Enviar una solicitud no publica la oferta. Consulta aquí su estado actual.",
+    "review": "Revisión",
+    "reference": "Referencia",
+    "viewPublic": "Ver oferta publicada",
+    "more": "Mostrar más",
+    "states": {
+      "draft": "Borrador",
+      "submitted": "Solicitud enviada",
+      "published": "Publicada",
+      "paused": "En pausa",
+      "closed": "Cerrada",
+      "expired": "Caducada",
+      "rejected": "Rechazada",
+      "archived": "Archivada"
+    },
+    "reviewStates": {
+      "not_submitted": "No enviada",
+      "pending": "Pendiente",
+      "approved": "Aprobada",
+      "auto_cleared": "Validada",
+      "changes_requested": "Cambios solicitados",
+      "rejected": "Rechazada"
+    },
+    "organizationStates": {
+      "pending": "Pendiente",
+      "verified": "Verificada",
+      "rejected": "Rechazada",
+      "suspended": "Suspendida"
+    }
   }
 }

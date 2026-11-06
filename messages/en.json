@@ -1408,6 +1408,49 @@
     "stepsRequest": "Confirm the request",
     "stepsRequestBody": "Review the offer and submit the request yourself.",
     "published": "Published",
-    "submitted": "Request submitted"
+    "submitted": "Request submitted",
+    "workspace": "Employer workspace"
+  },
+  "EmployerWorkspace": {
+    "title": "Employer workspace",
+    "create": "Create a job",
+    "organization": "Organization",
+    "orgStatus": "Organization status",
+    "jobs": "Our jobs",
+    "refresh": "Refresh",
+    "error": "Unable to load data. Please retry.",
+    "retry": "Retry",
+    "emptyOrg": "No organization linked to this account",
+    "emptyOrgBody": "Start a draft or sign in with the account used to submit your request.",
+    "emptyJobs": "No jobs for this organization.",
+    "submissionNote": "Submitting a request does not publish the job publicly. Track its current status here.",
+    "review": "Review",
+    "reference": "Reference",
+    "viewPublic": "View published job",
+    "more": "Load more",
+    "states": {
+      "draft": "Draft",
+      "submitted": "Request submitted",
+      "published": "Published",
+      "paused": "Paused",
+      "closed": "Closed",
+      "expired": "Expired",
+      "rejected": "Rejected",
+      "archived": "Archived"
+    },
+    "reviewStates": {
+      "not_submitted": "Not submitted",
+      "pending": "Pending",
+      "approved": "Approved",
+      "auto_cleared": "Cleared",
+      "changes_requested": "Changes requested",
+      "rejected": "Rejected"
+    },
+    "organizationStates": {
+      "pending": "Pending",
+      "verified": "Verified",
+      "rejected": "Rejected",
+      "suspended": "Suspended"
+    }
   }
 }

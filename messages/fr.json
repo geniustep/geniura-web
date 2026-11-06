@@ -1408,6 +1408,49 @@
     "stepsRequest": "Confirmez la demande",
     "stepsRequestBody": "Vérifiez l’offre et envoyez vous-même la demande.",
     "published": "Publiée",
-    "submitted": "Demande envoyée"
+    "submitted": "Demande envoyée",
+    "workspace": "Mon espace employeur"
+  },
+  "EmployerWorkspace": {
+    "title": "Mon espace employeur",
+    "create": "Créer une offre",
+    "organization": "Entreprise",
+    "orgStatus": "Statut de l’entreprise",
+    "jobs": "Mes offres",
+    "refresh": "Actualiser",
+    "error": "Impossible de charger les données. Réessayez.",
+    "retry": "Réessayer",
+    "emptyOrg": "Aucune entreprise liée à ce compte",
+    "emptyOrgBody": "Commencez une offre ou connectez-vous avec le compte utilisé pour envoyer votre demande.",
+    "emptyJobs": "Aucune offre pour cette entreprise.",
+    "submissionNote": "Une demande envoyée n’est pas encore une annonce publique. Suivez son statut ici.",
+    "review": "Examen",
+    "reference": "Référence",
+    "viewPublic": "Voir l’annonce publiée",
+    "more": "Afficher plus",
+    "states": {
+      "draft": "Brouillon",
+      "submitted": "Demande envoyée",
+      "published": "Publiée",
+      "paused": "En pause",
+      "closed": "Clôturée",
+      "expired": "Expirée",
+      "rejected": "Refusée",
+      "archived": "Archivée"
+    },
+    "reviewStates": {
+      "not_submitted": "Non envoyée",
+      "pending": "En cours",
+      "approved": "Approuvée",
+      "auto_cleared": "Validée",
+      "changes_requested": "Modifications demandées",
+      "rejected": "Refusée"
+    },
+    "organizationStates": {
+      "pending": "En attente",
+      "verified": "Vérifiée",
+      "rejected": "Refusée",
+      "suspended": "Suspendue"
+    }
   }
 }

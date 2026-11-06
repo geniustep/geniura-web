@@ -28,6 +28,7 @@ const itemClass =
  */
 export function UserMenu() {
   const t = useTranslations("UserMenu");
+  const tEmployer = useTranslations("EmployerWorkspace");
   const tHeader = useTranslations("Header");
   const me = useAuthMeRetrieve({ query: { retry: false, staleTime: 60_000 } });
   const logout = useLogout();
@@ -56,16 +57,20 @@ export function UserMenu() {
 
   return (
     <div className="flex items-center gap-1">
-      {me.data.signup_intent !== "employer" ? (
+      {
         <Link
-          href="/account/home"
+          href={me.data.signup_intent === "employer" ? "/account/employer" : "/account/home"}
           className="inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold hover:bg-muted"
         >
           <LayoutDashboardIcon className="size-4" aria-hidden="true" />
-          <span className="hidden lg:inline">{t("workspace")}</span>
-          <span className="sr-only lg:hidden">{t("workspace")}</span>
+          <span className="hidden lg:inline">
+            {me.data.signup_intent === "employer" ? tEmployer("title") : t("workspace")}
+          </span>
+          <span className="sr-only lg:hidden">
+            {me.data.signup_intent === "employer" ? tEmployer("title") : t("workspace")}
+          </span>
         </Link>
-      ) : null}
+      }
       <Menu.Root>
         <Menu.Trigger
           aria-label={t("label")}
@@ -85,10 +90,25 @@ export function UserMenu() {
               <div className="px-3 py-2 text-xs text-muted-foreground">
                 <bdi>{me.data.email}</bdi>
               </div>
-              {me.data.signup_intent !== "employer" ? (
-                <Menu.LinkItem render={<Link href="/account/home" />} className={itemClass}>
+              {
+                <Menu.LinkItem
+                  render={
+                    <Link
+                      href={
+                        me.data.signup_intent === "employer" ? "/account/employer" : "/account/home"
+                      }
+                    />
+                  }
+                  className={itemClass}
+                >
                   <LayoutDashboardIcon aria-hidden="true" />
-                  {t("workspace")}
+                  {me.data.signup_intent === "employer" ? tEmployer("title") : t("workspace")}
+                </Menu.LinkItem>
+              }
+              {me.data.signup_intent !== "employer" ? (
+                <Menu.LinkItem render={<Link href="/account/employer" />} className={itemClass}>
+                  <LayoutDashboardIcon aria-hidden="true" />
+                  {tEmployer("title")}
                 </Menu.LinkItem>
               ) : null}
               <Menu.LinkItem render={<Link href="/account/profile" />} className={itemClass}>

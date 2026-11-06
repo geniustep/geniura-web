@@ -626,6 +626,12 @@ function EmployerEditor() {
             {sent ? (
               <>
                 <CheckIcon className="size-7 text-success" aria-hidden="true" />
+                <Link
+                  href="/account/employer"
+                  className="inline-flex min-h-11 items-center font-semibold text-action"
+                >
+                  {t("workspace")}
+                </Link>
                 <h2 className="text-lg font-semibold">
                   {submitted ? t("sentTitle") : t("savedRequestTitle")}
                 </h2>

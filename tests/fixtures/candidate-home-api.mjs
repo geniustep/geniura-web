@@ -55,11 +55,20 @@ createServer((req, res) => {
   if (/^\/api\/v1\/organizations\/[^/]+\/jobs(?:\/[^/]+)?(?:\/submit)?$/.test(url.pathname)) {
     if (!session) return send(401, { code: "not_authenticated" });
     const existing = employerJobs.get(session);
+    if (req.method === "GET" && url.pathname.endsWith("/jobs")) {
+      return send(200, {
+        count: existing ? 1 : 0,
+        next: null,
+        previous: null,
+        results: existing ? [existing] : [],
+      });
+    }
     if (url.pathname.endsWith("/submit")) {
       if (state === "submit-failure") return send(503, { code: "unavailable" });
       const job = {
         ...existing,
         status: "submitted",
+        review_status: "pending",
         allowed_actions: [],
         submitted_at: "2026-11-06T00:00:00Z",
       };
