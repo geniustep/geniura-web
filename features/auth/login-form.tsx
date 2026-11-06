@@ -47,7 +47,7 @@ export function LoginForm({ next }: { next?: string }) {
             employerReturn
               ? EMPLOYER_DRAFT_PATH
               : me.signup_intent === "employer"
-                ? "/account"
+                ? "/account/employer"
                 : "/account/home",
           ),
         );

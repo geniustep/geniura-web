@@ -56,6 +56,33 @@ for (const [locale, m] of Object.entries({ ar, fr, en, es })) {
     await page.getByRole("button", { name: t.checkRequest, exact: true }).click();
     await expect(page.getByRole("heading", { name: t.sentTitle, exact: true })).toBeVisible();
     expect(submissions).toBe(1);
+    await page.getByRole("link", { name: t.workspace, exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/${locale}/account/employer$`));
+    await expect(
+      page.getByRole("heading", { name: m.EmployerWorkspace.jobs, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(m.EmployerWorkspace.states.submitted, { exact: true }),
+    ).toBeVisible();
+    const offers = page.getByRole("region", { name: m.EmployerWorkspace.jobs, exact: true });
+    await offers.locator("summary").filter({ hasText: "Synthetic employer offer" }).click();
+    await expect(
+      offers.getByText("Synthetic job description for an authorized test.", { exact: true }),
+    ).toBeVisible();
+    await page.goto(`/${locale}/employers/new`);
+    await page.getByRole("button", { name: t.start, exact: true }).click();
+    await expect(page.getByLabel(t.jobTitle, { exact: true })).toHaveValue("");
+    await page.goto(`/${locale}/account/employer`);
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await expect(page.getByText("Synthetic employer offer", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText(m.EmployerWorkspace.states.submitted, { exact: true }),
+    ).toBeVisible();
+    expect(submissions).toBe(1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
   });
 }
 test("employer registration defaults to employer and preserves the draft destination", async ({
@@ -114,7 +141,7 @@ test("a failed submission keeps the server draft and never claims success", asyn
   await page.goto("/ar/employers/new");
   await page.getByLabel(t.consent, { exact: true }).check();
   await page.getByRole("button", { name: t.submit, exact: true }).click();
-  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.getByRole("alert").filter({ hasText: /\S/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: t.sentTitle, exact: true })).toHaveCount(0);
   expect(
     await page.evaluate(
@@ -156,4 +183,31 @@ test("an unverified employer keeps the draft and sees verification before any or
   await expect(page.getByText(t.verify, { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: t.submit, exact: true })).toHaveCount(0);
   expect(creates).toBe(0);
+});
+
+test("employer workspace distinguishes missing organizations from API failure", async ({
+  page,
+  context,
+}) => {
+  await context.addCookies([
+    { name: "geniura_sid", value: "empty-employer", domain: "localhost", path: "/" },
+  ]);
+  await page.goto("/ar/account/employer");
+  await expect(
+    page.getByRole("heading", { name: ar.EmployerWorkspace.emptyOrg, exact: true }),
+  ).toBeVisible();
+  await page.route("**/api/bff/api/v1/organizations", (route) =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ code: "unavailable" }),
+    }),
+  );
+  await page.reload();
+  await expect(
+    page.getByRole("alert").filter({ hasText: ar.EmployerWorkspace.error }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: ar.EmployerWorkspace.emptyOrg, exact: true }),
+  ).toBeHidden();
 });

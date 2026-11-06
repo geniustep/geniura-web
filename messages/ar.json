@@ -1408,6 +1408,49 @@
     "stepsRequest": "أكد الطلب",
     "stepsRequestBody": "راجع العرض وأرسل طلب النشر بنفسك.",
     "published": "منشور",
-    "submitted": "طلب مرسل"
+    "submitted": "طلب مرسل",
+    "workspace": "مساحة المؤسسة"
+  },
+  "EmployerWorkspace": {
+    "title": "مساحة المؤسسة",
+    "create": "إنشاء عرض",
+    "organization": "المؤسسة",
+    "orgStatus": "حالة المؤسسة",
+    "jobs": "عروضنا",
+    "refresh": "تحديث",
+    "error": "تعذر تحميل البيانات. حاول مجددًا.",
+    "retry": "إعادة المحاولة",
+    "emptyOrg": "لا توجد مؤسسة مرتبطة بهذا الحساب",
+    "emptyOrgBody": "ابدأ بمسودة عرض، أو سجّل الدخول بالحساب الذي أرسلت منه الطلب.",
+    "emptyJobs": "لا توجد عروض لهذه المؤسسة.",
+    "submissionNote": "إرسال طلب النشر لا يعني نشر العرض للعامة. تجد هنا الحالة الحالية لطلبك.",
+    "review": "حالة المراجعة",
+    "reference": "مرجع العرض",
+    "viewPublic": "عرض الإعلان المنشور",
+    "more": "عرض المزيد",
+    "states": {
+      "draft": "مسودة",
+      "submitted": "طلب مرسل",
+      "published": "منشور",
+      "paused": "متوقف مؤقتًا",
+      "closed": "مغلق",
+      "expired": "منتهي",
+      "rejected": "مرفوض",
+      "archived": "مؤرشف"
+    },
+    "reviewStates": {
+      "not_submitted": "لم يُرسل",
+      "pending": "قيد المراجعة",
+      "approved": "معتمد",
+      "auto_cleared": "مجاز",
+      "changes_requested": "تعديلات مطلوبة",
+      "rejected": "مرفوض"
+    },
+    "organizationStates": {
+      "pending": "قيد المراجعة",
+      "verified": "موثقة",
+      "rejected": "مرفوضة",
+      "suspended": "موقوفة"
+    }
   }
 }

@@ -626,6 +626,30 @@ function EmployerEditor() {
             {sent ? (
               <>
                 <CheckIcon className="size-7 text-success" aria-hidden="true" />
+                <Link
+                  href="/account/employer"
+                  className="inline-flex min-h-11 items-center font-semibold text-action"
+                >
+                  {t("workspace")}
+                </Link>
+                <Button
+                  variant="outline"
+                  disabled={busy || conflict}
+                  onClick={() => {
+                    try {
+                      checkpoint(blankDraft(locale));
+                      setSubmitted(null);
+                      setConsent(false);
+                      setSelectedOrg("");
+                      setFailure(null);
+                      setNotice("");
+                    } catch {
+                      setNotice(t("storageFailed"));
+                    }
+                  }}
+                >
+                  {t("start")}
+                </Button>
                 <h2 className="text-lg font-semibold">
                   {submitted ? t("sentTitle") : t("savedRequestTitle")}
                 </h2>
