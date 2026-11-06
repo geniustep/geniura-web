@@ -43,7 +43,7 @@ export async function ProfilePage({
     <Container data-candidate-space className="max-w-6xl py-6 sm:py-8">
       <div className="grid min-w-0 gap-6">
         <CandidateNav />
-        <header className="flex flex-wrap items-center justify-between gap-3">
+        <header className="grid min-w-0 gap-3">
           <h1 className="text-2xl font-semibold sm:text-3xl">{t(`${page}.title`)}</h1>
           {page !== "profile" ? <ProfileNav /> : null}
         </header>
