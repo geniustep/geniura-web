@@ -88,9 +88,11 @@ function OrganizationJobs({ org }: { org: Organization }) {
   const items = jobs.data?.pages.flatMap((page) => page.results) ?? [];
 
   return (
-    <section className="space-y-4">
+    <section aria-labelledby="employer-jobs-title" className="space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold">{t("jobs")}</h2>
+        <h2 id="employer-jobs-title" className="text-lg font-semibold">
+          {t("jobs")}
+        </h2>
         <Button variant="outline" disabled={jobs.isFetching} onClick={() => void jobs.refetch()}>
           {t("refresh")}
         </Button>

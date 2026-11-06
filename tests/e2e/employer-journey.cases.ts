@@ -64,9 +64,10 @@ for (const [locale, m] of Object.entries({ ar, fr, en, es })) {
     await expect(
       page.getByText(m.EmployerWorkspace.states.submitted, { exact: true }),
     ).toBeVisible();
-    await page.getByText("Synthetic employer offer", { exact: true }).click();
+    const offers = page.getByRole("region", { name: m.EmployerWorkspace.jobs, exact: true });
+    await offers.locator("summary").filter({ hasText: "Synthetic employer offer" }).click();
     await expect(
-      page.getByText("Synthetic job description for an authorized test.", { exact: true }),
+      offers.getByText("Synthetic job description for an authorized test.", { exact: true }),
     ).toBeVisible();
     await page.goto(`/${locale}/employers/new`);
     await page.getByRole("button", { name: t.start, exact: true }).click();
@@ -140,7 +141,7 @@ test("a failed submission keeps the server draft and never claims success", asyn
   await page.goto("/ar/employers/new");
   await page.getByLabel(t.consent, { exact: true }).check();
   await page.getByRole("button", { name: t.submit, exact: true }).click();
-  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.getByRole("alert").filter({ hasText: /\S/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: t.sentTitle, exact: true })).toHaveCount(0);
   expect(
     await page.evaluate(
@@ -203,7 +204,9 @@ test("employer workspace distinguishes missing organizations from API failure", 
     }),
   );
   await page.reload();
-  await expect(page.getByRole("alert")).toContainText(ar.EmployerWorkspace.error);
+  await expect(
+    page.getByRole("alert").filter({ hasText: ar.EmployerWorkspace.error }),
+  ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: ar.EmployerWorkspace.emptyOrg, exact: true }),
   ).toBeHidden();
