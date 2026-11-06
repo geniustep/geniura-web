@@ -1117,6 +1117,9 @@
       "year": "Year only",
       "month": "Month and year",
       "day": "Day, month and year"
+    },
+    "editor": {
+      "information": "My information"
     }
   },
   "CandidateStart": {
