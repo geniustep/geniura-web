@@ -32,7 +32,7 @@ for (const [locale, m] of Object.entries({ ar, fr, en, es })) {
     await page.getByRole("button", { name: t.preview, exact: true }).click();
     await page.getByRole("button", { name: t.continue, exact: true }).click();
     await page.getByRole("button", { name: t.login, exact: true }).click();
-    await expect(page.getByText(t.authSaved, { exact: true })).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: t.authSaved })).toBeVisible();
     await page.getByLabel(m.Auth.fields.email, { exact: true }).fill("employer@example.test");
     await page.getByLabel(m.Auth.fields.password, { exact: true }).fill("Synthetic-Password-397!");
     await page.getByRole("button", { name: m.Auth.login.submit, exact: true }).click();
@@ -70,7 +70,7 @@ test("employer registration defaults to employer and preserves the draft destina
   await page.getByRole("button", { name: t.preview, exact: true }).click();
   await page.getByRole("button", { name: t.continue, exact: true }).click();
   await page.getByRole("button", { name: t.register, exact: true }).click();
-  await expect(page.getByText(t.authSaved, { exact: true })).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: t.authSaved })).toBeVisible();
   await page.getByLabel(ar.Auth.fields.email, { exact: true }).fill("new-employer@example.test");
   await page.getByLabel(ar.Auth.fields.password, { exact: true }).fill("Synthetic-Password-397!");
   const posted = page.waitForRequest(
