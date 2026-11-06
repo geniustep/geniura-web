@@ -68,6 +68,10 @@ for (const [locale, m] of Object.entries({ ar, fr, en, es })) {
     await expect(
       page.getByText("Synthetic job description for an authorized test.", { exact: true }),
     ).toBeVisible();
+    await page.goto(`/${locale}/employers/new`);
+    await page.getByRole("button", { name: t.start, exact: true }).click();
+    await expect(page.getByLabel(t.jobTitle, { exact: true })).toHaveValue("");
+    await page.goto(`/${locale}/account/employer`);
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await expect(page.getByText("Synthetic employer offer", { exact: true })).toBeVisible();
