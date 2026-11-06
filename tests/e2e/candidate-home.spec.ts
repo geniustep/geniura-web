@@ -1,3 +1,4 @@
+import "./employer-journey.cases";
 import { expect, test } from "@playwright/test";
 import ar from "../../messages/ar.json";
 import fr from "../../messages/fr.json";

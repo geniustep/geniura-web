@@ -10,6 +10,8 @@ import { useAuthEmailVerifyCreate } from "@/lib/api/generated/endpoints/auth/aut
 import { getAuthMeRetrieveQueryKey } from "@/lib/api/generated/endpoints/me/me";
 import { Link } from "@/lib/i18n/navigation";
 
+import { EmployerDraftReturn } from "@/features/employer/draft-notice";
+
 import { FormAlert } from "./form-parts";
 
 /**
@@ -35,9 +37,12 @@ export function VerifyEmailPanel({ token }: { token: string }) {
         title={t("verify.doneTitle")}
         description={t("verify.doneBody")}
         action={
-          <Link href="/account" className="text-sm font-medium text-action hover:underline">
-            {tMenu("account")}
-          </Link>
+          <div className="grid gap-2">
+            <EmployerDraftReturn />
+            <Link href="/account" className="text-sm font-medium text-action hover:underline">
+              {tMenu("account")}
+            </Link>
+          </div>
         }
       />
     );

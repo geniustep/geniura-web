@@ -15,6 +15,9 @@ import { AuthLoginCreateBody } from "@/lib/api/generated/zod/auth/auth.zod";
 import { safeRedirectPath } from "@/lib/auth/safe-redirect";
 import { Link, useRouter } from "@/lib/i18n/navigation";
 
+import { EmployerDraftNotice, useEmployerDraftReturn } from "@/features/employer/draft-notice";
+import { EMPLOYER_DRAFT_PATH } from "@/features/employer/draft";
+
 import { FormAlert, FormField } from "./form-parts";
 import { applyServerErrors } from "./use-server-errors";
 import { keyedZodErrors } from "./validation";
@@ -25,6 +28,7 @@ type Output = z.output<typeof AuthLoginCreateBody>;
 export function LoginForm({ next }: { next?: string }) {
   const t = useTranslations("Auth");
   const router = useRouter();
+  const employerReturn = useEmployerDraftReturn(next);
   const queryClient = useQueryClient();
   const [general, setGeneral] = useState<string[]>([]);
   const form = useForm<Input, unknown, Output>({
@@ -38,7 +42,14 @@ export function LoginForm({ next }: { next?: string }) {
         queryClient.clear();
         queryClient.setQueryData(getAuthMeRetrieveQueryKey(), me);
         router.replace(
-          safeRedirectPath(next, me.signup_intent === "employer" ? "/account" : "/account/home"),
+          safeRedirectPath(
+            next,
+            employerReturn
+              ? EMPLOYER_DRAFT_PATH
+              : me.signup_intent === "employer"
+                ? "/account"
+                : "/account/home",
+          ),
         );
         router.refresh();
       },
@@ -57,6 +68,7 @@ export function LoginForm({ next }: { next?: string }) {
         login.mutate({ data });
       })}
     >
+      <EmployerDraftNotice next={next ?? (employerReturn ? EMPLOYER_DRAFT_PATH : undefined)} />
       <FormAlert error={login.error} extra={general} />
       <FormField
         id="email"
@@ -101,7 +113,13 @@ export function LoginForm({ next }: { next?: string }) {
         )}
       </FormField>
       <div className="flex justify-end">
-        <Link href="/forgot-password" className="text-sm text-action hover:underline">
+        <Link
+          href={{
+            pathname: "/forgot-password",
+            query: next ? { next: safeRedirectPath(next) } : undefined,
+          }}
+          className="text-sm text-action hover:underline"
+        >
           {t("login.forgot")}
         </Link>
       </div>

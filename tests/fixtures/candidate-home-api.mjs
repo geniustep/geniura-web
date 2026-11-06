@@ -14,6 +14,8 @@ const me = {
 };
 const id = "00000000-0000-4000-8000-000000000002";
 const reviewed = new Set();
+const employerOrgs = new Map();
+const employerJobs = new Map();
 createServer((req, res) => {
   const url = new URL(req.url, "http://localhost");
   const session = (req.headers.cookie ?? "").match(/geniura_sid=([^;]+)/)?.[1];
@@ -27,6 +29,61 @@ createServer((req, res) => {
   if (url.pathname === "/api/v1/auth/login") {
     res.setHeader("Set-Cookie", "geniura_sid=complete; Path=/; HttpOnly; SameSite=Lax");
     return send(200, me);
+  }
+  if (url.pathname === "/api/v1/auth/register") return send(202, { detail: "Check your email" });
+  if (url.pathname === "/api/v1/auth/email/resend") return send(202, { detail: "Sent" });
+  if (url.pathname === "/api/v1/organizations/") {
+    if (!session) return send(401, { code: "not_authenticated" });
+    if (req.method === "POST") {
+      let body = "";
+      req.on("data", (chunk) => (body += chunk));
+      req.on("end", () => {
+        const org = {
+          ...JSON.parse(body),
+          id: "org-" + session,
+          status: "pending",
+          my_role: "owner",
+        };
+        employerOrgs.set(session, org);
+        send(201, org);
+      });
+      return;
+    }
+    const org = employerOrgs.get(session);
+    return send(200, { count: org ? 1 : 0, next: null, previous: null, results: org ? [org] : [] });
+  }
+  if (/^\/api\/v1\/organizations\/[^/]+\/jobs(?:\/[^/]+)?(?:\/submit)?$/.test(url.pathname)) {
+    if (!session) return send(401, { code: "not_authenticated" });
+    const existing = employerJobs.get(session);
+    if (url.pathname.endsWith("/submit")) {
+      if (state === "submit-failure") return send(503, { code: "unavailable" });
+      const job = {
+        ...existing,
+        status: "submitted",
+        allowed_actions: [],
+        submitted_at: "2026-11-06T00:00:00Z",
+      };
+      employerJobs.set(session, job);
+      return send(200, job);
+    }
+    if (req.method === "POST" || req.method === "PATCH") {
+      let body = "";
+      req.on("data", (chunk) => (body += chunk));
+      req.on("end", () => {
+        const job = {
+          ...existing,
+          ...JSON.parse(body),
+          id: "job-" + session,
+          status: "draft",
+          allowed_actions: ["submit"],
+          revision: 1,
+        };
+        employerJobs.set(session, job);
+        send(req.method === "POST" ? 201 : 200, job);
+      });
+      return;
+    }
+    return existing ? send(200, existing) : send(404, { code: "not_found" });
   }
   if (url.pathname === "/api/v1/auth/me")
     return send(

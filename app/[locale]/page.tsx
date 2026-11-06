@@ -332,7 +332,7 @@ export default async function HomePage({ params }: HomePageProps) {
               <p className="mt-2 text-sm text-muted-foreground">{h("employerBody")}</p>
             </div>
             <Link
-              href="/employers"
+              href="/employers/new"
               className={buttonVariants({
                 size: "lg",
                 className: "w-full rounded-xl text-center whitespace-normal sm:w-auto",

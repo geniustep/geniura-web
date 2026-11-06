@@ -48,6 +48,7 @@ const nextConfig: NextConfig = {
     return [
       { source: "/:path*", headers: securityHeaders },
       { source: "/:locale/start", headers: privateNoStore },
+      { source: "/:locale/employers/new", headers: privateNoStore },
       { source: "/:locale/account", headers: privateNoStore },
       { source: "/:locale/account/:path*", headers: privateNoStore },
     ];

@@ -14,6 +14,9 @@ import { useAuthPasswordResetConfirmCreate } from "@/lib/api/generated/endpoints
 import { AuthPasswordResetConfirmCreateBody } from "@/lib/api/generated/zod/auth/auth.zod";
 import { Link } from "@/lib/i18n/navigation";
 
+import { useEmployerDraftReturn } from "@/features/employer/draft-notice";
+import { EMPLOYER_DRAFT_PATH } from "@/features/employer/draft";
+
 import { FormAlert, FormField } from "./form-parts";
 import { applyServerErrors } from "./use-server-errors";
 import { keyedZodErrors } from "./validation";
@@ -24,6 +27,7 @@ type Output = z.output<typeof AuthPasswordResetConfirmCreateBody>;
 /** `uid` and `token` come from the link Django emails (`/reset-password?uid=…&token=…`). */
 export function ResetPasswordForm({ uid, token }: { uid: string; token: string }) {
   const t = useTranslations("Auth");
+  const employerReturn = useEmployerDraftReturn();
   const [general, setGeneral] = useState<string[]>([]);
   const form = useForm<Input, unknown, Output>({
     resolver: zodResolver(AuthPasswordResetConfirmCreateBody, keyedZodErrors),
@@ -47,7 +51,13 @@ export function ResetPasswordForm({ uid, token }: { uid: string; token: string }
         title={t("reset.doneTitle")}
         description={t("reset.doneBody")}
         action={
-          <Link href="/login" className="text-sm font-medium text-action hover:underline">
+          <Link
+            href={{
+              pathname: "/login",
+              query: employerReturn ? { next: EMPLOYER_DRAFT_PATH } : undefined,
+            }}
+            className="text-sm font-medium text-action hover:underline"
+          >
             {t("backToLogin")}
           </Link>
         }
