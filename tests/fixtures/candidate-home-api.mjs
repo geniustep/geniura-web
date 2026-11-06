@@ -50,6 +50,11 @@ createServer((req, res) => {
           id,
           headline: state === "new" ? "" : "مطورة برمجيات",
           visibility: "private",
+          city: null,
+          availability: "immediate",
+          summary: "",
+          willing_to_relocate: false,
+          profile_updated_at: "2026-11-01T00:00:00Z",
           completeness: {
             has_headline: state !== "new",
             has_city: false,
@@ -60,6 +65,35 @@ createServer((req, res) => {
             has_shareable_resume: false,
           },
         });
+  if (
+    /^\/api\/v1\/candidates\/me\/(educations|experiences|skills|languages|certifications)$/.test(
+      url.pathname,
+    )
+  ) {
+    const kind = url.pathname.split("/").at(-1);
+    const rows =
+      kind === "educations"
+        ? [
+            {
+              id: "education-1",
+              degree: "Licence en droit privé – 3e année suivie",
+              institution: "",
+              level: "bac_plus_3",
+              source: "extracted",
+              updated_at: "2026-11-01T00:00:00Z",
+            },
+            {
+              id: "education-2",
+              degree: "Baccalauréat – 2014",
+              institution: "",
+              level: "baccalaureate",
+              source: "extracted",
+              updated_at: "2026-11-01T00:00:00Z",
+            },
+          ]
+        : [];
+    return send(200, { count: rows.length, next: null, previous: null, results: rows });
+  }
   if (url.pathname === "/api/v1/candidates/me/resumes")
     return send(
       200,

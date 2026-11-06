@@ -2,12 +2,8 @@
 
 import {
   BriefcaseBusinessIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EyeIcon,
   FileTextIcon,
   GraduationCapIcon,
-  HistoryIcon,
   LanguagesIcon,
   LockKeyholeIcon,
   PencilIcon,
@@ -18,9 +14,10 @@ import {
   Trash2Icon,
   TriangleAlertIcon,
   UsersRoundIcon,
+  UserRoundIcon,
 } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { useState, type ReactNode } from "react";
+import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { toast } from "sonner";
 
 import { ProvenanceTag } from "@/components/patterns/provenance-tag";
@@ -37,7 +34,6 @@ import {
   useCandidatesMeSkillsList,
 } from "@/lib/api/generated/endpoints/candidates/candidates";
 import type { CandidateProfile } from "@/lib/api/generated/model";
-import { getDirection } from "@/lib/i18n/config";
 import { Link } from "@/lib/i18n/navigation";
 import type { Vocabulary } from "@/lib/jobs/labels";
 
@@ -248,10 +244,7 @@ function SectionCard({
   const Icon = SECTION_ICONS[kind];
   const headingId = `section-${kind}`;
   return (
-    <section
-      aria-labelledby={headingId}
-      className="flex flex-col gap-2 rounded-2xl bg-card p-6 shadow-card"
-    >
+    <section aria-labelledby={headingId} className="flex min-w-0 flex-col gap-4 bg-card p-5 sm:p-8">
       <div className="flex items-center justify-between gap-3">
         <h2 id={headingId} className="flex items-center gap-2 text-lg font-semibold">
           <Icon className="size-5 text-action" aria-hidden="true" />
@@ -308,109 +301,22 @@ function VisibilityStrip({ profile }: { profile: CandidateProfile }) {
   );
 }
 
-function NextSteps({
-  profile,
-  onIdentity,
-  onAdd,
-}: {
-  profile: CandidateProfile;
-  onIdentity: () => void;
-  onAdd: (kind: SectionKind) => void;
-}) {
-  const t = useTranslations("Profile.next");
-  const c = profile.completeness;
-  const steps: { key: string; action: () => void }[] = [];
-  if (!c.has_headline) steps.push({ key: "headline", action: onIdentity });
-  if (!c.has_city) steps.push({ key: "city", action: onIdentity });
-  if (!c.has_skills) steps.push({ key: "skills", action: () => onAdd("skills") });
-  if (!c.has_languages) steps.push({ key: "languages", action: () => onAdd("languages") });
-  if (!c.has_experience) steps.push({ key: "experience", action: () => onAdd("experiences") });
-  const resumeChecking = c.has_resume && !c.has_shareable_resume;
-
-  if (!steps.length && !resumeChecking && c.has_resume) return null;
-  return (
-    <section
-      aria-labelledby="next-steps"
-      className="flex flex-col gap-3 rounded-2xl bg-card p-6 shadow-card"
-    >
-      <div className="grid gap-1">
-        <h2 id="next-steps" className="text-lg font-semibold">
-          {t("title", { count: steps.length })}
-        </h2>
-        <p className="text-sm text-muted-foreground">{t("hint")}</p>
-      </div>
-      <ul className="grid gap-1">
-        {steps.map((step) => (
-          <li key={step.key}>
-            <button
-              type="button"
-              onClick={step.action}
-              className="flex min-h-11 w-full items-center gap-3 rounded-xl px-2 text-start hover:bg-muted"
-            >
-              <span className="inline-flex size-7 items-center justify-center rounded-lg border-2 border-dashed border-action text-action">
-                <PlusIcon className="size-4" aria-hidden="true" />
-              </span>
-              <span className="flex-1 text-sm font-medium">{t(`steps.${step.key}`)}</span>
-              {step.key === "experience" ? (
-                <span className="text-xs text-muted-foreground">{t("optional")}</span>
-              ) : null}
-            </button>
-          </li>
-        ))}
-        {!c.has_resume ? (
-          <li>
-            <Link
-              href="/account/profile/resumes"
-              className="flex min-h-11 w-full items-center gap-3 rounded-xl px-2 hover:bg-muted"
-            >
-              <span className="inline-flex size-7 items-center justify-center rounded-lg border-2 border-dashed border-action text-action">
-                <FileTextIcon className="size-4" aria-hidden="true" />
-              </span>
-              <span className="flex-1 text-sm font-medium">{t("steps.resume")}</span>
-              <span className="text-xs text-muted-foreground">{t("optional")}</span>
-            </Link>
-          </li>
-        ) : null}
-        {resumeChecking ? (
-          <li className="flex min-h-11 items-center gap-3 px-2 text-sm text-muted-foreground">
-            <FileTextIcon className="size-4" aria-hidden="true" />
-            {t("resumeChecking")}
-          </li>
-        ) : null}
-      </ul>
-    </section>
-  );
+const SECTION_ORDER: SectionKind[] = [
+  "experiences",
+  "educations",
+  "skills",
+  "languages",
+  "certifications",
+];
+function subscribeSection(callback: () => void) {
+  window.addEventListener("hashchange", callback);
+  return () => window.removeEventListener("hashchange", callback);
 }
-
-function SideLink({
-  href,
-  icon: Icon,
-  title,
-  line,
-}: {
-  href: string;
-  icon: typeof EyeIcon;
-  title: string;
-  line: string;
-}) {
-  const locale = useLocale();
-  const Chevron = getDirection(locale) === "rtl" ? ChevronLeftIcon : ChevronRightIcon;
-  return (
-    <Link
-      href={href}
-      className="flex items-center gap-3 rounded-2xl bg-card p-4 shadow-card hover:bg-muted"
-    >
-      <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary">
-        <Icon className="size-5 text-secondary-foreground" aria-hidden="true" />
-      </span>
-      <span className="grid flex-1 gap-0.5">
-        <span className="font-semibold">{title}</span>
-        <span className="text-sm text-muted-foreground">{line}</span>
-      </span>
-      <Chevron className="size-4 text-muted-foreground" aria-hidden="true" />
-    </Link>
-  );
+function currentSection(): SectionKind | "identity" {
+  const kind = window.location.hash.replace("#section-", "");
+  return SECTION_ORDER.includes(kind as SectionKind) ? (kind as SectionKind) : "identity";
 }
+const initialSection = () => "identity" as const;
 
 export function ProfileWorkspace({ vocabulary }: { vocabulary: Vocabulary }) {
   const t = useTranslations("Profile");
@@ -421,6 +327,7 @@ export function ProfileWorkspace({ vocabulary }: { vocabulary: Vocabulary }) {
   const lists = useSectionLists();
   const [identityOpen, setIdentityOpen] = useState(false);
   const [editing, setEditing] = useState<Editing>(null);
+  const active = useSyncExternalStore(subscribeSection, currentSection, initialSection);
 
   if (profile.isPending) {
     return (
@@ -440,6 +347,12 @@ export function ProfileWorkspace({ vocabulary }: { vocabulary: Vocabulary }) {
   }
 
   const data = profile.data;
+  const VisibilityIcon =
+    data.visibility === "private"
+      ? LockKeyholeIcon
+      : data.visibility === "discoverable"
+        ? RadarIcon
+        : UsersRoundIcon;
   const city = label("locations", data.city);
   const availability = t(`enums.availability.${data.availability ?? "unspecified"}`);
   const openAdd = (kind: SectionKind) => setEditing({ kind });
@@ -447,13 +360,10 @@ export function ProfileWorkspace({ vocabulary }: { vocabulary: Vocabulary }) {
     ((lists[kind].data as { results?: SectionItem[] } | undefined)?.results ?? []) as SectionItem[];
 
   const identity: ReactNode = (
-    <section
-      aria-labelledby="identity"
-      className="flex flex-col gap-4 rounded-2xl bg-card p-6 shadow-float sm:p-8"
-    >
+    <section aria-labelledby="identity" className="flex min-w-0 flex-col gap-4 bg-card p-5 sm:p-8">
       <div className="flex items-start justify-between gap-4">
         <div className="grid gap-1">
-          <h2 id="identity" className="text-2xl font-bold sm:text-3xl">
+          <h2 id="identity" className="text-xl font-semibold break-words sm:text-2xl">
             {data.headline ? (
               <bdi dir="auto">{data.headline}</bdi>
             ) : (
@@ -514,39 +424,100 @@ export function ProfileWorkspace({ vocabulary }: { vocabulary: Vocabulary }) {
   );
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
-      <div className="grid min-w-0 gap-6">
-        {identity}
-        <NextSteps profile={data} onIdentity={() => setIdentityOpen(true)} onAdd={openAdd} />
-        {(Object.keys(SECTIONS) as SectionKind[]).map((kind) => (
-          <SectionCard
-            key={kind}
-            kind={kind}
-            items={results(kind)}
-            loading={lists[kind].isPending}
-            error={lists[kind].error}
-            vocabulary={vocabulary}
-            onAdd={() => openAdd(kind)}
-            onEdit={(item) => setEditing({ kind, item })}
-          />
-        ))}
+    <div className="grid min-w-0 gap-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-5">
+        <p className="min-w-0 text-lg font-semibold break-words sm:text-xl" dir="auto">
+          {data.headline || t("identity.noHeadline")}
+        </p>
+        <Link
+          href="/account/profile/privacy"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-secondary px-4 text-sm text-secondary-foreground"
+        >
+          <VisibilityIcon className="size-4" aria-hidden="true" />
+          {t(`visibility.${data.visibility}.short`)}
+        </Link>
       </div>
-      <aside className="grid gap-3 lg:sticky lg:top-24">
-        <VisibilityStrip profile={data} />
-        <SideLink
-          href="/account/profile/resumes"
-          icon={FileTextIcon}
-          title={t("links.resumes")}
-          line={t("links.resumesLine")}
-        />
-        <SideLink
-          href="/account/profile/access-log"
-          icon={HistoryIcon}
-          title={t("links.accessLog")}
-          line={t("links.accessLogLine")}
-        />
-        <SideLink href="/jobs" icon={EyeIcon} title={t("links.jobs")} line={t("links.jobsLine")} />
-      </aside>
+      <div className="grid min-w-0 gap-5 lg:grid-cols-[13rem_minmax(0,1fr)] lg:items-start">
+        <aside className="min-w-0 lg:sticky lg:top-24">
+          <nav
+            aria-label={t("pages.profile.title")}
+            className="overflow-x-auto lg:overflow-visible"
+          >
+            <ul className="flex w-max gap-1 lg:grid lg:w-auto lg:gap-2">
+              <li>
+                <a
+                  href="#section-identity"
+                  aria-current={active === "identity" ? "location" : undefined}
+                  className={`flex min-h-11 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium ${active === "identity" ? "bg-secondary text-secondary-foreground" : "hover:bg-muted"}`}
+                >
+                  <UserRoundIcon className="size-5 shrink-0" aria-hidden="true" />
+                  {t("editor.information")}
+                </a>
+              </li>
+              {SECTION_ORDER.map((kind) => {
+                const Icon = SECTION_ICONS[kind];
+                return (
+                  <li key={kind}>
+                    <a
+                      href={`#section-${kind}`}
+                      aria-current={active === kind ? "location" : undefined}
+                      className={`flex min-h-11 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium ${active === kind ? "bg-secondary text-secondary-foreground" : "hover:bg-muted"}`}
+                    >
+                      <Icon className="size-5 shrink-0" aria-hidden="true" />
+                      {t(`sections.${kind}.title`)}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+          <div className="mt-4 flex flex-wrap gap-x-4 border-t pt-3 text-sm lg:grid lg:gap-1">
+            <Link
+              href="/account/profile/resumes"
+              className="inline-flex min-h-11 items-center gap-2 text-action"
+            >
+              <FileTextIcon className="size-4" aria-hidden="true" />
+              {t("links.resumes")}
+            </Link>
+            <Link
+              href="/account/profile/privacy"
+              className="inline-flex min-h-11 items-center gap-2 text-action"
+            >
+              <LockKeyholeIcon className="size-4" aria-hidden="true" />
+              {t("nav.privacy")}
+            </Link>
+            <Link
+              href="/account/profile/access-log"
+              className="inline-flex min-h-11 items-center text-action"
+            >
+              {t("nav.accessLog")}
+            </Link>
+          </div>
+        </aside>
+        <div
+          id={`section-${active}`}
+          className="min-w-0 scroll-mt-24 overflow-hidden rounded-2xl border bg-card"
+        >
+          {active === "identity" ? (
+            <>
+              {identity}
+              <div className="border-t p-5 sm:px-8">
+                <VisibilityStrip profile={data} />
+              </div>
+            </>
+          ) : (
+            <SectionCard
+              kind={active}
+              items={results(active)}
+              loading={lists[active].isPending}
+              error={lists[active].error}
+              vocabulary={vocabulary}
+              onAdd={() => openAdd(active)}
+              onEdit={(item) => setEditing({ kind: active, item })}
+            />
+          )}
+        </div>
+      </div>
 
       {identityOpen ? (
         <IdentityDialog

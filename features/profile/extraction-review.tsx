@@ -166,7 +166,7 @@ function ItemCard({
   return (
     <li
       id={`review-item-${item.id}`}
-      className={`grid scroll-mt-24 gap-3 rounded-2xl border bg-card p-4 ${decision ? "opacity-90" : ""}`}
+      className={`grid min-w-0 scroll-mt-24 gap-3 rounded-2xl border bg-card p-4 ${decision ? "opacity-90" : ""}`}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs font-semibold text-muted-foreground">
@@ -179,7 +179,7 @@ function ItemCard({
           </Badge>
         ) : null}
       </div>
-      <p className="font-semibold">
+      <p className="font-semibold break-words">
         <bdi dir="auto">{text(item, decision?.corrected)}</bdi>
       </p>
       {item.confidence ? (
@@ -405,7 +405,7 @@ export function ExtractionReview({
   if (!extraction.data) return <FormAlert error={extraction.error} />;
 
   return (
-    <div className="grid gap-6">
+    <div className="grid min-w-0 gap-6">
       <div className="grid gap-3 rounded-2xl bg-card p-6 shadow-float">
         <p>{t("intro")}</p>
         <div className="flex items-center gap-3">
@@ -449,7 +449,7 @@ export function ExtractionReview({
         ))}
       </ul>
       <FormAlert error={failure} />
-      <div className="sticky bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-primary p-4 text-primary-foreground shadow-float">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-primary p-4 text-primary-foreground shadow-float sm:sticky sm:bottom-[calc(1rem+env(safe-area-inset-bottom,0px))]">
         <span className="text-sm">{t("partialNote")}</span>
         <div className="flex gap-2">
           <Link

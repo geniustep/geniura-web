@@ -120,3 +120,38 @@ test("review links open the pending item and clear the marker after explicit app
     page.getByRole("heading", { name: ar.CandidateHome.actions.review.title }),
   ).toHaveCount(0);
 });
+
+for (const [locale, messages] of Object.entries({ ar, fr, en, es })) {
+  test(`${locale}: profile sections restore after refresh and retain edit dialogs`, async ({
+    page,
+    context,
+  }) => {
+    await context.addCookies([
+      { name: "geniura_sid", value: "complete", domain: "localhost", path: "/" },
+    ]);
+    await page.goto(`/${locale}/account/profile#section-educations`);
+    await expect(
+      page.getByRole("heading", { name: messages.Profile.sections.educations.title, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Licence en droit privé – 3e année suivie", { exact: true }),
+    ).toBeVisible();
+    await page.reload();
+    await expect(
+      page.getByText("Licence en droit privé – 3e année suivie", { exact: true }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: messages.Profile.item.add, exact: true }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.getByRole("button", { name: messages.Profile.form.cancel, exact: true }).click();
+    await page.locator('a[href="#section-languages"]').click();
+    await expect(
+      page.getByRole("heading", { name: messages.Profile.sections.languages.title, exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Licence en droit privé – 3e année suivie", { exact: true }),
+    ).toHaveCount(0);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+  });
+}

@@ -18,8 +18,13 @@ export function CandidateNav() {
           <li key={key}>
             <Link
               href={href!}
-              aria-current={path === href ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center rounded-lg px-4 text-sm font-medium ${path === href ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+              aria-current={
+                path === href ||
+                (href === "/account/profile" && path.startsWith("/account/profile/"))
+                  ? "page"
+                  : undefined
+              }
+              className={`inline-flex min-h-11 items-center rounded-lg px-4 text-sm font-medium ${path === href || (href === "/account/profile" && path.startsWith("/account/profile/")) ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
             >
               {t(key as "overview")}
             </Link>

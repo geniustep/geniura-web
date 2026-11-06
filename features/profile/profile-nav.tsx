@@ -18,7 +18,7 @@ export function ProfileNav() {
   const pathname = usePathname();
   const home = useTranslations("CandidateHome");
   return (
-    <nav aria-label={t("label")} className="-mx-1 overflow-x-auto pb-1">
+    <nav aria-label={t("label")} className="max-w-full min-w-0 overflow-x-auto pb-1">
       <ul className="flex w-max gap-1 rounded-full bg-card p-1 shadow-card">
         <li>
           <Link
