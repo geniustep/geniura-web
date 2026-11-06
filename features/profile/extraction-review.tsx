@@ -449,7 +449,7 @@ export function ExtractionReview({
         ))}
       </ul>
       <FormAlert error={failure} />
-      <div className="sticky bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-primary p-4 text-primary-foreground shadow-float">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-primary p-4 text-primary-foreground shadow-float sm:sticky sm:bottom-[calc(1rem+env(safe-area-inset-bottom,0px))]">
         <span className="text-sm">{t("partialNote")}</span>
         <div className="flex gap-2">
           <Link
