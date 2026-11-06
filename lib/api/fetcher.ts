@@ -17,7 +17,9 @@ const UNSAFE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 const isBrowser = typeof window !== "undefined";
 
 function apiUrl(path: string): string {
-  if (isBrowser) return `/api/bff${path}`;
+  // Next.js normalizes trailing slashes. Avoid a redirect (especially for POST),
+  // while the BFF restores the backend's canonical slash from its allowlist.
+  if (isBrowser) return `/api/bff${path.replace(/\/(?=\?|$)/, "")}`;
   const base =
     process.env.API_BASE_URL ??
     process.env.NEXT_PUBLIC_API_BASE_URL ??

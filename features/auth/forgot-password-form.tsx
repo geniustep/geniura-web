@@ -13,6 +13,9 @@ import { useAuthPasswordResetRequestCreate } from "@/lib/api/generated/endpoints
 import { AuthPasswordResetRequestCreateBody } from "@/lib/api/generated/zod/auth/auth.zod";
 import { Link } from "@/lib/i18n/navigation";
 
+import { EmployerDraftNotice, useEmployerDraftReturn } from "@/features/employer/draft-notice";
+import { EMPLOYER_DRAFT_PATH } from "@/features/employer/draft";
+
 import { FormAlert, FormField } from "./form-parts";
 import { keyedZodErrors } from "./validation";
 
@@ -21,6 +24,7 @@ type Output = z.output<typeof AuthPasswordResetRequestCreateBody>;
 
 export function ForgotPasswordForm() {
   const t = useTranslations("Auth");
+  const employerReturn = useEmployerDraftReturn();
   const form = useForm<Input, unknown, Output>({
     resolver: zodResolver(AuthPasswordResetRequestCreateBody, keyedZodErrors),
     defaultValues: { email: "" },
@@ -35,7 +39,13 @@ export function ForgotPasswordForm() {
         title={t("forgot.doneTitle")}
         description={t("forgot.doneBody")}
         action={
-          <Link href="/login" className="text-sm font-medium text-action hover:underline">
+          <Link
+            href={{
+              pathname: "/login",
+              query: employerReturn ? { next: EMPLOYER_DRAFT_PATH } : undefined,
+            }}
+            className="text-sm font-medium text-action hover:underline"
+          >
             {t("backToLogin")}
           </Link>
         }
@@ -49,6 +59,7 @@ export function ForgotPasswordForm() {
       className="grid gap-5"
       onSubmit={form.handleSubmit((data) => request.mutate({ data }))}
     >
+      <EmployerDraftNotice next={employerReturn ? EMPLOYER_DRAFT_PATH : undefined} />
       <FormAlert error={request.error} />
       <FormField
         id="email"
@@ -71,7 +82,13 @@ export function ForgotPasswordForm() {
       <Button type="submit" size="lg" disabled={request.isPending}>
         {request.isPending ? t("submitting") : t("forgot.submit")}
       </Button>
-      <Link href="/login" className="text-center text-sm text-action hover:underline">
+      <Link
+        href={{
+          pathname: "/login",
+          query: employerReturn ? { next: EMPLOYER_DRAFT_PATH } : undefined,
+        }}
+        className="text-center text-sm text-action hover:underline"
+      >
         {t("backToLogin")}
       </Link>
     </form>

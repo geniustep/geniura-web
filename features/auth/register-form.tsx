@@ -15,6 +15,9 @@ import { AuthRegisterCreateBody } from "@/lib/api/generated/zod/auth/auth.zod";
 import { Link } from "@/lib/i18n/navigation";
 import { safeRedirectPath } from "@/lib/auth/safe-redirect";
 
+import { EmployerDraftNotice } from "@/features/employer/draft-notice";
+import { isEmployerDraftPath } from "@/features/employer/draft";
+
 import { FormAlert, FormField } from "./form-parts";
 import { applyServerErrors } from "./use-server-errors";
 import { keyedZodErrors } from "./validation";
@@ -35,7 +38,7 @@ export function RegisterForm({ next }: { next?: string }) {
       email: "",
       password: "",
       full_name: "",
-      signup_intent: "candidate",
+      signup_intent: isEmployerDraftPath(next) ? "employer" : "candidate",
       preferred_locale: locale,
     },
   });
@@ -50,22 +53,25 @@ export function RegisterForm({ next }: { next?: string }) {
   if (register.isSuccess) {
     // Same answer whether or not the address exists (the API never reveals it).
     return (
-      <EmptyState
-        icon={MailCheckIcon}
-        title={t("register.doneTitle")}
-        description={t("register.doneBody")}
-        action={
-          <Link
-            href={{
-              pathname: "/login",
-              query: next ? { next: safeRedirectPath(next) } : undefined,
-            }}
-            className="text-sm font-medium text-action hover:underline"
-          >
-            {t("backToLogin")}
-          </Link>
-        }
-      />
+      <>
+        <EmployerDraftNotice next={next} />
+        <EmptyState
+          icon={MailCheckIcon}
+          title={t("register.doneTitle")}
+          description={t("register.doneBody")}
+          action={
+            <Link
+              href={{
+                pathname: "/login",
+                query: next ? { next: safeRedirectPath(next) } : undefined,
+              }}
+              className="text-sm font-medium text-action hover:underline"
+            >
+              {t("backToLogin")}
+            </Link>
+          }
+        />
+      </>
     );
   }
 
@@ -78,26 +84,29 @@ export function RegisterForm({ next }: { next?: string }) {
         register.mutate({ data });
       })}
     >
+      <EmployerDraftNotice next={next} />
       <FormAlert error={register.error} extra={general} />
-      <fieldset className="grid gap-2">
-        <legend className="mb-2 text-sm font-medium">{t("register.intentLabel")}</legend>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {intents.map((intent) => (
-            <label
-              key={intent}
-              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-input px-3.5 text-sm has-checked:border-action has-checked:bg-secondary"
-            >
-              <input
-                type="radio"
-                value={intent}
-                className="accent-action"
-                {...form.register("signup_intent")}
-              />
-              {t(`register.intent.${intent}`)}
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      {!isEmployerDraftPath(next) ? (
+        <fieldset className="grid gap-2">
+          <legend className="mb-2 text-sm font-medium">{t("register.intentLabel")}</legend>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {intents.map((intent) => (
+              <label
+                key={intent}
+                className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-input px-3.5 text-sm has-checked:border-action has-checked:bg-secondary"
+              >
+                <input
+                  type="radio"
+                  value={intent}
+                  className="accent-action"
+                  {...form.register("signup_intent")}
+                />
+                {t(`register.intent.${intent}`)}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      ) : null}
       <FormField
         id="full_name"
         label={`${t("fields.fullName")} (${t("fields.optional")})`}
